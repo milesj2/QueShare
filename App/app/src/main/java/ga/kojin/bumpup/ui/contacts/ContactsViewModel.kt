@@ -1,13 +1,13 @@
-package ga.kojin.bumpup.ui.home
+package ga.kojin.bumpup.ui.contacts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class HomeViewModel : ViewModel() {
+class ContactsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+        value = "Contacts"
     }
     val text: LiveData<String> = _text
 }

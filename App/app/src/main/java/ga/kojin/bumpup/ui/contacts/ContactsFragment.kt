@@ -1,4 +1,4 @@
-package ga.kojin.bumpup.ui.home
+package ga.kojin.bumpup.ui.contacts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,12 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bumpup.R
 import ga.kojin.bumpup.interfaces.IContactsInterface
-import ga.kojin.bumpup.ui.contacts.ContactsAdapter
-import ga.kojin.bumpup.ui.contacts.GetContacts
 
-class HomeFragment : Fragment(), IContactsInterface {
+class ContactsFragment : Fragment(), IContactsInterface {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var homeViewModel: ContactsViewModel
 
     override fun contactsInterface(size: Int) {
          /*
@@ -33,11 +31,10 @@ class HomeFragment : Fragment(), IContactsInterface {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
+        homeViewModel = ViewModelProvider(this).get(ContactsViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_contacts, container, false)
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+
         })
 
         val recyclerView: RecyclerView = root.findViewById(R.id.contact_list)
