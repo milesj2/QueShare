@@ -10,8 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.reddit.indicatorfastscroll.FastScrollItemIndicator
+import com.reddit.indicatorfastscroll.FastScrollerThumbView
+import com.reddit.indicatorfastscroll.FastScrollerView
 import ga.kojin.bumpup.R
 import ga.kojin.bumpup.interfaces.IContactsInterface
+import java.util.*
 
 class ContactsFragment : Fragment(), IContactsInterface {
 
@@ -46,6 +50,22 @@ class ContactsFragment : Fragment(), IContactsInterface {
             layoutManager = LinearLayoutManager(this.context)
             adapter = contactsAdapter
         }
+
+        val fastScrollerView: FastScrollerView = root.findViewById(R.id.fastscroller)
+        val fastscrollerThumbView: FastScrollerThumbView = root.findViewById(R.id.fastscroller_thumb)
+
+        fastScrollerView.setupWithRecyclerView(
+            recyclerView,
+            { position ->
+                val item = contacts?.get(position) // Get your model object
+                // or fetch the section at [position] from your database
+                item?.name?.substring(0, 1)?.toUpperCase(Locale.ROOT)?.let {
+                    FastScrollItemIndicator.Text(it)
+                }
+            }
+        )
+        fastscrollerThumbView.setupWithFastScroller(fastScrollerView)
+
 
         return root
     }
