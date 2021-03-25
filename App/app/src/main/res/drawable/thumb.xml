@@ -5,11 +5,16 @@
     <corners
         android:topLeftRadius="44dp"
         android:topRightRadius="44dp"
-        android:bottomLeftRadius="44dp" />
+        android:bottomLeftRadius="44dp"
+        android:bottomRightRadius="44dp"/>
 
     <padding
         android:paddingLeft="22dp"
         android:paddingRight="22dp" />
+    <size
+        android:width="20dp"
+        android:height="40dp"
+        />
 
     <solid android:color="@color/cardview_dark_background" />
 

@@ -6,7 +6,9 @@
 
     <padding
         android:top="10dp"
-        android:left="10dp"
+        android:left="15dp"
         android:right="10dp"
         android:bottom="10dp"/>
+    <size
+        android:width="15dp" />
 </shape>
