@@ -44,7 +44,7 @@ class ContactsFragment : Fragment(), IContactsInterface {
         val recyclerView: RecyclerView = root.findViewById(R.id.contact_list)
 
         val contacts = this.context?.let { GetContacts().getContactList(it) }
-        val contactsAdapter = contacts?.let { ContactsAdapter(this, it) }
+        val contactsAdapter = contacts?.let { ContactsAdapter(this, requireContext(), it) }
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this.context)
