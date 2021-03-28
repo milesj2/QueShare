@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bumpup.R
 import ga.kojin.bumpup.interfaces.IContactsInterface
 import ga.kojin.bumpup.interfaces.IViewHolderClickListener
-import ga.kojin.bumpup.models.ContactsRow
+import ga.kojin.bumpup.models.ContactRow
 import ga.kojin.bumpup.ui.contact.ContactActivity
 
 class ContactsAdapter(val contactsInterface: IContactsInterface,
                       val context : Context,
-                      val contactsList: ArrayList<ContactsRow>)
+                      val contactsList: ArrayList<ContactRow>)
     : RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(), IViewHolderClickListener
 {
 
@@ -26,7 +26,9 @@ class ContactsAdapter(val contactsInterface: IContactsInterface,
     }
 
     override fun onTap(index: Int) {
-        val intent = Intent("ga.kojin.bumpup.ContactActivity")
+        val intent = Intent("ga.kojin.bumpup.ContactActivity").apply {
+            putExtra("contact", index.toString())
+        }
         intent.setClass(context, ContactActivity::class.java)
         context.startActivity(intent)
 
@@ -46,7 +48,7 @@ class ContactsAdapter(val contactsInterface: IContactsInterface,
     }
 
     override fun onBindViewHolder(holder: ContactsViewHolder, position: Int) {
-        val contact: ContactsRow = contactsList[position]
+        val contact: ContactRow = contactsList[position]
 
         holder.contactViewName.text = contact.name
 

@@ -9,11 +9,11 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.provider.ContactsContract
 import androidx.core.app.ActivityCompat
-import ga.kojin.bumpup.models.ContactsRow
+import ga.kojin.bumpup.models.ContactRow
 
 
 class GetContacts : Application() {
-    val contacts = ArrayList<ContactsRow>()
+    val contacts = ArrayList<ContactRow>()
 
     private fun requestPermission(context: Context, permission : String, dReturn : Int){
         if (context.checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED){
@@ -21,7 +21,7 @@ class GetContacts : Application() {
         }
     }
 
-    fun getContactList(context: Context): ArrayList<ContactsRow>? {
+    fun getContactList(context: Context): ArrayList<ContactRow>? {
 
         requestPermission(context, Manifest.permission.READ_CONTACTS, 100)
 
@@ -51,7 +51,7 @@ class GetContacts : Application() {
                     )
                     while (pCur!!.moveToNext()) {
                         // val phoneNo: String = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                        val newContact = ContactsRow(id, name, "MJ")
+                        val newContact = ContactRow(id, name, "MJ")
                         if (contacts.contains(newContact))
                             continue
                         contacts.add(newContact)
