@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bumpup.R
+import ga.kojin.bumpup.data.ContactsRepository
 import ga.kojin.bumpup.interfaces.IContactsInterface
 import ga.kojin.bumpup.interfaces.IViewHolderClickListener
 import ga.kojin.bumpup.models.ContactRow
@@ -19,7 +20,6 @@ class ContactsAdapter(val contactsInterface: IContactsInterface,
                       val contactsList: ArrayList<ContactRow>)
     : RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(), IViewHolderClickListener
 {
-
 
     override fun onLongTap(index: Int) {
 
@@ -56,8 +56,7 @@ class ContactsAdapter(val contactsInterface: IContactsInterface,
 
     }
 
-    class ContactsViewHolder(itemView : View,
-                             val r_tap: IViewHolderClickListener)
+    class ContactsViewHolder(itemView : View, val r_tap: IViewHolderClickListener)
         : RecyclerView.ViewHolder(itemView),
             View.OnLongClickListener,
             View.OnClickListener{

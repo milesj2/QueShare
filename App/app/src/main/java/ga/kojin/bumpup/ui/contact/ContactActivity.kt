@@ -38,6 +38,7 @@ class ContactActivity: AppCompatActivity() {
         }
     }
 
+    @Preview
     @Composable
     fun DefaultPreview() {
         NewsStory()
@@ -89,17 +90,11 @@ class ContactActivity: AppCompatActivity() {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            var contact: ContactRow?
 
-            if (contactIdx != -1){
-                contact = GetContacts().getContactList(applicationContext)!![contactIdx]
-                DisplayRow(icon = R.drawable.ic_baseline_person_24, value = contact.id)
-                DisplayRow(icon = R.drawable.ic_baseline_person_24, value = contact.name)
-                DisplayRow(icon = R.drawable.ic_baseline_local_phone_24, value = contact.id)
-            }
-            if (contactIdx == -1){
-                // Display blank contact
-            }
+            DisplayRow(icon = R.drawable.ic_baseline_person_24, value = "TEST ID")
+            DisplayRow(icon = R.drawable.ic_baseline_person_24, value = "TEST NAME")
+            DisplayRow(icon = R.drawable.ic_baseline_local_phone_24, value = "+447123456789")
+
 
         }
     }

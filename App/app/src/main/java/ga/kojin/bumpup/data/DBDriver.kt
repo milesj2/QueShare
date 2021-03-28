@@ -1,39 +1,81 @@
 package ga.kojin.bumpup.data
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import ga.kojin.bumpup.models.ContactRow
 
 class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION ) {
 
     companion object {
-        var DATABASE_NAME = "data"
-        private val DATABASE_VERSION = 1
+        const val DATABASE_NAME = "data"
+        const val DATABASE_VERSION = 1
 
-        private val TABLE_CONTACTS = "contacts"
+        const val TABLE_CONTACTS = "contacts"
 
-        private val KEY_ID = "id"
-        private val KEY_FIRSTNAME = "name"
-
-        /*CREATE TABLE students ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, phone_number TEXT......);*/
-        private val SQL_CREATE_USER = (
-                "CREATE TABLE  " +
-                "$TABLE_CONTACTS (" +
-                        "$KEY_ID INTEGER PRIMARY KEY, " +
-                        "$KEY_FIRSTNAME TEXT " +
-                ");"
-                ).trimMargin()
+        const val KEY_ID = "id"
+        const val KEY_SYS_CONTACT_ID = "sys_contact_id"
+        const val KEY_FIRSTNAME = "firstname"
+        const val KEY_LASTNAME = "lastname"
+        const val KEY_INITIALS = "initials"
+        const val KEY_MOBILE = "mobile"
     }
 
+    private val SQL_TALE_CONTACTS_DROP = "IF OBJECT_ID('dbo.Contacts', 'u') IS NOT NULL \n" +
+                                        "  DROP TABLE dbo.Contacts;"
+
+    private val SQL_TABLE_CONTACTS_CREATE = "CREATE TABLE  " +
+                                                "$TABLE_CONTACTS (" +
+                                                "$KEY_ID INTEGER PRIMARY KEY, " +
+                                                "$KEY_SYS_CONTACT_ID TEXT," +
+                                                "$KEY_FIRSTNAME TEXT," +
+                                                "$KEY_LASTNAME TEXT," +
+                                                "$KEY_INITIALS TEXT," +
+                                                "$KEY_MOBILE TEXT " +
+                                                ");"
+
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(SQL_CREATE_USER)
+        db.execSQL(SQL_TALE_CONTACTS_DROP)
+        db.execSQL(SQL_TABLE_CONTACTS_CREATE)
+
+        addUser(ContactRow("none", "Test Name 1", "TN"))
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // db.execSQL("DROP TABLE IF EXISTS '$TABLE_CONTACTS'")
         onCreate(db)
     }
 
+    fun addUser(contact: ContactRow): Long {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_SYS_CONTACT_ID, contact.id)
+        contentValues.put(KEY_FIRSTNAME, contact.name) // EmpModelClass Name
+        //contentValues.put(KEY_MOBILE,mobile  ) // EmpModelClass Phone
+
+        val success = db.insert(TABLE_CONTACTS, null, contentValues)
+        db.close()
+        return success
+    }
+
+    fun getContacts(): ArrayList<ContactRow> {
+        val list: ArrayList<ContactRow> = ArrayList()
+        val db = this.readableDatabase
+        val query = "Select * from $TABLE_CONTACTS"
+        val result = db.rawQuery(query, null)
+        if (result.moveToFirst()) {
+            do {
+                val user = ContactRow(
+                    result.getString(result.getColumnIndex(KEY_SYS_CONTACT_ID)),
+                    result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
+                    result.getString(result.getColumnIndex(KEY_INITIALS))
+                )
+                list.add(user)
+            }
+            while (result.moveToNext())
+        }
+        return list
+    }
 
 
 }
