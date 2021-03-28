@@ -9,7 +9,7 @@ class ContactsRepository(context: Context) {
     private val dbDriver: DBDriver = DBDriver(context)
 
     fun addUser(contact: ContactRow):Boolean {
-        val result: Long = dbDriver.addUser(contact)
+        val result: Long = dbDriver.addUser(contact, null)
         return result > 0
     }
 

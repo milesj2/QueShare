@@ -24,7 +24,7 @@ class ContactsFragment : Fragment(), IContactsInterface {
 
     private lateinit var homeViewModel: ContactsViewModel
 
-    val contactsRepo = ContactsRepository(requireContext())
+
 
     override fun contactsInterface(size: Int) {
          /*
@@ -41,7 +41,7 @@ class ContactsFragment : Fragment(), IContactsInterface {
             savedInstanceState: Bundle?
     ): View?
     {
-
+        val contactsRepo = ContactsRepository(requireContext())
         homeViewModel = ViewModelProvider(this).get(ContactsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_contacts, container, false)
         homeViewModel.text.observe(viewLifecycleOwner, Observer {

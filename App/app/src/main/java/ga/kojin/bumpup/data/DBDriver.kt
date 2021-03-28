@@ -22,8 +22,7 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         const val KEY_MOBILE = "mobile"
     }
 
-    private val SQL_TALE_CONTACTS_DROP = "IF OBJECT_ID('dbo.Contacts', 'u') IS NOT NULL \n" +
-                                        "  DROP TABLE dbo.Contacts;"
+    private val SQL_TALE_CONTACTS_DROP = "  DROP TABLE dbo.Contacts;"
 
     private val SQL_TABLE_CONTACTS_CREATE = "CREATE TABLE  " +
                                                 "$TABLE_CONTACTS (" +
@@ -36,25 +35,33 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                                                 ");"
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(SQL_TALE_CONTACTS_DROP)
+        // db.execSQL(SQL_TALE_CONTACTS_DROP)
         db.execSQL(SQL_TABLE_CONTACTS_CREATE)
 
-        addUser(ContactRow("none", "Test Name 1", "TN"))
+
+        addUser(ContactRow("none", "Test Name 1", "TN"), db)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         onCreate(db)
     }
 
-    fun addUser(contact: ContactRow): Long {
-        val db = this.writableDatabase
+    fun addUser(contact: ContactRow, db: SQLiteDatabase?): Long {
+
         val contentValues = ContentValues()
         contentValues.put(KEY_SYS_CONTACT_ID, contact.id)
-        contentValues.put(KEY_FIRSTNAME, contact.name) // EmpModelClass Name
-        //contentValues.put(KEY_MOBILE,mobile  ) // EmpModelClass Phone
+        contentValues.put(KEY_FIRSTNAME, contact.name)
+        contentValues.put(KEY_INITIALS, contact.initials)
+        //contentValues.put(KEY_MOBILE,mobile  )
 
-        val success = db.insert(TABLE_CONTACTS, null, contentValues)
-        db.close()
+
+        val success : Long
+        if (db == null)
+            success = this.writableDatabase.insert(TABLE_CONTACTS, null, contentValues)
+        else
+            success = db.insert(TABLE_CONTACTS, null, contentValues)
+
         return success
     }
 
@@ -68,12 +75,14 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                 val user = ContactRow(
                     result.getString(result.getColumnIndex(KEY_SYS_CONTACT_ID)),
                     result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
-                    result.getString(result.getColumnIndex(KEY_INITIALS))
+                    "ts"
+                    //result.getString(result.getColumnIndex(KEY_INITIALS))
                 )
                 list.add(user)
             }
             while (result.moveToNext())
         }
+        db.close()
         return list
     }
 
