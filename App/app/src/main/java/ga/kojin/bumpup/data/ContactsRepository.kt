@@ -1,27 +1,26 @@
 package ga.kojin.bumpup.data
 
-import android.app.Application
 import android.content.Context
-import ga.kojin.bumpup.models.ContactRow
+import ga.kojin.bumpup.models.SystemContact
 
 class ContactsRepository(context: Context) {
 
     private val dbDriver: DBDriver = DBDriver(context)
 
-    fun addUser(contact: ContactRow):Boolean {
+    fun addUser(contact: SystemContact):Boolean {
         val result: Long = dbDriver.addUser(contact, null)
         return result > 0
     }
 
-    fun removeUser(contact: ContactRow): Boolean {
+    fun removeUser(contact: SystemContact): Boolean {
         TODO()
     }
 
-    fun getUser(id: Int): ContactRow {
+    fun getUser(id: Int): SystemContact {
         TODO()
     }
 
-    fun getUsers(): ArrayList<ContactRow> {
+    fun getUsers(): ArrayList<SystemContact> {
         return dbDriver.getContacts()
     }
 

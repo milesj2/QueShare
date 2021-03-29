@@ -9,15 +9,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bumpup.R
-import ga.kojin.bumpup.data.ContactsRepository
 import ga.kojin.bumpup.interfaces.IContactsInterface
 import ga.kojin.bumpup.interfaces.IViewHolderClickListener
-import ga.kojin.bumpup.models.ContactRow
+import ga.kojin.bumpup.models.SystemContact
 import ga.kojin.bumpup.ui.contact.ContactActivity
 
 class ContactsAdapter(val contactsInterface: IContactsInterface,
                       val context : Context,
-                      val contactsList: ArrayList<ContactRow>)
+                      val contactsList: ArrayList<SystemContact>)
     : RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>(), IViewHolderClickListener
 {
 
@@ -48,7 +47,7 @@ class ContactsAdapter(val contactsInterface: IContactsInterface,
     }
 
     override fun onBindViewHolder(holder: ContactsViewHolder, position: Int) {
-        val contact: ContactRow = contactsList[position]
+        val contact: SystemContact = contactsList[position]
 
         holder.contactViewName.text = contact.name
 

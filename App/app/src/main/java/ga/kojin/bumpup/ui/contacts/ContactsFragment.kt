@@ -1,16 +1,17 @@
 package ga.kojin.bumpup.ui.contacts
 
-import android.content.DialogInterface
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.reddit.indicatorfastscroll.FastScrollItemIndicator
 import com.reddit.indicatorfastscroll.FastScrollerThumbView
 import com.reddit.indicatorfastscroll.FastScrollerView
@@ -18,29 +19,35 @@ import ga.kojin.bumpup.R
 import ga.kojin.bumpup.adapters.ContactsAdapter
 import ga.kojin.bumpup.data.ContactsRepository
 import ga.kojin.bumpup.interfaces.IContactsInterface
+import ga.kojin.bumpup.models.SystemContact
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ContactsFragment : Fragment(), IContactsInterface {
 
     private lateinit var homeViewModel: ContactsViewModel
-
-
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var contactsList: ArrayList<SystemContact>
+    public lateinit var button : FloatingActionButton
 
     override fun contactsInterface(size: Int) {
-         /*
-        if (actionMode == null) actionMode = startActionMode(ActionModeCallback())
-        if (size > 0) actionMode?.setTitle("$size")
-        else actionMode?.finish()
+    }
 
-          */
+    @SuppressLint("NotifyDataSetChanged")
+    override fun refreshContacts() {
+        if (context == null)
+            return
+        val contactsRepo = ContactsRepository(requireContext())
+        contactsList = contactsRepo.getUsers()
+        this.recyclerView.adapter?.notifyDataSetChanged()
     }
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View?
+            savedInstanceState: Bundle? ): View?
     {
+
         val contactsRepo = ContactsRepository(requireContext())
         homeViewModel = ViewModelProvider(this).get(ContactsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_contacts, container, false)
@@ -48,28 +55,14 @@ class ContactsFragment : Fragment(), IContactsInterface {
 
         })
 
-        val recyclerView: RecyclerView = root.findViewById(R.id.contact_list)
 
-        val contacts = contactsRepo.getUsers()
-        if (contacts.count() == 0){
-            val dialogBuilder = AlertDialog.Builder(requireContext())
+        recyclerView = root.findViewById(R.id.contact_list)
 
-            dialogBuilder.setMessage("No contacts are stored in app, would you like to import?")
-                .setCancelable(false)
-                .setPositiveButton("Proceed") { dialog, _ ->
-                    dialog.cancel()
-                }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.cancel()
-                }
+        button = root.findViewById(R.id.fbtnBump)
 
-            val alert = dialogBuilder.create()
-            alert.setTitle("AlertDialogExample")
+        contactsList = contactsRepo.getUsers()
 
-            alert.show()
-        }
-
-        val contactsAdapter =  ContactsAdapter(this, requireContext(), contacts)
+        val contactsAdapter =  ContactsAdapter(this, requireContext(), contactsList)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this.context)
@@ -79,10 +72,9 @@ class ContactsFragment : Fragment(), IContactsInterface {
         val fastScrollerView: FastScrollerView = root.findViewById(R.id.fastscroller)
         val fastscrollerThumbView: FastScrollerThumbView = root.findViewById(R.id.fastscroller_thumb)
 
-        fastScrollerView.setupWithRecyclerView(
-            recyclerView,
+        fastScrollerView.setupWithRecyclerView(recyclerView,
             { position ->
-                val item = contacts?.get(position) // Get your model object
+                val item = contactsList?.get(position) // Get your model object
                 // or fetch the section at [position] from your database
                 item?.name?.substring(0, 1)?.toUpperCase(Locale.ROOT)?.let {
                     FastScrollItemIndicator.Text(it)
@@ -94,4 +86,6 @@ class ContactsFragment : Fragment(), IContactsInterface {
 
         return root
     }
+
+
 }

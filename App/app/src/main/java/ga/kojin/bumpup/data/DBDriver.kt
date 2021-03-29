@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import ga.kojin.bumpup.models.ContactRow
+import ga.kojin.bumpup.models.SystemContact
 
 class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION ) {
 
@@ -20,6 +20,7 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         const val KEY_LASTNAME = "lastname"
         const val KEY_INITIALS = "initials"
         const val KEY_MOBILE = "mobile"
+        const val KEY_STARRED = "starred"
     }
 
     private val SQL_TALE_CONTACTS_DROP = "  DROP TABLE dbo.Contacts;"
@@ -29,6 +30,7 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
                                                 "$KEY_ID INTEGER PRIMARY KEY, " +
                                                 "$KEY_SYS_CONTACT_ID TEXT," +
                                                 "$KEY_FIRSTNAME TEXT," +
+                                                "$KEY_STARRED INTEGER," +
                                                 "$KEY_LASTNAME TEXT," +
                                                 "$KEY_INITIALS TEXT," +
                                                 "$KEY_MOBILE TEXT " +
@@ -39,7 +41,7 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         db.execSQL(SQL_TABLE_CONTACTS_CREATE)
 
 
-        addUser(ContactRow("none", "Test Name 1", "TN"), db)
+        //addUser(ContactRow("none", "Test Name 1", "TN"), db)
 
     }
 
@@ -47,12 +49,14 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         onCreate(db)
     }
 
-    fun addUser(contact: ContactRow, db: SQLiteDatabase?): Long {
+    fun addUser(contact: SystemContact, db: SQLiteDatabase?): Long {
 
         val contentValues = ContentValues()
         contentValues.put(KEY_SYS_CONTACT_ID, contact.id)
+        contentValues.put(KEY_STARRED, contact.starred)
         contentValues.put(KEY_FIRSTNAME, contact.name)
-        contentValues.put(KEY_INITIALS, contact.initials)
+        contentValues.put(KEY_MOBILE, contact.number)
+
         //contentValues.put(KEY_MOBILE,mobile  )
 
 
@@ -65,18 +69,18 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return success
     }
 
-    fun getContacts(): ArrayList<ContactRow> {
-        val list: ArrayList<ContactRow> = ArrayList()
+    fun getContacts(): ArrayList<SystemContact> {
+        val list: ArrayList<SystemContact> = ArrayList()
         val db = this.readableDatabase
         val query = "Select * from $TABLE_CONTACTS"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {
-                val user = ContactRow(
+                val user = SystemContact(
                     result.getString(result.getColumnIndex(KEY_SYS_CONTACT_ID)),
                     result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
-                    "ts"
-                    //result.getString(result.getColumnIndex(KEY_INITIALS))
+                    result.getString(result.getColumnIndex(KEY_MOBILE)),
+                    result.getInt(result.getColumnIndex(KEY_STARRED)) == 1
                 )
                 list.add(user)
             }

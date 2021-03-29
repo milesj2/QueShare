@@ -80,6 +80,7 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.0.0-beta03'
 
     implementation 'com.reddit:indicator-fast-scroll:1.4.0'
+    implementation 'com.github.sembozdemir:PermissionsKt:1.0.0'
 
 
 
