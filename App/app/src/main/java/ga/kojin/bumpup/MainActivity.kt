@@ -31,11 +31,23 @@ import ga.kojin.bumpup.helpers.SystemContactsHelper
 import ga.kojin.bumpup.models.SystemContact
 import com.sembozdemir.permissionskt.*
 import ga.kojin.bumpup.data.ContactsRepository
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
+
 
 class MainActivity : AppCompatActivity() {
 
-
+    companion object {
+        private const val STATE_CONTACTS : Int = 0
+    }
+    
     data class ItemViewState(val text: String)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,13 +70,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         setContent{
-            displayMain()
+            DisplayMain()
         }
     }
 
     @Preview
     @Composable
-    fun displayMain(){
+    fun DisplayMain(){
         var state by remember { mutableStateOf(0) }
         val titles = listOf("Contacts", "Favourites", "Groups")
 
@@ -81,8 +93,9 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
             }
-            if (state == 0){
-                if (contacts != null && contacts.count() > 0){
+            if (state == STATE_CONTACTS){
+
+                if (contacts.count() > 0){
                     ContactsList(contactsList = contacts)
                 } else {
                     Text(modifier = Modifier
@@ -97,6 +110,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+
     }
 
     @OptIn(ExperimentalFoundationApi::class)
@@ -155,7 +170,9 @@ class MainActivity : AppCompatActivity() {
         toast("Finished importing...")
 
         setContent{
-            displayMain()
+            DisplayMain()
         }
     }
+
+
 }
