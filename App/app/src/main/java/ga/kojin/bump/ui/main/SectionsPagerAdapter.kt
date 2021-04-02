@@ -21,13 +21,16 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
 {
 
+    var contactsFragment: ContactsFragment = ContactsFragment()
+    var favouritesFragment: FavouritesFragment = FavouritesFragment()
+
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                ContactsFragment()
+                contactsFragment
             }
             1 -> {
-                FavouritesFragment()
+                favouritesFragment
             }
             else -> getItem(position)
         }

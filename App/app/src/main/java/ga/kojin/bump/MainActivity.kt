@@ -21,6 +21,8 @@ import ga.kojin.bump.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewPager: ViewPager
+    private lateinit var sectionsPagerAdapter: SectionsPagerAdapter
 
     private val TAG : String = "MainActivity"
 
@@ -30,8 +32,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = binding.viewPager
+        sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+        viewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
 
         val tabs: TabLayout = binding.tabs
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun requireContacts() {
+    private fun requireContacts() {
         Log.v(TAG, "Requiring Contacts")
         requestPermission(Manifest.permission.READ_CONTACTS, 100)
     }
@@ -70,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "Permission result for ${permissions[0]} is ${grantResults[0]}")
 
         if (grantResults[0] == 0){
-
+            sectionsPagerAdapter.contactsFragment.refreshContacts()
         }
     }
 

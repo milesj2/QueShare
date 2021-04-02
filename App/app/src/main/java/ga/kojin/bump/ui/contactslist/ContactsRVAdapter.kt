@@ -10,17 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bump.R
 import ga.kojin.bump.models.SystemContact
 
-class ContactsRVAdapter(val context : Context,
-                        val contactsList: ArrayList<SystemContact>)
+class ContactsRVAdapter(val context : Context)
     : RecyclerView.Adapter<ContactsRVAdapter.ViewHolder>()
 {
 
-    class ViewHolder(itemView : View)
-        : RecyclerView.ViewHolder(itemView) {
-
-        val contactViewName = itemView.findViewById<TextView>(R.id.txtName)
-        val contactsLinearLayout = itemView.findViewById<LinearLayout>(R.id.contactsLinear)
-    }
+    var contactsList : ArrayList<SystemContact> = ArrayList<SystemContact>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
@@ -41,6 +35,13 @@ class ContactsRVAdapter(val context : Context,
 
     override fun getItemCount(): Int {
         return contactsList.size
+    }
+
+    class ViewHolder(itemView : View)
+        : RecyclerView.ViewHolder(itemView) {
+
+        val contactViewName = itemView.findViewById<TextView>(R.id.txtName)
+        val contactsLinearLayout = itemView.findViewById<LinearLayout>(R.id.contactsLinear)
     }
 
 }
