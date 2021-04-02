@@ -1,6 +1,11 @@
 package ga.kojin.bump
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -8,12 +13,16 @@ import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import ga.kojin.bump.ui.main.SectionsPagerAdapter
 import ga.kojin.bump.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val TAG : String = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +42,36 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            requireContacts()
+        }
+
+        requireContacts()
+
+    }
+
+    fun requireContacts() {
+        Log.v(TAG, "Requiring Contacts")
+        requestPermission(Manifest.permission.READ_CONTACTS, 100)
+    }
+
+    private fun requestPermission(permission : String, dReturn : Int){
+        if (applicationContext.checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, arrayOf(permission), dReturn)
         }
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        Log.v(TAG, "Permission result for ${permissions[0]} is ${grantResults[0]}")
+
+        if (grantResults[0] == 0){
+
+        }
+    }
+
 }
