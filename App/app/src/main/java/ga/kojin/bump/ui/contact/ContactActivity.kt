@@ -2,6 +2,7 @@ package ga.kojin.bump.ui.contact
 
 import android.database.DefaultDatabaseErrorHandler
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -24,15 +25,17 @@ class ContactActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_details)
 
-        val userID: Int? = intent.getStringExtra("contact")?.toInt()
+        val btnNavBack : ImageView = findViewById(R.id.imgNavBack)
 
-        if (userID == null){
-            return
+        btnNavBack.setOnClickListener {
+            finish()
         }
 
-        contact = contactsRepo.getContactBySystemID(userID)
+        val userID: Int? = intent.getStringExtra("contact")?.toInt()
 
-        Toast.makeText(this, "Contact: ${contact?.name}!", Toast.LENGTH_SHORT).show()
+        if (userID != null) {
+            contact = contactsRepo.getContactBySystemID(userID)
+        }
 
         val contactAdapter = ContactAdapter(contact, this, supportFragmentManager)
 

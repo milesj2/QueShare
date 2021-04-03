@@ -50,5 +50,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation 'com.reddit:indicator-fast-scroll:1.4.0'
+    implementation 'com.budiyev.android:code-scanner:2.1.0'
 
 }

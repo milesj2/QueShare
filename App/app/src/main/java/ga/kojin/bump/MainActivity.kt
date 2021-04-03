@@ -3,6 +3,7 @@ package ga.kojin.bump
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import ga.kojin.bump.ui.main.SectionsPagerAdapter
 import ga.kojin.bump.databinding.ActivityMainBinding
+import ga.kojin.bump.ui.bump.BumpActivity
+import ga.kojin.bump.ui.contact.ContactActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,9 +45,9 @@ class MainActivity : AppCompatActivity() {
         val fab: FloatingActionButton = binding.fab
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-            requireContacts()
+            val intent = Intent("ga.kojin.bump.ui.contact.BumpActivity")
+            intent.setClass(this, BumpActivity::class.java)
+            this.startActivity(intent)
         }
 
         requireContacts()

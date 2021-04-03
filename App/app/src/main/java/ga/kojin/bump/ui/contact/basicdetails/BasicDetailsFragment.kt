@@ -23,13 +23,8 @@ class BasicDetailsFragment(val contact: SystemContact?) : Fragment() {
         root = inflater.inflate(R.layout.fragment_basic_details, container, false)
 
         if (contact != null) {
-            Toast.makeText(root.context, "Contact not null", Toast.LENGTH_LONG).show()
-            //populateFields()
-        } else {
-            Toast.makeText(root.context, "Contact null", Toast.LENGTH_LONG).show()
+            populateFields()
         }
-        // container?.addView(root)
-
         return root
     }
 

@@ -5,12 +5,6 @@
     android:orientation="vertical">
 
 
-    <CalendarView
-        android:id="@+id/calendarView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/socialMedia"
         android:layout_width="match_parent"

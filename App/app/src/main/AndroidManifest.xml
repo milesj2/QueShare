@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ga.kojin.bump">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
@@ -11,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bump">
-        <activity android:name=".ui.contact.TestActivity"></activity>
+        <activity android:name=".ui.bump.BumpActivity">
+
+        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

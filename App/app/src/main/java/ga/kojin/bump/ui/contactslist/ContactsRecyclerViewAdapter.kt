@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bump.R
 import ga.kojin.bump.models.SystemContact
+import ga.kojin.bump.ui.bump.BumpActivity
 import ga.kojin.bump.ui.contact.ContactActivity
 import kotlin.coroutines.coroutineContext
 
