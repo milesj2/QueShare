@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bump">
+        <activity android:name=".ui.contact.TestActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -20,6 +21,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.contact.ContactActivity">
+
         </activity>
     </application>
 

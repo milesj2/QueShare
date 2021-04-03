@@ -4,9 +4,10 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.widget.Toast
 import ga.kojin.bump.models.SystemContact
 
-class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION ) {
+class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION ) {
 
     companion object {
         const val DATABASE_NAME = "data"
@@ -85,6 +86,28 @@ class DBDriver(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         }
         db.close()
         return list
+    }
+
+    fun getContactBySystemID(id: Int): SystemContact? {
+        var contact : SystemContact? = null
+        val db = this.readableDatabase
+        val query = "Select * from $TABLE_CONTACTS WHERE $KEY_SYS_CONTACT_ID='$id'"
+        val result = db.rawQuery(query, null)
+        if (result.moveToFirst()) {
+            do {
+                val user = SystemContact(
+                    result.getString(result.getColumnIndex(KEY_SYS_CONTACT_ID)),
+                    result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
+                    result.getString(result.getColumnIndex(KEY_MOBILE)),
+                    result.getInt(result.getColumnIndex(KEY_STARRED)) == 1
+                )
+                contact =  user
+            }
+            while (result.moveToNext())
+        }
+        db.close()
+        return contact
+
     }
 
 

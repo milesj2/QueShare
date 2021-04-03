@@ -1,6 +1,5 @@
 package ga.kojin.bump.ui.contacts
 
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -14,9 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bump.R
 import ga.kojin.bump.data.ContactsRepository
 import ga.kojin.bump.helpers.SystemContactsHelper
-import ga.kojin.bump.models.SystemContact
-import ga.kojin.bump.ui.contactslist.ContactsRVAdapter
-import java.util.jar.Manifest
+import ga.kojin.bump.ui.contactslist.ContactsRecyclerViewAdapter
 
 class ContactsFragment : Fragment()
 {
@@ -35,7 +32,7 @@ class ContactsFragment : Fragment()
         contactsRV = root.findViewById(R.id.contact_list)
         contactsRepo = ContactsRepository(requireContext())
 
-        val contactsAdapter = ContactsRVAdapter(requireContext())
+        val contactsAdapter = ContactsRecyclerViewAdapter(requireContext())
 
         contactsRV.apply {
             layoutManager = LinearLayoutManager(this.context)
@@ -56,7 +53,7 @@ class ContactsFragment : Fragment()
             return
         }
 
-        val adapter = contactsRV.adapter as ContactsRVAdapter
+        val adapter = contactsRV.adapter as ContactsRecyclerViewAdapter
 
         adapter.contactsList = contactsRepo.getUsers()
 

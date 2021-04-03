@@ -16,12 +16,9 @@ class ContactsRepository(context: Context) {
         TODO()
     }
 
-    fun getUser(id: Int): SystemContact {
-        TODO()
-    }
+    fun getContactBySystemID(id: Int): SystemContact? = dbDriver.getContactBySystemID(id)
 
-    fun getUsers(): ArrayList<SystemContact> {
-        return dbDriver.getContacts()
-    }
+    fun getUsers(): ArrayList<SystemContact> = dbDriver.getContacts()
+
 
 }
