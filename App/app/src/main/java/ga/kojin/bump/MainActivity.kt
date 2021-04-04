@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         viewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
 
+
+
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
 

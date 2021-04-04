@@ -2,6 +2,7 @@ package ga.kojin.bump.ui.contactslist
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ class ContactsRecyclerViewAdapter(val context : Context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.contact_row,
+            R.layout.row_contact,
             parent,
             false
         )

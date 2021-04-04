@@ -52,6 +52,7 @@ class SocialMediaFragment(val contact: SystemContact?) : Fragment() {
         val addNewButton : Button = root.findViewById(R.id.btnAdd)
         addNewButton.setOnClickListener {
             addNewControl.visibility = View.VISIBLE
+            addNewButton.visibility = View.INVISIBLE
         }
 
         val chooseType : ImageView = root.findViewById(R.id.imgChooseType)
@@ -92,8 +93,21 @@ class SocialMediaFragment(val contact: SystemContact?) : Fragment() {
             socialMediaAdapter.socialMediaList.add(socialMedia)
             socialMediaAdapter.notifyItemInserted(
                 socialMediaAdapter.socialMediaList.size - 1)
+            addNewButton.visibility = View.VISIBLE
+        }
+
+        val clearChanges : ImageView = root.findViewById(R.id.imgClearChanges)
+        clearChanges.setOnClickListener {
+            addNewControl.visibility = View.GONE
+            txtHandle.text = ""
+            addNewButton.visibility = View.VISIBLE
         }
 
         return root
+    }
+
+    fun setEdit(editMode : Boolean) {
+        (socialMediaRV.adapter as SocialMediaListAdapter).editMode = editMode
+        (socialMediaRV.adapter as SocialMediaListAdapter).notifyDataSetChanged()
     }
 }

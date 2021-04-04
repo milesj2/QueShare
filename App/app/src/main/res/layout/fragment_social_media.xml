@@ -44,6 +44,11 @@
                     android:text="" />
 
                 <ImageView
+                    android:id="@+id/imgClearChanges"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_clear_24" />
+                <ImageView
                     android:id="@+id/imgAcceptChanges"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

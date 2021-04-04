@@ -19,4 +19,6 @@ class ContactsRepository(context: Context) {
 
     fun getUserProfile() : SystemContact = dbDriver.getContactByID(DBDriver.USER_PROFILE_ID)!!
 
+    fun getStarredContacts() : ArrayList<SystemContact> = dbDriver.getStarredContacts()
+
 }

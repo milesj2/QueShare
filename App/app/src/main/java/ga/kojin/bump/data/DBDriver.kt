@@ -107,6 +107,9 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return list
     }
 
+    fun getStarredContacts(): ArrayList<SystemContact> =
+        getContactResults( "Select * from $TABLE_CONTACTS WHERE $KEY_STARRED='1'")
+
     fun getContactBySystemID(id: Int): SystemContact? {
         var contact : SystemContact? = null
         val db = this.readableDatabase
@@ -176,6 +179,23 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                     result.getString(result.getColumnIndex(KEY_HANDLE))
                 )
                 list.add(social)
+            }
+            while (result.moveToNext())
+        }
+        db.close()
+        return list
+    }
+
+    private fun getContactResults(query : String) : ArrayList<SystemContact> {
+        val list: ArrayList<SystemContact> = ArrayList()
+        val db = this.readableDatabase
+        val result = db.rawQuery(query, null)
+        if (result.moveToFirst()) {
+            do {
+                if (result.getString(result.getColumnIndex(KEY_CONTACT_ID)) == "$USER_PROFILE_ID") {
+                    continue
+                }
+                list.add(getSystemContactFromResult(result))
             }
             while (result.moveToNext())
         }

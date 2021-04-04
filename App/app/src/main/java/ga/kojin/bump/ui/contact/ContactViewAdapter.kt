@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import ga.kojin.bump.R
 import ga.kojin.bump.models.SystemContact
 import ga.kojin.bump.ui.contact.basicdetails.BasicDetailsFragment
+import ga.kojin.bump.ui.contact.basicdetails.EditBasicDetailsFragment
 import ga.kojin.bump.ui.contact.socials.SocialMediaFragment
 
 
@@ -21,6 +22,12 @@ class ContactAdapter(val contact: SystemContact?, val context: Context, fm: Frag
 {
     var basicDetailsFragment: BasicDetailsFragment = BasicDetailsFragment(contact)
     var socialMediaFragment: SocialMediaFragment = SocialMediaFragment(contact)
+
+    fun setEdit(editMode: Boolean){
+        socialMediaFragment.setEdit(editMode)
+        basicDetailsFragment.toggleEditMode(editMode)
+
+    }
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
