@@ -47,11 +47,7 @@ class ContactActivity : AppCompatActivity() {
 
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                Toast.makeText(applicationContext, tab.text, Toast.LENGTH_LONG).show()
-
                 viewPager.currentItem = tab.position
-
-
             }
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}

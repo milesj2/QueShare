@@ -11,6 +11,8 @@ import android.hardware.camera2.CameraManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -24,6 +26,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import ga.kojin.bump.R
 import ga.kojin.bump.databinding.ActivityMainBinding
+import ga.kojin.bump.ui.bump.qrshare.QRShareActivity
+import ga.kojin.bump.ui.contact.ContactActivity
 import ga.kojin.bump.ui.main.SectionsPagerAdapter
 
 class BumpActivity : AppCompatActivity() {
@@ -37,6 +41,19 @@ class BumpActivity : AppCompatActivity() {
         setContentView(R.layout.activity_bump)
 
         scannerView = findViewById(R.id.scanner_view)
+
+        val btnNavBack : ImageView = findViewById(R.id.imgNavBack)
+        btnNavBack.setOnClickListener {
+            finish()
+        }
+
+        val btnBump : Button = findViewById(R.id.btnShare)
+
+        btnBump.setOnClickListener {
+            val intent = Intent("ga.kojin.bump.ui.bump.qrshare.QRShareActivity")
+            intent.setClass(applicationContext, QRShareActivity::class.java)
+            this.startActivity(intent)
+        }
 
         startQRScanner()
     }
