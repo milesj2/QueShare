@@ -20,7 +20,7 @@ class ContactAdapter(val contact: SystemContact?, val context: Context, fm: Frag
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
 {
     var basicDetailsFragment: BasicDetailsFragment = BasicDetailsFragment(contact)
-    var socialMediaFragment: SocialMediaFragment = SocialMediaFragment()
+    var socialMediaFragment: SocialMediaFragment = SocialMediaFragment(contact)
 
     override fun getItem(position: Int): Fragment {
         return when (position) {

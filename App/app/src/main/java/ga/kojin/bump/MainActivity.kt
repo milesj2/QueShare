@@ -1,25 +1,18 @@
 package ga.kojin.bump
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import ga.kojin.bump.ui.main.SectionsPagerAdapter
 import ga.kojin.bump.databinding.ActivityMainBinding
 import ga.kojin.bump.ui.bump.BumpActivity
-import ga.kojin.bump.ui.contact.ContactActivity
 
 class MainActivity : AppCompatActivity() {
 

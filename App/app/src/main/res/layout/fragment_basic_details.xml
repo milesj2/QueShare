@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_dialog_info" />
+            app:srcCompat="@drawable/ic_baseline_person_24" />
         <TextView
             android:id="@+id/txtName"
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/ic_dialog_info" />
+            app:srcCompat="@drawable/ic_baseline_local_phone_24" />
         <TextView
             android:id="@+id/txtNumber"
             android:layout_width="match_parent"

@@ -7,18 +7,16 @@ class ContactsRepository(context: Context) {
 
     private val dbDriver: DBDriver = DBDriver(context)
 
-    fun addUser(contact: SystemContact): Boolean {
-        val result: Long = dbDriver.addUser(contact, null)
-        return result > 0
-    }
+    fun addUser(contact: SystemContact) : Boolean = dbDriver.addContact(contact) == 1L
 
-    fun removeUser(contact: SystemContact): Boolean {
+    fun removeUser(contact: SystemContact) : Boolean {
         TODO()
     }
 
-    fun getContactBySystemID(id: Int): SystemContact? = dbDriver.getContactBySystemID(id)
+    fun getContactBySystemID(id: Int) : SystemContact? = dbDriver.getContactBySystemID(id)
 
     fun getUsers(): ArrayList<SystemContact> = dbDriver.getContacts()
 
+    fun getUserProfile() : SystemContact = dbDriver.getContactByID(DBDriver.USER_PROFILE_ID)!!
 
 }

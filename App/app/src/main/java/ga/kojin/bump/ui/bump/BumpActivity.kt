@@ -1,16 +1,9 @@
 package ga.kojin.bump.ui.bump
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.ImageFormat
-import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraDevice
-import android.hardware.camera2.CameraManager
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -22,13 +15,8 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.tabs.TabLayout
 import ga.kojin.bump.R
-import ga.kojin.bump.databinding.ActivityMainBinding
 import ga.kojin.bump.ui.bump.qrshare.QRShareActivity
-import ga.kojin.bump.ui.contact.ContactActivity
-import ga.kojin.bump.ui.main.SectionsPagerAdapter
 
 class BumpActivity : AppCompatActivity() {
 

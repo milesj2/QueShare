@@ -35,5 +35,4 @@ class BasicDetailsFragment(val contact: SystemContact?) : Fragment() {
         contactName.text = contact!!.name
         contactNumber.text = contact.number
     }
-
 }

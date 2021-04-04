@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.contact.ContactActivity"
+            android:name=".ui.contact.ContactViewActivity"
             android:theme="@style/Theme.Bump.NoActionBar">
         </activity>
     </application>

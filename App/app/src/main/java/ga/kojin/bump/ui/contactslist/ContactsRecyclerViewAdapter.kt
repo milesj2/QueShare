@@ -2,7 +2,6 @@ package ga.kojin.bump.ui.contactslist
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bump.R
 import ga.kojin.bump.models.SystemContact
-import ga.kojin.bump.ui.bump.BumpActivity
-import ga.kojin.bump.ui.contact.ContactActivity
-import kotlin.coroutines.coroutineContext
+import ga.kojin.bump.ui.contact.ContactViewActivity
 
 class ContactsRecyclerViewAdapter(val context : Context)
     : RecyclerView.Adapter<ContactsRecyclerViewAdapter.ViewHolder>(),
@@ -77,7 +74,7 @@ class ContactsRecyclerViewAdapter(val context : Context)
         val intent = Intent("ga.kojin.bump.ui.contact.ContactActivity").apply {
             putExtra("contact", contactsList[index].id)
         }
-        intent.setClass(context, ContactActivity::class.java)
+        intent.setClass(context, ContactViewActivity::class.java)
         context.startActivity(intent)
     }
 
