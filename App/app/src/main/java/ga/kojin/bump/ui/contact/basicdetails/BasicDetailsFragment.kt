@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ga.kojin.bump.R
 import ga.kojin.bump.models.SystemContact
+import org.w3c.dom.Text
 
 class BasicDetailsFragment(val contact: SystemContact?) : Fragment() {
 
@@ -29,10 +29,11 @@ class BasicDetailsFragment(val contact: SystemContact?) : Fragment() {
     }
 
     private fun populateFields() {
-        val contactName : TextView = root.findViewById(R.id.txtContactName)
+        val contactName : TextView = root.findViewById(R.id.txtName)
+        val contactNumber : TextView = root.findViewById(R.id.txtNumber)
 
         contactName.text = contact!!.name
-
+        contactNumber.text = contact.number
     }
 
 }
