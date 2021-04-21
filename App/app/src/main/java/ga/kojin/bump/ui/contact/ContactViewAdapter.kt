@@ -21,11 +21,6 @@ class ContactViewAdapter(var contact: Contact, val context: Context, fm: Fragmen
     var basicDetailsFragment: BasicDetailsFragment = BasicDetailsFragment(contact)
     var socialMediaFragment: SocialMediaFragment = SocialMediaFragment(contact)
 
-    fun setEdit(editMode: Boolean){
-        socialMediaFragment.setEdit(editMode)
-        basicDetailsFragment.toggleEditMode(editMode)
-    }
-
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
@@ -49,5 +44,10 @@ class ContactViewAdapter(var contact: Contact, val context: Context, fm: Fragmen
     fun saveDetails(starred: Boolean) {
         basicDetailsFragment.saveDetails(starred)
         socialMediaFragment.saveDetails()
+    }
+
+    fun setEdit(editMode: Boolean){
+        socialMediaFragment.setEdit(editMode)
+        basicDetailsFragment.toggleEditMode(editMode)
     }
 }

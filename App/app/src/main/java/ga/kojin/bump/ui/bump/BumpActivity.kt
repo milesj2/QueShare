@@ -17,6 +17,10 @@ import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import ga.kojin.bump.R
 import ga.kojin.bump.ui.bump.qrshare.QRShareActivity
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import ga.kojin.bump.data.ContactsRepository
+import ga.kojin.bump.models.persisted.Contact
 
 class BumpActivity : AppCompatActivity() {
 
@@ -80,7 +84,10 @@ class BumpActivity : AppCompatActivity() {
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
                 bump()
-                Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
+                val mapper = jacksonObjectMapper()
+                val contact = mapper.readValue<Contact>(it.text)
+                ContactsRepository(applicationContext).addUser(contact)
+                finish()
             }
         }
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS

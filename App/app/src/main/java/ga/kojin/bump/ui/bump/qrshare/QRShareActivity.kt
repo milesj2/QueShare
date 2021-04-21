@@ -3,15 +3,16 @@ package ga.kojin.bump.ui.bump.qrshare
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import ga.kojin.bump.R
+import ga.kojin.bump.data.ContactsRepository
+import ga.kojin.bump.data.SocialMediaRepository
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 class QRShareActivity : AppCompatActivity() {
 
@@ -34,7 +35,15 @@ class QRShareActivity : AppCompatActivity() {
     }
 
     private fun buildQRString(): String {
-        return "Example QER CODE"
+
+        val contact = ContactsRepository(applicationContext).getUserProfile()
+
+        contact.socialMedia = SocialMediaRepository(applicationContext)
+            .getSocialMediaByContactID(contact.id)
+
+        val mapper = jacksonObjectMapper()
+
+        return mapper.writeValueAsString(contact)
     }
 
     private fun generateQRCode(text: String): Bitmap {

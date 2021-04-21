@@ -75,8 +75,7 @@ class ContactViewActivity : AppCompatActivity() {
             btnEdit.visibility = View.GONE
             btnDone.visibility = View.VISIBLE
             btnClear.visibility = View.VISIBLE
-
-            (viewPager.adapter as ContactViewAdapter).setEdit(editMode)
+            contactViewAdapter.setEdit(editMode)
         }
 
         btnDone.setOnClickListener {
@@ -85,7 +84,7 @@ class ContactViewActivity : AppCompatActivity() {
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
-            (viewPager.adapter as ContactViewAdapter).setEdit(editMode)
+            contactViewAdapter.setEdit(editMode)
         }
 
         btnClear.setOnClickListener {
@@ -93,7 +92,7 @@ class ContactViewActivity : AppCompatActivity() {
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
-            (viewPager.adapter as ContactViewAdapter).setEdit(editMode)
+            contactViewAdapter.setEdit(editMode)
         }
     }
 

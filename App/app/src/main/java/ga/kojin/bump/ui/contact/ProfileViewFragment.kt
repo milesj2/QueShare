@@ -20,6 +20,8 @@ class ProfileViewFragment : Fragment() {
     private lateinit var contactsRepo : ContactsRepository
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
+    private var editMode : Boolean = false
+    private lateinit var contactAdapter : ContactViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +47,7 @@ class ProfileViewFragment : Fragment() {
 
         avatar.setImageResource(R.mipmap.ic_default_avatar)
 
-        val contactAdapter = ContactViewAdapter(contact, root.context, this.requireFragmentManager())
+        contactAdapter = ContactViewAdapter(contact, root.context, this.requireFragmentManager())
 
         viewPager = root.findViewById(R.id.detailsViewPager)
         tabLayout = root.findViewById(R.id.detailsTabBar)
@@ -61,7 +63,40 @@ class ProfileViewFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
+        val btnEdit : ImageView = root.findViewById(R.id.imgEdit)
+        val btnDone : ImageView = root.findViewById(R.id.imgDone)
+        val btnClear : ImageView = root.findViewById(R.id.imgClear)
+
+        btnEdit.setOnClickListener {
+            editMode = true
+            btnEdit.visibility = View.GONE
+            btnDone.visibility = View.VISIBLE
+            btnClear.visibility = View.VISIBLE
+            contactAdapter.setEdit(editMode)
+        }
+
+        btnDone.setOnClickListener {
+            saveProfile()
+            editMode = false
+            btnEdit.visibility = View.VISIBLE
+            btnDone.visibility = View.GONE
+            btnClear.visibility = View.GONE
+            contactAdapter.setEdit(editMode)
+        }
+
+        btnClear.setOnClickListener {
+            editMode = false
+            btnEdit.visibility = View.VISIBLE
+            btnDone.visibility = View.GONE
+            btnClear.visibility = View.GONE
+            contactAdapter.setEdit(editMode)
+        }
+
         return root
+    }
+
+    private fun saveProfile() {
+        contactAdapter.saveDetails(false)
     }
 
 }
