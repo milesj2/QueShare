@@ -12,11 +12,11 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import ga.kojin.bump.R
 import ga.kojin.bump.data.ContactsRepository
-import ga.kojin.bump.models.SystemContact
+import ga.kojin.bump.models.persisted.Contact
 
 class ProfileViewFragment : Fragment() {
 
-    private lateinit var contact : SystemContact
+    private lateinit var contact : Contact
     private lateinit var contactsRepo : ContactsRepository
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
@@ -45,7 +45,7 @@ class ProfileViewFragment : Fragment() {
 
         avatar.setImageResource(R.mipmap.ic_default_avatar)
 
-        val contactAdapter = ContactAdapter(contact, root.context, this.requireFragmentManager())
+        val contactAdapter = ContactViewAdapter(contact, root.context, this.requireFragmentManager())
 
         viewPager = root.findViewById(R.id.detailsViewPager)
         tabLayout = root.findViewById(R.id.detailsTabBar)

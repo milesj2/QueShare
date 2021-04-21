@@ -1,7 +1,6 @@
 package ga.kojin.bump.ui.contact
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,18 +8,22 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
+import com.google.android.material.textfield.TextInputEditText
 import ga.kojin.bump.R
 import ga.kojin.bump.data.ContactsRepository
-import ga.kojin.bump.models.SystemContact
+import ga.kojin.bump.models.persisted.Contact
 
 class ContactViewActivity : AppCompatActivity() {
 
-    private var contact : SystemContact? = null
+    private lateinit var contact : Contact
     private val contactsRepo : ContactsRepository = ContactsRepository(this)
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
     private var starred : Boolean = false
     private var editMode : Boolean = false
+    private lateinit var contactViewAdapter : ContactViewAdapter
+
+    private lateinit var txtName : TextInputEditText
 
     private lateinit var imgStarred : ImageView
 
@@ -34,26 +37,25 @@ class ContactViewActivity : AppCompatActivity() {
             finish()
         }
 
-        val userID: Int? = intent.getStringExtra("contact")?.toInt()
+        val userID: Long = intent.extras!!.getLong("Contact")
 
-        if (userID != null) {
-            contact = contactsRepo.getContactBySystemID(userID)
-        }
+        contact = contactsRepo.getContactByID(userID)!!
 
         imgStarred = findViewById(R.id.imgStarred)
         imgStarred.setOnClickListener {
             starred = !starred
+            contactsRepo.setContactFavouriteStatus(userID, starred)
             setStarredIco()
         }
-        starred = contact?.starred == true
+        starred = contact.starred == true
         setStarredIco()
 
-        val contactAdapter = ContactAdapter(contact, this, supportFragmentManager)
+        contactViewAdapter = ContactViewAdapter(contact, this, supportFragmentManager)
 
         viewPager = findViewById(R.id.detailsViewPager)
         tabLayout = findViewById(R.id.detailsTabBar)
 
-        viewPager.adapter = contactAdapter
+        viewPager.adapter = contactViewAdapter
         viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
 
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
@@ -74,15 +76,16 @@ class ContactViewActivity : AppCompatActivity() {
             btnDone.visibility = View.VISIBLE
             btnClear.visibility = View.VISIBLE
 
-            (viewPager.adapter as ContactAdapter).setEdit(editMode)
+            (viewPager.adapter as ContactViewAdapter).setEdit(editMode)
         }
 
         btnDone.setOnClickListener {
+            saveContact()
             editMode = false
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
-            (viewPager.adapter as ContactAdapter).setEdit(editMode)
+            (viewPager.adapter as ContactViewAdapter).setEdit(editMode)
         }
 
         btnClear.setOnClickListener {
@@ -90,7 +93,7 @@ class ContactViewActivity : AppCompatActivity() {
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
-            (viewPager.adapter as ContactAdapter).setEdit(editMode)
+            (viewPager.adapter as ContactViewAdapter).setEdit(editMode)
         }
     }
 
@@ -100,5 +103,9 @@ class ContactViewActivity : AppCompatActivity() {
         } else {
             imgStarred.setImageResource(android.R.drawable.star_big_off)
         }
+    }
+
+    private fun saveContact() {
+        contactViewAdapter.saveDetails(starred)
     }
 }

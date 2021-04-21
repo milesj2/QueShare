@@ -16,6 +16,7 @@ import com.reddit.indicatorfastscroll.FastScrollerView
 import ga.kojin.bump.R
 import ga.kojin.bump.data.ContactsRepository
 import ga.kojin.bump.helpers.SystemContactsHelper
+import ga.kojin.bump.models.persisted.Contact
 import ga.kojin.bump.ui.contactslist.ContactsRecyclerViewAdapter
 import java.util.*
 
@@ -76,6 +77,8 @@ class ContactsFragment : Fragment()
 
         adapter.contactsList = contactsRepo.getUsers()
 
+        adapter.contactsList.sortBy { selector(it) }
+
         if(adapter.contactsList.size == 0){
             Log.v(TAG, "No stored users.")
             requestImport()
@@ -84,6 +87,8 @@ class ContactsFragment : Fragment()
         Log.v(TAG, "notifyDataSetChanged")
         this.contactsRV.adapter!!.notifyDataSetChanged()
     }
+
+    fun selector(c: Contact): String = c.name
 
     private fun requestImport() {
 
@@ -120,7 +125,13 @@ class ContactsFragment : Fragment()
         val contacts = SystemContactsHelper.getContactList(requireContext())
 
         contacts?.forEach{
-            contactsRepo.addUser(it)
+            contactsRepo.addUser(
+                Contact(-1,
+                    it.name,
+                    it.starred,
+                    it.number
+                )
+            )
         }
 
         refreshContacts()

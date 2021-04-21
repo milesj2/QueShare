@@ -5,9 +5,9 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 import ga.kojin.bump.models.SocialMediaType
 import ga.kojin.bump.models.SystemContact
+import ga.kojin.bump.models.persisted.Contact
 import ga.kojin.bump.models.persisted.SocialMedia
 
 class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION ) {
@@ -16,7 +16,7 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         const val DATABASE_NAME = "data"
         const val DATABASE_VERSION = 1
 
-        const val USER_PROFILE_ID = 0
+        const val USER_PROFILE_ID : Long = -1
 
         const val TABLE_CONTACTS = "contacts"
         const val TABLE_SOCIAL_MEDIA = "social_media"
@@ -60,26 +60,21 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         db.execSQL(SQL_TABLE_CONTACTS_CREATE)
         db.execSQL(SQL_TABLE_SOCIAL_MEDIA_CREATE)
 
-        addUserProfile(db)
+        // Insert user profile
+        val contentValues = ContentValues()
+        contentValues.put(KEY_CONTACT_ID, USER_PROFILE_ID)
+        contentValues.put(KEY_STARRED, false)
+        contentValues.put(KEY_FIRSTNAME, "")
+        contentValues.put(KEY_MOBILE, "")
+
+        db.insert(TABLE_CONTACTS, null, contentValues)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         onCreate(db)
     }
 
-    fun addUserProfile(db: SQLiteDatabase): Long {
-        val contentValues = ContentValues()
-        contentValues.put(KEY_CONTACT_ID, 0)
-        contentValues.put(KEY_SYS_CONTACT_ID, -1)
-        contentValues.put(KEY_STARRED, false)
-        contentValues.put(KEY_FIRSTNAME, "")
-        contentValues.put(KEY_MOBILE, "")
-
-        return db.insert(TABLE_CONTACTS, null, contentValues)
-    }
-
-    fun addContact(contact: SystemContact): Long {
-
+    fun addContact(contact: Contact): Long {
         val contentValues = ContentValues()
         contentValues.put(KEY_SYS_CONTACT_ID, contact.id)
         contentValues.put(KEY_STARRED, contact.starred)
@@ -89,8 +84,8 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return this.writableDatabase.insert(TABLE_CONTACTS, null, contentValues)
     }
 
-    fun getContacts(): ArrayList<SystemContact> {
-        val list: ArrayList<SystemContact> = ArrayList()
+    fun getContacts(): ArrayList<Contact> {
+        val list: ArrayList<Contact> = ArrayList()
         val db = this.readableDatabase
         val query = "Select * from $TABLE_CONTACTS"
         val result = db.rawQuery(query, null)
@@ -99,7 +94,7 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                 if (result.getString(result.getColumnIndex(KEY_CONTACT_ID)) == "$USER_PROFILE_ID") {
                     continue
                 }
-                list.add(getSystemContactFromResult(result))
+                list.add(getContactFromResult(result))
             }
             while (result.moveToNext())
         }
@@ -107,17 +102,17 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return list
     }
 
-    fun getStarredContacts(): ArrayList<SystemContact> =
+    fun getStarredContacts(): ArrayList<Contact> =
         getContactResults( "Select * from $TABLE_CONTACTS WHERE $KEY_STARRED='1'")
 
-    fun getContactBySystemID(id: Int): SystemContact? {
-        var contact : SystemContact? = null
+    fun getContactBySystemID(id: String): Contact? {
+        var contact : Contact? = null
         val db = this.readableDatabase
         val query = "Select * from $TABLE_CONTACTS WHERE $KEY_SYS_CONTACT_ID='$id'"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {
-                contact =  getSystemContactFromResult(result)
+                contact =  getContactFromResult(result)
             }
             while (result.moveToNext())
         }
@@ -125,19 +120,32 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return contact
     }
 
-    fun getContactByID(id: Int): SystemContact? {
-        var contact : SystemContact? = null
+    fun getContactByID(id: Long): Contact? {
+        var contact : Contact? = null
         val db = this.readableDatabase
         val query = "Select * from $TABLE_CONTACTS WHERE $KEY_CONTACT_ID='$id'"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {
-                contact =  getSystemContactFromResult(result)
+                contact =  getContactFromResult(result)
             }
             while (result.moveToNext())
         }
         db.close()
         return contact
+    }
+
+    fun updateContact(contact: Contact) {
+        val contentValues = ContentValues()
+        contentValues.put(KEY_STARRED, if(contact.starred) 1 else 0)
+        contentValues.put(KEY_FIRSTNAME, contact.name)
+        contentValues.put(KEY_MOBILE, contact.number)
+
+        readableDatabase.update(
+            TABLE_CONTACTS,
+            contentValues,
+            "$KEY_CONTACT_ID=?",
+            arrayOf(contact.id.toString()))
     }
 
     fun addSocialMedia(socialMedia: SocialMedia): Long {
@@ -149,7 +157,7 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return this.writableDatabase.insert(TABLE_SOCIAL_MEDIA, null, contentValues)
     }
 
-    fun getSocialMedia(contactID: String?, socialMediaID: Int?): ArrayList<SocialMedia> {
+    fun getSocialMedia(contactID: Long?, socialMediaID: Int?): ArrayList<SocialMedia> {
         val list: ArrayList<SocialMedia> = ArrayList()
         val db = this.readableDatabase
         var query = "Select * from $TABLE_SOCIAL_MEDIA "
@@ -172,7 +180,7 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             do {
                 val social = SocialMedia(
                     result.getInt(result.getColumnIndex(KEY_SOCIAL_MEDIA_ID)),
-                    result.getString(result.getColumnIndex(KEY_CONTACT_ID)),
+                    result.getLong(result.getColumnIndex(KEY_CONTACT_ID)),
                     SocialMediaType.valueOf(
                         result.getString(result.getColumnIndex(KEY_SOCIAL_TYPE))
                     ),
@@ -186,8 +194,20 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return list
     }
 
-    private fun getContactResults(query : String) : ArrayList<SystemContact> {
-        val list: ArrayList<SystemContact> = ArrayList()
+    fun updateSocialMedia(socialMedia: SocialMedia) {
+        val contentValues = ContentValues()
+        contentValues.put(KEY_SOCIAL_TYPE, socialMedia.type.toString())
+        contentValues.put(KEY_HANDLE, socialMedia.handle)
+
+        readableDatabase.update(
+            TABLE_SOCIAL_MEDIA,
+            contentValues,
+            "$KEY_SOCIAL_MEDIA_ID=?",
+            arrayOf("${socialMedia.id}"))
+    }
+
+    private fun getContactResults(query : String) : ArrayList<Contact> {
+        val list: ArrayList<Contact> = ArrayList()
         val db = this.readableDatabase
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
@@ -195,7 +215,7 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                 if (result.getString(result.getColumnIndex(KEY_CONTACT_ID)) == "$USER_PROFILE_ID") {
                     continue
                 }
-                list.add(getSystemContactFromResult(result))
+                list.add(getContactFromResult(result))
             }
             while (result.moveToNext())
         }
@@ -209,6 +229,14 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
             result.getString(result.getColumnIndex(KEY_MOBILE)),
             result.getInt(result.getColumnIndex(KEY_STARRED)) == 1)
+    }
+
+    private fun getContactFromResult(result: Cursor) : Contact {
+        return Contact(
+            result.getLong(result.getColumnIndex(KEY_CONTACT_ID)),
+            result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
+            result.getInt(result.getColumnIndex(KEY_STARRED)) == 1,
+            result.getString(result.getColumnIndex(KEY_MOBILE)))
     }
 }
 

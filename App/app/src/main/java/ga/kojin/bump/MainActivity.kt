@@ -32,8 +32,6 @@ class MainActivity : AppCompatActivity() {
         viewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
 
-
-
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
 
@@ -46,7 +44,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         requireContacts()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        sectionsPagerAdapter.refreshData()
     }
 
     private fun requireContacts() {

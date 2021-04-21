@@ -48,4 +48,9 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
     override fun getCount(): Int {
         return TAB_TITLES.size
     }
+
+    fun refreshData() {
+        contactsFragment.refreshContacts()
+        favouritesFragment.refreshContacts()
+    }
 }

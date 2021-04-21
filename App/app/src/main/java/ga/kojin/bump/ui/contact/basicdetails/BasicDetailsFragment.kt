@@ -9,45 +9,46 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import ga.kojin.bump.R
-import ga.kojin.bump.models.SystemContact
-import org.w3c.dom.Text
+import ga.kojin.bump.data.ContactsRepository
+import ga.kojin.bump.models.persisted.Contact
 
-class BasicDetailsFragment(val contact: SystemContact?) : Fragment() {
+class BasicDetailsFragment(var contact: Contact) : Fragment() {
 
     lateinit var root : View
     lateinit var viewLayout : LinearLayout
     lateinit var editLayout: LinearLayout
+    private lateinit var contactNameView : TextView
+    private lateinit var contactNumberView : TextView
+    lateinit var contactNameEdit : EditText
+    lateinit var contactNumberEdit : EditText
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
         root = inflater.inflate(R.layout.fragment_basic_details, container, false)
 
         viewLayout = root.findViewById(R.id.layoutView)
         editLayout = root.findViewById(R.id.layoutEdit)
 
+        contactNameView = root.findViewById(R.id.txtName)
+        contactNumberView = root.findViewById(R.id.txtNumber)
+        contactNameEdit = root.findViewById(R.id.txtNameEdit)
+        contactNumberEdit = root.findViewById(R.id.txtNumberEdit)
+
         editLayout.visibility = View.GONE
 
-        if (contact != null) {
-            populateFields()
-        }
+
+        populateFields()
+
 
         return root
     }
 
     private fun populateFields() {
-        val contactNameView : TextView = root.findViewById(R.id.txtName)
-        val contactNumberView : TextView = root.findViewById(R.id.txtNumber)
-        val contactNameEdit : EditText = root.findViewById(R.id.txtNameEdit)
-        val contactNumberEdit : EditText = root.findViewById(R.id.txtNumberEdit)
-
-        contactNameView.text = contact!!.name
+        contactNameView.text = contact.name
         contactNumberView.text = contact.number
-
         contactNameEdit.setText(contact.name)
         contactNumberEdit.setText(contact.number)
 
@@ -60,7 +61,17 @@ class BasicDetailsFragment(val contact: SystemContact?) : Fragment() {
         } else {
             viewLayout.visibility = View.VISIBLE
             editLayout.visibility = View.GONE
+            populateFields()
         }
+    }
+
+    fun saveDetails(starred: Boolean) {
+        contact.starred = starred
+        contact.name = contactNameEdit.text.toString()
+        contact.number = contactNumberEdit.text.toString()
+
+        ContactsRepository(requireContext()).updateContact(contact)
+        populateFields()
     }
 
 }

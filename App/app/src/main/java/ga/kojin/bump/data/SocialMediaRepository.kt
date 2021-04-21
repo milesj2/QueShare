@@ -1,7 +1,7 @@
 package ga.kojin.bump.data
 
 import android.content.Context
-import ga.kojin.bump.models.SystemContact
+import ga.kojin.bump.data.DBDriver
 import ga.kojin.bump.models.persisted.SocialMedia
 
 class SocialMediaRepository (context: Context) {
@@ -25,9 +25,11 @@ class SocialMediaRepository (context: Context) {
         }
     }
 
-    fun getSocialMediaByContactID(contactID: String) : ArrayList<SocialMedia> =
+    fun getSocialMediaByContactID(contactID: Long) : ArrayList<SocialMedia> =
         dbDriver.getSocialMedia(contactID, null)
 
     fun getAllSocialMedia() : List<SocialMedia> =
         dbDriver.getSocialMedia(null, null)
+
+    fun updateSocialMedia(social : SocialMedia) = dbDriver.updateSocialMedia(social)
 }

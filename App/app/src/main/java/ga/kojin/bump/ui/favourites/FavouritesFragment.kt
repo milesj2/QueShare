@@ -8,13 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.reddit.indicatorfastscroll.FastScrollItemIndicator
-import com.reddit.indicatorfastscroll.FastScrollerThumbView
-import com.reddit.indicatorfastscroll.FastScrollerView
 import ga.kojin.bump.R
 import ga.kojin.bump.data.ContactsRepository
 import ga.kojin.bump.ui.contactslist.ContactsRecyclerViewAdapter
-import java.util.*
 
 class FavouritesFragment : Fragment()
 {
@@ -42,21 +38,6 @@ class FavouritesFragment : Fragment()
         }
 
         refreshContacts()
-
-        val fastScrollerView: FastScrollerView = root.findViewById(R.id.fastscroller)
-        val fastscrollerThumbView: FastScrollerThumbView = root.findViewById(R.id.fastscroller_thumb)
-
-        fastScrollerView.setupWithRecyclerView(
-            favouritesRV,
-            { position ->
-                val item = contactsAdapter.contactsList[position] // Get your model object
-                // or fetch the section at [position] from your database
-                item.name.substring(0, 1).toUpperCase(Locale.ROOT).let {
-                    FastScrollItemIndicator.Text(it)
-                }
-            }
-        )
-        fastscrollerThumbView.setupWithFastScroller(fastScrollerView)
 
         return root
     }

@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bump.R
 import ga.kojin.bump.models.SystemContact
+import ga.kojin.bump.models.persisted.Contact
 import ga.kojin.bump.ui.contact.ContactViewActivity
 
 class ContactsRecyclerViewAdapter(val context : Context)
@@ -21,7 +22,7 @@ class ContactsRecyclerViewAdapter(val context : Context)
 
     private val TAG : String = "ContactRecyclerViewAdapter"
 
-    var contactsList : ArrayList<SystemContact> = ArrayList()
+    var contactsList : ArrayList<Contact> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
@@ -33,7 +34,7 @@ class ContactsRecyclerViewAdapter(val context : Context)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val contact: SystemContact = contactsList[position]
+        val contact: Contact = contactsList[position]
 
         holder.contactViewName.text = contact.name
 
@@ -73,7 +74,7 @@ class ContactsRecyclerViewAdapter(val context : Context)
 
     override fun onTap(index: Int) {
         val intent = Intent("ga.kojin.bump.ui.contact.ContactActivity").apply {
-            putExtra("contact", contactsList[index].id)
+            putExtra("Contact", contactsList[index].id)
         }
         intent.setClass(context, ContactViewActivity::class.java)
         context.startActivity(intent)

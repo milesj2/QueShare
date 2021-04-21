@@ -1,5 +1,7 @@
-package ga.kojin.bump.ui.contact.socials
+package ga.kojin.bump.ui.contact.socialmedia
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import ga.kojin.bump.R
 import ga.kojin.bump.models.SocialMediaType
 import ga.kojin.bump.models.persisted.SocialMedia
 
+
 class SocialMediaListAdapter() :
     RecyclerView.Adapter<SocialMediaListAdapter.ViewHolder>() {
 
@@ -18,7 +21,6 @@ class SocialMediaListAdapter() :
     var editMode: Boolean = false
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-
         val socialMediaIco : ImageView = itemView.findViewById(R.id.imgSocialMediaIco)
         val txtHandle : TextView = itemView.findViewById(R.id.handle)
     }
@@ -30,6 +32,7 @@ class SocialMediaListAdapter() :
             R.layout.row_social_media
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = if (editMode){
@@ -54,11 +57,25 @@ class SocialMediaListAdapter() :
         holder.socialMediaIco.setImageResource(SocialMediaType.getImageResource(socialMedia.type))
 
         holder.txtHandle.text = socialMedia.handle
+
+        holder.txtHandle.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+            override fun afterTextChanged(s: Editable) {
+
+            }
+        })
     }
 
     override fun getItemCount(): Int {
         return socialMediaList.size
     }
 
+    fun saveDetails() {
 
+    }
 }

@@ -4,7 +4,7 @@ import ga.kojin.bump.models.SocialMediaType
 
 data class SocialMedia(
     var id: Int,
-    var contactID: String,
+    var contactID: Long,
     var type: SocialMediaType,
     var handle: String
     ) {
