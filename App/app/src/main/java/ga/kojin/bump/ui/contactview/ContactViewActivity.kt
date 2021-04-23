@@ -1,8 +1,9 @@
-package ga.kojin.bump.ui.contact
+package ga.kojin.bump.ui.contactview
 
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
@@ -15,31 +16,31 @@ import ga.kojin.bump.models.persisted.Contact
 
 class ContactViewActivity : AppCompatActivity() {
 
-    private lateinit var contact : Contact
-    private val contactsRepo : ContactsRepository = ContactsRepository(this)
+    private lateinit var contact: Contact
+    private val contactsRepo: ContactsRepository = ContactsRepository(this)
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
-    private var starred : Boolean = false
-    private var editMode : Boolean = false
-    private lateinit var contactViewAdapter : ContactViewAdapter
+    private var starred: Boolean = false
+    private var editMode: Boolean = false
+    private lateinit var contactViewAdapter: ContactViewAdapter
 
-    private lateinit var txtName : TextInputEditText
+    private lateinit var txtName: TextInputEditText
 
-    private lateinit var imgStarred : ImageView
+    private lateinit var imgStarred: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_details)
 
-        val btnNavBack : ImageView = findViewById(R.id.imgNavBack)
+        val btnNavBack: ImageView = findViewById(R.id.imgNavBack)
 
         btnNavBack.setOnClickListener {
             finish()
         }
 
-        val userID: Long = intent.extras!!.getLong("Contact")
+        val userID: Long = (intent.extras ?: return).getLong("Contact")
 
-        contact = contactsRepo.getContactByID(userID)!!
+        contact = (contactsRepo.getContactByID(userID) ?: return)
 
         imgStarred = findViewById(R.id.imgStarred)
         imgStarred.setOnClickListener {
@@ -62,13 +63,15 @@ class ContactViewActivity : AppCompatActivity() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        val btnEdit : ImageView = findViewById(R.id.imgEdit)
-        val btnDone : ImageView = findViewById(R.id.imgDone)
-        val btnClear : ImageView = findViewById(R.id.imgClear)
+        val btnEdit: ImageView = findViewById(R.id.imgEdit)
+        val btnDone: ImageView = findViewById(R.id.imgDone)
+        val btnClear: ImageView = findViewById(R.id.imgClear)
+        val btnDelete: ImageView = findViewById(R.id.imgDelete)
 
         btnEdit.setOnClickListener {
             editMode = true
@@ -94,10 +97,28 @@ class ContactViewActivity : AppCompatActivity() {
             btnClear.visibility = View.GONE
             contactViewAdapter.setEdit(editMode)
         }
+
+        btnDelete.setOnClickListener {
+            val dialogBuilder = AlertDialog.Builder(applicationContext)
+
+            dialogBuilder.setMessage("There are no contacts, would you like to import from system?")
+                .setCancelable(false)
+                .setPositiveButton("Proceed") { _, _ ->
+                    contactsRepo.deleteContact(contact.id)
+                    finish()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.cancel()
+                }
+
+            val alert = dialogBuilder.create()
+            alert.setTitle("Are you sure?")
+            alert.show()
+        }
     }
 
     private fun setStarredIco() {
-        if (starred){
+        if (starred) {
             imgStarred.setImageResource(android.R.drawable.star_big_on)
         } else {
             imgStarred.setImageResource(android.R.drawable.star_big_off)

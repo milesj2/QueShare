@@ -1,8 +1,7 @@
-package ga.kojin.bump.ui.contactslist
+package ga.kojin.bump.ui.main.contactslist
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,18 +10,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bump.R
-import ga.kojin.bump.models.SystemContact
 import ga.kojin.bump.models.persisted.Contact
-import ga.kojin.bump.ui.contact.ContactViewActivity
+import ga.kojin.bump.ui.contactview.ContactViewActivity
 
-class ContactsRecyclerViewAdapter(val context : Context)
-    : RecyclerView.Adapter<ContactsRecyclerViewAdapter.ViewHolder>(),
-        IClickListener
-{
+class ContactsRecyclerViewAdapter(val context: Context) :
+    RecyclerView.Adapter<ContactsRecyclerViewAdapter.ViewHolder>(),
+    IClickListener {
 
-    private val TAG : String = "ContactRecyclerViewAdapter"
+    private val TAG: String = "ContactRecyclerViewAdapter"
 
-    var contactsList : ArrayList<Contact> = ArrayList()
+    var contactsList: ArrayList<Contact> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
@@ -45,8 +42,8 @@ class ContactsRecyclerViewAdapter(val context : Context)
         return contactsList.size
     }
 
-    class ViewHolder(itemView : View, private val clickListener : IClickListener)
-        : RecyclerView.ViewHolder(itemView),
+    class ViewHolder(itemView: View, private val clickListener: IClickListener) :
+        RecyclerView.ViewHolder(itemView),
         View.OnClickListener,
         View.OnLongClickListener {
 

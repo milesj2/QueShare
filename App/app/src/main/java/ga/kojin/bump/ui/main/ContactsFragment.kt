@@ -1,4 +1,4 @@
-package ga.kojin.bump.ui.contacts
+package ga.kojin.bump.ui.main
 
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -17,7 +17,7 @@ import ga.kojin.bump.R
 import ga.kojin.bump.data.ContactsRepository
 import ga.kojin.bump.helpers.SystemContactsHelper
 import ga.kojin.bump.models.persisted.Contact
-import ga.kojin.bump.ui.contactslist.ContactsRecyclerViewAdapter
+import ga.kojin.bump.ui.main.contactslist.ContactsRecyclerViewAdapter
 import java.util.*
 
 class ContactsFragment : Fragment()
@@ -98,24 +98,17 @@ class ContactsFragment : Fragment()
 
         val dialogBuilder = AlertDialog.Builder(requireContext())
 
-        // set message of alert dialog
         dialogBuilder.setMessage("There are no contacts, would you like to import from system?")
-            // if the dialog is cancelable
             .setCancelable(false)
-            // positive button text and action
             .setPositiveButton("Proceed") { _, _ ->
                 importContacts()
             }
-            // negative button text and action
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()
             }
 
-        // create dialog box
         val alert = dialogBuilder.create()
-        // set title for alert dialog box
         alert.setTitle("No Contacts Found!")
-        // show alert dialog
         alert.show()
     }
 

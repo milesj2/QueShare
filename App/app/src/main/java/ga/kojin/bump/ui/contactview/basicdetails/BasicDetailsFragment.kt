@@ -1,4 +1,4 @@
-package ga.kojin.bump.ui.contact.basicdetails
+package ga.kojin.bump.ui.contactview.basicdetails
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,20 +14,19 @@ import ga.kojin.bump.models.persisted.Contact
 
 class BasicDetailsFragment(var contact: Contact) : Fragment() {
 
-    lateinit var root : View
-    lateinit var viewLayout : LinearLayout
+    lateinit var viewLayout: LinearLayout
     lateinit var editLayout: LinearLayout
-    private lateinit var contactNameView : TextView
-    private lateinit var contactNumberView : TextView
-    lateinit var contactNameEdit : EditText
-    lateinit var contactNumberEdit : EditText
+    private lateinit var contactNameView: TextView
+    private lateinit var contactNumberView: TextView
+    lateinit var contactNameEdit: EditText
+    lateinit var contactNumberEdit: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        root = inflater.inflate(R.layout.fragment_basic_details, container, false)
+        val root = inflater.inflate(R.layout.fragment_basic_details, container, false)
 
         viewLayout = root.findViewById(R.id.layoutView)
         editLayout = root.findViewById(R.id.layoutEdit)
@@ -39,9 +38,7 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
 
         editLayout.visibility = View.GONE
 
-
         populateFields()
-
 
         return root
     }
@@ -54,8 +51,12 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
 
     }
 
-    fun toggleEditMode(editMode: Boolean){
-        if (editMode){
+    override fun onResume() {
+        super.onResume()
+    }
+
+    fun toggleEditMode(editMode: Boolean) {
+        if (editMode) {
             viewLayout.visibility = View.GONE
             editLayout.visibility = View.VISIBLE
         } else {
@@ -74,4 +75,11 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
         populateFields()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }

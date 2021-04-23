@@ -32,14 +32,14 @@ class BumpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bump)
 
-        scannerView = findViewById(R.id.scanner_view)
+        scannerView = this.findViewById(R.id.scanner_view)
 
-        val btnNavBack : ImageView = findViewById(R.id.imgNavBack)
+        val btnNavBack: ImageView = this.findViewById(R.id.imgNavBack)
         btnNavBack.setOnClickListener {
             finish()
         }
 
-        val btnBump : Button = findViewById(R.id.btnShare)
+        val btnBump: Button = findViewById(R.id.btnShare)
 
         btnBump.setOnClickListener {
             val intent = Intent("ga.kojin.bump.ui.bump.qrshare.QRShareActivity")
@@ -47,7 +47,7 @@ class BumpActivity : AppCompatActivity() {
             this.startActivity(intent)
         }
 
-        startQRScanner()
+        this.startQRScanner()
     }
 
     override fun onRequestPermissionsResult(
@@ -57,28 +57,27 @@ class BumpActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (grantResults[0] == 0){
+        if (grantResults[0] == 0) {
             startQRScanner()
         }
     }
 
     private fun startQRScanner() {
-        if (applicationContext.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
+        if (this.applicationContext.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 100)
             return
         }
 
-
         codeScanner = CodeScanner(this, scannerView)
 
         // Parameters (default values)
-        codeScanner.camera = CodeScanner.CAMERA_BACK // or CAMERA_FRONT or specific camera id
-        codeScanner.formats = CodeScanner.ALL_FORMATS // list of type BarcodeFormat,
+        codeScanner.camera = CodeScanner.CAMERA_BACK
+        codeScanner.formats = CodeScanner.ALL_FORMATS
         // ex. listOf(BarcodeFormat.QR_CODE)
-        codeScanner.autoFocusMode = AutoFocusMode.SAFE // or CONTINUOUS
-        codeScanner.scanMode = ScanMode.SINGLE // or CONTINUOUS or PREVIEW
-        codeScanner.isAutoFocusEnabled = true // Whether to enable auto focus or not
-        codeScanner.isFlashEnabled = false // Whether to enable flash or not
+        codeScanner.autoFocusMode = AutoFocusMode.SAFE
+        codeScanner.scanMode = ScanMode.SINGLE
+        codeScanner.isAutoFocusEnabled = true
+        codeScanner.isFlashEnabled = false
 
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {

@@ -1,4 +1,4 @@
-package ga.kojin.bump.ui.favourites
+package ga.kojin.bump.ui.main
 
 import android.os.Bundle
 import android.util.Log
@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bump.R
 import ga.kojin.bump.data.ContactsRepository
-import ga.kojin.bump.ui.contactslist.ContactsRecyclerViewAdapter
+import ga.kojin.bump.ui.main.contactslist.ContactsRecyclerViewAdapter
 
 class FavouritesFragment : Fragment()
 {
-    private val TAG : String = "FavouritesFragment"
+    private val TAG: String = "FavouritesFragment"
 
     private lateinit var favouritesRV: RecyclerView
     private lateinit var contactsRepo : ContactsRepository

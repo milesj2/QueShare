@@ -1,4 +1,4 @@
-package ga.kojin.bump.ui.contact
+package ga.kojin.bump.ui.contactview
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,12 +16,12 @@ import ga.kojin.bump.models.persisted.Contact
 
 class ProfileViewFragment : Fragment() {
 
-    private lateinit var contact : Contact
-    private lateinit var contactsRepo : ContactsRepository
+    private lateinit var contact: Contact
+    private lateinit var contactsRepo: ContactsRepository
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
-    private var editMode : Boolean = false
-    private lateinit var contactAdapter : ContactViewAdapter
+    private var editMode: Boolean = false
+    private lateinit var contactAdapter: ContactViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,17 +37,17 @@ class ProfileViewFragment : Fragment() {
         val toolbar: Toolbar = root.findViewById(R.id.toolbar)
         val starred: ImageView = root.findViewById(R.id.imgStarred)
         val title: TextView = root.findViewById(R.id.txtName)
-        val navback: ImageView = root.findViewById(R.id.imgNavBack)
+        val navBack: ImageView = root.findViewById(R.id.imgNavBack)
         val avatar: ImageView = root.findViewById(R.id.imageView)
 
         toolbar.visibility = View.GONE
         starred.visibility = View.GONE
         title.visibility = View.GONE
-        navback.visibility = View.GONE
+        navBack.visibility = View.GONE
 
         avatar.setImageResource(R.mipmap.ic_default_avatar)
 
-        contactAdapter = ContactViewAdapter(contact, root.context, this.requireFragmentManager())
+        contactAdapter = ContactViewAdapter(contact, root.context, requireFragmentManager())
 
         viewPager = root.findViewById(R.id.detailsViewPager)
         tabLayout = root.findViewById(R.id.detailsTabBar)
@@ -59,13 +59,17 @@ class ProfileViewFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 viewPager.currentItem = tab.position
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        val btnEdit : ImageView = root.findViewById(R.id.imgEdit)
-        val btnDone : ImageView = root.findViewById(R.id.imgDone)
-        val btnClear : ImageView = root.findViewById(R.id.imgClear)
+        val btnEdit: ImageView = root.findViewById(R.id.imgEdit)
+        val btnDone: ImageView = root.findViewById(R.id.imgDone)
+        val btnClear: ImageView = root.findViewById(R.id.imgClear)
+        val btnDelete: ImageView = root.findViewById(R.id.imgDelete)
+
+        btnDelete.visibility = View.GONE
 
         btnEdit.setOnClickListener {
             editMode = true
@@ -98,5 +102,11 @@ class ProfileViewFragment : Fragment() {
     private fun saveProfile() {
         contactAdapter.saveDetails(false)
     }
+
+    override fun onResume() {
+        super.onResume()
+        // ContactViewAdapter(contact, this.requireContext(), requireFragmentManager())
+    }
+
 
 }

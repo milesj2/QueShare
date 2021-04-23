@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager
     private lateinit var sectionsPagerAdapter: SectionsPagerAdapter
 
-    private val TAG : String = "MainActivity"
+    private val TAG: String = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         requestPermission(Manifest.permission.READ_CONTACTS, 100)
     }
 
-    private fun requestPermission(permission : String, dReturn : Int){
+    private fun requestPermission(permission: String, dReturn: Int) {
         if (applicationContext.checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, arrayOf(permission), dReturn)
         }
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "Permission result for ${permissions[0]} is ${grantResults[0]}")
 
         if (grantResults[0] == 0){
-            sectionsPagerAdapter.contactsFragment.refreshContacts()
+            sectionsPagerAdapter.refreshData()
         }
     }
 

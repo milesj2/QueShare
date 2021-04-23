@@ -1,4 +1,4 @@
-package ga.kojin.bump.ui.contact
+package ga.kojin.bump.ui.contactview
 
 import android.content.Context
 import androidx.fragment.app.Fragment
@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import ga.kojin.bump.R
 import ga.kojin.bump.models.persisted.Contact
-import ga.kojin.bump.ui.contact.basicdetails.BasicDetailsFragment
-import ga.kojin.bump.ui.contact.socialmedia.SocialMediaFragment
+import ga.kojin.bump.ui.contactview.basicdetails.BasicDetailsFragment
+import ga.kojin.bump.ui.contactview.socialmedia.SocialMediaFragment
 
 
 private val TAB_TITLES = arrayOf(
@@ -24,10 +24,12 @@ class ContactViewAdapter(var contact: Contact, val context: Context, fm: Fragmen
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                basicDetailsFragment
+                // basicDetailsFragment
+                BasicDetailsFragment(contact)
             }
             1 -> {
-                socialMediaFragment
+                // socialMediaFragment
+                SocialMediaFragment(contact)
             }
             else -> getItem(position)
         }

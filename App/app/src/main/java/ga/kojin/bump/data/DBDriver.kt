@@ -10,13 +10,14 @@ import ga.kojin.bump.models.SystemContact
 import ga.kojin.bump.models.persisted.Contact
 import ga.kojin.bump.models.persisted.SocialMedia
 
-class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION ) {
+class DBDriver(var context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         const val DATABASE_NAME = "data"
         const val DATABASE_VERSION = 1
 
-        const val USER_PROFILE_ID : Long = -1
+        const val USER_PROFILE_ID: Long = -1
 
         const val TABLE_CONTACTS = "contacts"
         const val TABLE_SOCIAL_MEDIA = "social_media"
@@ -95,41 +96,38 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                     continue
                 }
                 list.add(getContactFromResult(result))
-            }
-            while (result.moveToNext())
+            } while (result.moveToNext())
         }
         db.close()
         return list
     }
 
     fun getStarredContacts(): ArrayList<Contact> =
-        getContactResults( "Select * from $TABLE_CONTACTS WHERE $KEY_STARRED='1'")
+        getContactResults("Select * from $TABLE_CONTACTS WHERE $KEY_STARRED='1'")
 
     fun getContactBySystemID(id: String): Contact? {
-        var contact : Contact? = null
+        var contact: Contact? = null
         val db = this.readableDatabase
         val query = "Select * from $TABLE_CONTACTS WHERE $KEY_SYS_CONTACT_ID='$id'"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {
-                contact =  getContactFromResult(result)
-            }
-            while (result.moveToNext())
+                contact = getContactFromResult(result)
+            } while (result.moveToNext())
         }
         db.close()
         return contact
     }
 
     fun getContactByID(id: Long): Contact? {
-        var contact : Contact? = null
+        var contact: Contact? = null
         val db = this.readableDatabase
         val query = "Select * from $TABLE_CONTACTS WHERE $KEY_CONTACT_ID='$id'"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {
-                contact =  getContactFromResult(result)
-            }
-            while (result.moveToNext())
+                contact = getContactFromResult(result)
+            } while (result.moveToNext())
         }
         db.close()
         return contact
@@ -137,7 +135,7 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     fun updateContact(contact: Contact) {
         val contentValues = ContentValues()
-        contentValues.put(KEY_STARRED, if(contact.starred) 1 else 0)
+        contentValues.put(KEY_STARRED, if (contact.starred) 1 else 0)
         contentValues.put(KEY_FIRSTNAME, contact.name)
         contentValues.put(KEY_MOBILE, contact.number)
 
@@ -145,7 +143,20 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             TABLE_CONTACTS,
             contentValues,
             "$KEY_CONTACT_ID=?",
-            arrayOf(contact.id.toString()))
+            arrayOf(contact.id.toString())
+        )
+    }
+
+    fun deleteContact(contactID: Long) {
+        val contentValues = ContentValues()
+        contentValues.put(KEY_CONTACT_ID, contactID)
+
+        readableDatabase.delete(
+            TABLE_CONTACTS,
+            "$KEY_CONTACT_ID=?",
+            arrayOf("$contactID")
+        )
+
     }
 
     fun addSocialMedia(socialMedia: SocialMedia): Long {
@@ -162,16 +173,16 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         val db = this.readableDatabase
         var query = "Select * from $TABLE_SOCIAL_MEDIA "
 
-        if (contactID != null || socialMediaID != null){
+        if (contactID != null || socialMediaID != null) {
             query += "WHERE "
         }
-        if(contactID!= null){
+        if (contactID != null) {
             query += "$KEY_CONTACT_ID='$contactID' "
         }
-        if (contactID != null && socialMediaID != null){
+        if (contactID != null && socialMediaID != null) {
             query += "AND "
         }
-        if(socialMediaID != null){
+        if (socialMediaID != null) {
             query += "$KEY_SOCIAL_MEDIA_ID='$socialMediaID' "
         }
 
@@ -187,8 +198,7 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                     result.getString(result.getColumnIndex(KEY_HANDLE))
                 )
                 list.add(social)
-            }
-            while (result.moveToNext())
+            } while (result.moveToNext())
         }
         db.close()
         return list
@@ -203,10 +213,11 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             TABLE_SOCIAL_MEDIA,
             contentValues,
             "$KEY_SOCIAL_MEDIA_ID=?",
-            arrayOf("${socialMedia.id}"))
+            arrayOf("${socialMedia.id}")
+        )
     }
 
-    private fun getContactResults(query : String) : ArrayList<Contact> {
+    private fun getContactResults(query: String): ArrayList<Contact> {
         val list: ArrayList<Contact> = ArrayList()
         val db = this.readableDatabase
         val result = db.rawQuery(query, null)
@@ -216,27 +227,28 @@ class DBDriver(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
                     continue
                 }
                 list.add(getContactFromResult(result))
-            }
-            while (result.moveToNext())
+            } while (result.moveToNext())
         }
         db.close()
         return list
     }
 
-    private fun getSystemContactFromResult(result: Cursor) : SystemContact {
+    private fun getSystemContactFromResult(result: Cursor): SystemContact {
         return SystemContact(
             result.getString(result.getColumnIndex(KEY_SYS_CONTACT_ID)),
             result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
             result.getString(result.getColumnIndex(KEY_MOBILE)),
-            result.getInt(result.getColumnIndex(KEY_STARRED)) == 1)
+            result.getInt(result.getColumnIndex(KEY_STARRED)) == 1
+        )
     }
 
-    private fun getContactFromResult(result: Cursor) : Contact {
+    private fun getContactFromResult(result: Cursor): Contact {
         return Contact(
             result.getLong(result.getColumnIndex(KEY_CONTACT_ID)),
             result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
             result.getInt(result.getColumnIndex(KEY_STARRED)) == 1,
-            result.getString(result.getColumnIndex(KEY_MOBILE)))
+            result.getString(result.getColumnIndex(KEY_MOBILE))
+        )
     }
 }
 

@@ -15,15 +15,15 @@ class ContactsRepository(context: Context) {
         TODO()
     }
 
-    fun getContactBySystemID(id: String) : Contact? = dbDriver.getContactBySystemID(id)
+    fun getContactBySystemID(id: String): Contact? = dbDriver.getContactBySystemID(id)
 
-    fun getContactByID(id: Long) : Contact? = dbDriver.getContactByID(id)
+    fun getContactByID(id: Long): Contact? = dbDriver.getContactByID(id)
 
     fun getUsers(): ArrayList<Contact> = dbDriver.getContacts()
 
-    fun getUserProfile() : Contact = dbDriver.getContactByID(DBDriver.USER_PROFILE_ID)!!
+    fun getUserProfile(): Contact = dbDriver.getContactByID(DBDriver.USER_PROFILE_ID)!!
 
-    fun getStarredContacts() : ArrayList<Contact> = dbDriver.getStarredContacts()
+    fun getStarredContacts(): ArrayList<Contact> = dbDriver.getStarredContacts()
 
     fun setContactFavouriteStatus(contactID: Long, status: Boolean) {
         val contact = dbDriver.getContactByID(contactID) ?: return
@@ -32,6 +32,8 @@ class ContactsRepository(context: Context) {
     }
 
     fun updateContact(contact: Contact) = dbDriver.updateContact(contact)
+
+    fun deleteContact(contactID: Long) = dbDriver.deleteContact(contactID)
 
 
 

@@ -1,4 +1,4 @@
-package ga.kojin.bump.ui.contactslist
+package ga.kojin.bump.ui.main.contactslist
 
 interface IClickListener {
     fun onLongTap(index : Int)
