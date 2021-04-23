@@ -12,7 +12,8 @@
         android:id="@+id/imageConstraint"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/pink_500">
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
@@ -23,6 +24,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="TODO" />
+        <TextView
+            android:id="@+id/txtInitial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="100sp"
+            android:visibility="gone"
+            />
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"

@@ -1,8 +1,10 @@
 package ga.kojin.bump.ui.contactview
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
@@ -30,6 +32,7 @@ class ContactViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_contact_details)
 
         val btnNavBack: ImageView = findViewById(R.id.imgNavBack)
@@ -72,10 +75,15 @@ class ContactViewActivity : AppCompatActivity() {
         val btnDone: ImageView = findViewById(R.id.imgDone)
         val btnClear: ImageView = findViewById(R.id.imgClear)
         val btnDelete: ImageView = findViewById(R.id.imgDelete)
+        val txtInitial: TextView = findViewById(R.id.txtInitial)
+
+        txtInitial.text = "${contact.name[0]}"
+        txtInitial.visibility = View.VISIBLE
 
         btnEdit.setOnClickListener {
             editMode = true
             btnEdit.visibility = View.GONE
+            btnDelete.visibility = View.GONE
             btnDone.visibility = View.VISIBLE
             btnClear.visibility = View.VISIBLE
             contactViewAdapter.setEdit(editMode)
@@ -85,6 +93,7 @@ class ContactViewActivity : AppCompatActivity() {
             saveContact()
             editMode = false
             btnEdit.visibility = View.VISIBLE
+            btnDelete.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
             contactViewAdapter.setEdit(editMode)
@@ -99,13 +108,13 @@ class ContactViewActivity : AppCompatActivity() {
         }
 
         btnDelete.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(applicationContext)
+            val dialogBuilder = AlertDialog.Builder(viewPager.context)
 
             dialogBuilder.setMessage("There are no contacts, would you like to import from system?")
                 .setCancelable(false)
                 .setPositiveButton("Proceed") { _, _ ->
                     contactsRepo.deleteContact(contact.id)
-                    finish()
+                    this.finish()
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.cancel()

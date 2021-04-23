@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewPager: ViewPager
-    private lateinit var sectionsPagerAdapter: SectionsPagerAdapter
+    private var sectionsPagerAdapter: SectionsPagerAdapter  = SectionsPagerAdapter(this, supportFragmentManager)
 
     private val TAG: String = "MainActivity"
 
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+        // sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         viewPager = binding.viewPager
         viewPager.adapter = sectionsPagerAdapter
 

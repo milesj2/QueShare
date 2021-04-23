@@ -1,6 +1,7 @@
 package ga.kojin.bump.ui.contactview.basicdetails
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,8 @@ import ga.kojin.bump.data.ContactsRepository
 import ga.kojin.bump.models.persisted.Contact
 
 class BasicDetailsFragment(var contact: Contact) : Fragment() {
+
+    private val TAG: String = "Basic Details Fragment"
 
     lateinit var viewLayout: LinearLayout
     lateinit var editLayout: LinearLayout
@@ -81,5 +84,6 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.w(TAG, "DESTROYED")
     }
 }

@@ -22,10 +22,10 @@ import java.util.*
 
 class ContactsFragment : Fragment()
 {
-    private val TAG : String = "ContactsFragment"
+    private val TAG: String = "ContactsFragment"
 
     private lateinit var contactsRV: RecyclerView
-    private lateinit var contactsRepo : ContactsRepository
+    private lateinit var contactsRepo: ContactsRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +40,7 @@ class ContactsFragment : Fragment()
         val contactsAdapter = ContactsRecyclerViewAdapter(requireContext())
 
         contactsRV.apply {
-            layoutManager = LinearLayoutManager(this.context)
+            layoutManager = LinearLayoutManager(context)
             adapter = contactsAdapter
         }
 
@@ -52,10 +52,9 @@ class ContactsFragment : Fragment()
         fastScrollerView.setupWithRecyclerView(
             contactsRV,
             { position ->
-                val item = contactsAdapter.contactsList[position] // Get your model object
-                // or fetch the section at [position] from your database
-                item.name.substring(0, 1).toUpperCase(Locale.ROOT).let {
-                    FastScrollItemIndicator.Text(it)
+                val item = contactsAdapter.contactsList[position]
+                item.name[0].toUpperCase().run {
+                    FastScrollItemIndicator.Text("$this")
                 }
             }
         )

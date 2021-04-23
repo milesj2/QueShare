@@ -58,6 +58,4 @@ class FavouritesFragment : Fragment()
         Log.v(TAG, "notifyDataSetChanged")
         favouritesRV.adapter!!.notifyDataSetChanged()
     }
-
-
 }

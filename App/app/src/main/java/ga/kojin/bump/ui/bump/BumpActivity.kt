@@ -19,6 +19,7 @@ import ga.kojin.bump.R
 import ga.kojin.bump.ui.bump.qrshare.QRShareActivity
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ga.kojin.bump.data.ContactsRepository
 import ga.kojin.bump.models.persisted.Contact
 
@@ -39,7 +40,8 @@ class BumpActivity : AppCompatActivity() {
             finish()
         }
 
-        val btnBump: Button = findViewById(R.id.btnShare)
+        // val btnBump: Button = findViewById(R.id.btnShare)
+        val btnBump: FloatingActionButton = findViewById(R.id.fbtnShare)
 
         btnBump.setOnClickListener {
             val intent = Intent("ga.kojin.bump.ui.bump.qrshare.QRShareActivity")

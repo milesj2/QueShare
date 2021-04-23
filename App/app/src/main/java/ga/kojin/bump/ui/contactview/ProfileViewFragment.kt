@@ -47,7 +47,7 @@ class ProfileViewFragment : Fragment() {
 
         avatar.setImageResource(R.mipmap.ic_default_avatar)
 
-        contactAdapter = ContactViewAdapter(contact, root.context, requireFragmentManager())
+        contactAdapter = ContactViewAdapter(contact, requireContext(), requireFragmentManager())
 
         viewPager = root.findViewById(R.id.detailsViewPager)
         tabLayout = root.findViewById(R.id.detailsTabBar)

@@ -24,12 +24,10 @@ class ContactViewAdapter(var contact: Contact, val context: Context, fm: Fragmen
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> {
-                // basicDetailsFragment
-                BasicDetailsFragment(contact)
+                basicDetailsFragment
             }
             1 -> {
-                // socialMediaFragment
-                SocialMediaFragment(contact)
+                socialMediaFragment
             }
             else -> getItem(position)
         }
