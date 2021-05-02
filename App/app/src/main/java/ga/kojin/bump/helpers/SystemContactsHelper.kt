@@ -17,8 +17,13 @@ object SystemContactsHelper : Application() {
 
     fun getContactList(context: Context): ArrayList<SystemContact>? {
 
-        if (context.checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED)
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_CONTACTS
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
             return null
+        }
 
         val cr: ContentResolver = context.contentResolver
 

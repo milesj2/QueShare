@@ -2,6 +2,7 @@ package ga.kojin.bump.ui.contactview.socialmedia
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,8 @@ import ga.kojin.bump.models.persisted.Contact
 import ga.kojin.bump.models.persisted.SocialMedia
 
 class SocialMediaFragment(val contact: Contact) : Fragment() {
+
+    private val TAG: String = "SocialMediaFragment"
 
     lateinit var root: View
     lateinit var socialMediaList: ArrayList<SocialMedia>
@@ -33,6 +36,7 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.w(TAG, "CREATED")
 
         root = inflater.inflate(R.layout.fragment_social_media, container, false)
 
@@ -62,7 +66,7 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
         }
 
         chooseType.setOnClickListener {
-            val dialog = Dialog(this.requireContext())
+            val dialog = Dialog(requireContext())
             dialog.setContentView(R.layout.dialog_social_media_type_picker)
 
             val picker: NumberPicker = dialog.findViewById(R.id.picker)
@@ -115,21 +119,38 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
     }
 
     fun saveDetails() {
-        for (i in 0 until socialMediaList.size) {
-            val socialVH =
-                socialMediaRV.findViewHolderForAdapterPosition(0) as SocialMediaListAdapter.ViewHolder
-            val socialMedia = socialMediaList[i]
-            socialMedia.handle = socialVH.txtHandle.text.toString()
-            SocialMediaRepository(requireContext()).updateSocialMedia(socialMedia)
+        try {
+            for (i in 0 until socialMediaList.size) {
+                val socialVH =
+                    socialMediaRV.findViewHolderForAdapterPosition(0) as SocialMediaListAdapter.ViewHolder
+                val socialMedia = socialMediaList[i]
+                socialMedia.handle = socialVH.txtHandle.text.toString()
+                SocialMediaRepository(requireContext()).updateSocialMedia(socialMedia)
+            }
+            socialMediaAdapter.notifyDataSetChanged()
+        } catch (e: UninitializedPropertyAccessException) {
+            return
         }
-        socialMediaAdapter.notifyDataSetChanged()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.w(TAG, "RESUMED")
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.w(TAG, "onDestroyed")
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.w(TAG, "PAUSED")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Log.w(TAG, "onDestroyView")
     }
 }

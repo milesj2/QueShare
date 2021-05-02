@@ -9,9 +9,9 @@ class ContactsRepository(context: Context) {
 
     private val dbDriver: DBDriver = DBDriver(context)
 
-    fun addUser(contact: Contact) : Boolean = dbDriver.addContact(contact) == 1L
+    fun addContact(contact: Contact): Long = dbDriver.addContact(contact)
 
-    fun removeUser(contact: SystemContact) : Boolean {
+    fun removeUser(contact: SystemContact): Boolean {
         TODO()
     }
 
@@ -34,7 +34,6 @@ class ContactsRepository(context: Context) {
     fun updateContact(contact: Contact) = dbDriver.updateContact(contact)
 
     fun deleteContact(contactID: Long) = dbDriver.deleteContact(contactID)
-
 
 
 }

@@ -92,8 +92,8 @@ class ContactViewActivity : AppCompatActivity() {
         btnDone.setOnClickListener {
             saveContact()
             editMode = false
-            btnEdit.visibility = View.VISIBLE
             btnDelete.visibility = View.VISIBLE
+            btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
             contactViewAdapter.setEdit(editMode)
@@ -101,6 +101,7 @@ class ContactViewActivity : AppCompatActivity() {
 
         btnClear.setOnClickListener {
             editMode = false
+            btnEdit.visibility = View.VISIBLE
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
@@ -114,7 +115,7 @@ class ContactViewActivity : AppCompatActivity() {
                 .setCancelable(false)
                 .setPositiveButton("Proceed") { _, _ ->
                     contactsRepo.deleteContact(contact.id)
-                    this.finish()
+                    finish()
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.cancel()

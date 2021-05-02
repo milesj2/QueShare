@@ -21,6 +21,7 @@ class DBDriver(var context: Context) :
 
         const val TABLE_CONTACTS = "contacts"
         const val TABLE_SOCIAL_MEDIA = "social_media"
+        const val TABLE_PHOTOS = "photos"
 
         const val KEY_CONTACT_ID = "contact_id"
         const val KEY_SYS_CONTACT_ID = "sys_contact_id"
@@ -34,6 +35,8 @@ class DBDriver(var context: Context) :
         const val KEY_SOCIAL_TYPE = "type"
         const val KEY_HANDLE = "handle"
 
+        const val KEY_PHOTO_ID = "photo_id"
+        const val KEY_IMAGE = "image"
     }
 
     private val SQL_TALE_CONTACTS_DROP = "  DROP TABLE dbo.Contacts;"
@@ -57,9 +60,17 @@ class DBDriver(var context: Context) :
             ",$KEY_HANDLE TEXT" +
             ");"
 
+    private val SQL_TABLE_IMAGE_CREATE = "CREATE TABLE " +
+            "$TABLE_PHOTOS (" +
+            " $KEY_PHOTO_ID INTEGER PRIMARY KEY " +
+            ",$KEY_CONTACT_ID INTEGER" +
+            ",$KEY_IMAGE" +
+            ");"
+
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_TABLE_CONTACTS_CREATE)
         db.execSQL(SQL_TABLE_SOCIAL_MEDIA_CREATE)
+        db.execSQL(SQL_TABLE_IMAGE_CREATE)
 
         // Insert user profile
         val contentValues = ContentValues()
@@ -250,5 +261,11 @@ class DBDriver(var context: Context) :
             result.getString(result.getColumnIndex(KEY_MOBILE))
         )
     }
+
+    fun addImage() {}
+
+    fun removeImage() {}
+
+    fun getImageByContactID(contactID: Long) {}
 }
 

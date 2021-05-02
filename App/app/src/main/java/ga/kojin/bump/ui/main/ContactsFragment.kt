@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,10 +19,8 @@ import ga.kojin.bump.data.ContactsRepository
 import ga.kojin.bump.helpers.SystemContactsHelper
 import ga.kojin.bump.models.persisted.Contact
 import ga.kojin.bump.ui.main.contactslist.ContactsRecyclerViewAdapter
-import java.util.*
 
-class ContactsFragment : Fragment()
-{
+class ContactsFragment : Fragment() {
     private val TAG: String = "ContactsFragment"
 
     private lateinit var contactsRV: RecyclerView
@@ -47,7 +46,8 @@ class ContactsFragment : Fragment()
         refreshContacts()
 
         val fastScrollerView: FastScrollerView = root.findViewById(R.id.fastscroller)
-        val fastscrollerThumbView: FastScrollerThumbView = root.findViewById(R.id.fastscroller_thumb)
+        val fastscrollerThumbView: FastScrollerThumbView =
+            root.findViewById(R.id.fastscroller_thumb)
 
         fastScrollerView.setupWithRecyclerView(
             contactsRV,
@@ -67,7 +67,7 @@ class ContactsFragment : Fragment()
         if (context == null)
             return
 
-        if (contactsRV.adapter == null){
+        if (contactsRV.adapter == null) {
             Log.v(TAG, "No adapter for dataset!")
             return
         }
@@ -78,20 +78,24 @@ class ContactsFragment : Fragment()
 
         adapter.contactsList.sortBy { selector(it) }
 
-        if(adapter.contactsList.size == 0){
+        if (adapter.contactsList.size == 0) {
             Log.v(TAG, "No stored users.")
             requestImport()
         }
 
         Log.v(TAG, "notifyDataSetChanged")
-        this.contactsRV.adapter!!.notifyDataSetChanged()
+        contactsRV.adapter!!.notifyDataSetChanged()
     }
 
     fun selector(c: Contact): String = c.name
 
     private fun requestImport() {
 
-        if (context?.checkSelfPermission(android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED){
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.READ_CONTACTS
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
             return
         }
 
@@ -116,9 +120,10 @@ class ContactsFragment : Fragment()
 
         val contacts = SystemContactsHelper.getContactList(requireContext())
 
-        contacts?.forEach{
-            contactsRepo.addUser(
-                Contact(-1,
+        contacts?.forEach {
+            contactsRepo.addContact(
+                Contact(
+                    -1,
                     it.name,
                     it.starred,
                     it.number

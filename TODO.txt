@@ -1,0 +1,16 @@
+Themes:
+Status barcolour
+fab Icons
+FastScroller Text colour + Scroller
+Remove contact title TextAdd black bar to profile view
+
+Functionality:
+Add Images + UI 
+Blank profile checks
+Move QR Code into popup
+Change text edits to popups
+
+
+Bugs:
+ViewPager profile edit crash
+Social Media needs to scroll

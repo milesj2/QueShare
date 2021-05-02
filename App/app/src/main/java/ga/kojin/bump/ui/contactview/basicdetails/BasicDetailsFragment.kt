@@ -15,10 +15,11 @@ import ga.kojin.bump.models.persisted.Contact
 
 class BasicDetailsFragment(var contact: Contact) : Fragment() {
 
-    private val TAG: String = "Basic Details Fragment"
+    private val TAG: String = "BasicDetailsFragment"
 
-    lateinit var viewLayout: LinearLayout
-    lateinit var editLayout: LinearLayout
+    lateinit var root: View
+    var viewLayout: LinearLayout? = null
+    var editLayout: LinearLayout? = null
     private lateinit var contactNameView: TextView
     private lateinit var contactNumberView: TextView
     lateinit var contactNameEdit: EditText
@@ -29,21 +30,22 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val root = inflater.inflate(R.layout.fragment_basic_details, container, false)
+        Log.w(TAG, "CREATED ${this}")
+        val view2: View = inflater.inflate(R.layout.fragment_basic_details, container, false)
 
-        viewLayout = root.findViewById(R.id.layoutView)
-        editLayout = root.findViewById(R.id.layoutEdit)
+        viewLayout = view2.findViewById(R.id.layoutView)
+        editLayout = view2.findViewById(R.id.layoutEdit)
 
-        contactNameView = root.findViewById(R.id.txtName)
-        contactNumberView = root.findViewById(R.id.txtNumber)
-        contactNameEdit = root.findViewById(R.id.txtNameEdit)
-        contactNumberEdit = root.findViewById(R.id.txtNumberEdit)
+        contactNameView = view2.findViewById(R.id.txtName)
+        contactNumberView = view2.findViewById(R.id.txtNumber)
+        contactNameEdit = view2.findViewById(R.id.txtNameEdit)
+        contactNumberEdit = view2.findViewById(R.id.txtNumberEdit)
 
-        editLayout.visibility = View.GONE
+        editLayout?.visibility = View.GONE
 
         populateFields()
-
-        return root
+        root = view2
+        return view2
     }
 
     private fun populateFields() {
@@ -56,34 +58,61 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.w(TAG, "RESUMED ${this}")
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.w(TAG, "ONSTART ${this} ")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.w(TAG, "PAUSED ${this}")
     }
 
     fun toggleEditMode(editMode: Boolean) {
-        if (editMode) {
-            viewLayout.visibility = View.GONE
-            editLayout.visibility = View.VISIBLE
-        } else {
-            viewLayout.visibility = View.VISIBLE
-            editLayout.visibility = View.GONE
-            populateFields()
+
+        try {
+            if (editMode) {
+
+                viewLayout?.visibility = View.GONE
+                editLayout?.visibility = View.VISIBLE
+            } else {
+
+                viewLayout?.visibility = View.VISIBLE
+                editLayout?.visibility = View.GONE
+                populateFields()
+            }
+        } catch (e: UninitializedPropertyAccessException) {
+            Log.w(TAG, "VIEWLAYOUT UninitializedPropertyAccessException")
+            return
         }
+
     }
 
     fun saveDetails(starred: Boolean) {
-        contact.starred = starred
-        contact.name = contactNameEdit.text.toString()
-        contact.number = contactNumberEdit.text.toString()
+        try {
+            contact.starred = starred
+            contact.name = contactNameEdit.text.toString()
+            contact.number = contactNumberEdit.text.toString()
 
-        ContactsRepository(requireContext()).updateContact(contact)
-        populateFields()
+            ContactsRepository(requireContext()).updateContact(contact)
+            populateFields()
+        } catch (e: UninitializedPropertyAccessException) {
+            return
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.w(TAG, "DESTROYED ${this}")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.w(TAG, "DESTROYED")
+        Log.w(TAG, "DESTROYEDVIEW ${this}")
     }
 }

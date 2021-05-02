@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <attr name="backgroundGradient" format="reference"/>
+
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/bg_background_black_fade</item>
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_fade_out</item>
+    </style>
+
+    <style name="CustomActionBarTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
+    </style>
+
+    <style name="CustomActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#66000000</item>
+        <item name="android:textColor">@color/off_white</item>
+    </style>
+
+
+    <style name="CustomActionBarTextAppearance" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/off_white</item>
+    </style>
+
+
+</resources>

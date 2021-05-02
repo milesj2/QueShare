@@ -18,8 +18,8 @@ private val TAB_TITLES = arrayOf(
 class ContactViewAdapter(var contact: Contact, val context: Context, fm: FragmentManager) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
 {
-    var basicDetailsFragment: BasicDetailsFragment = BasicDetailsFragment(contact)
-    var socialMediaFragment: SocialMediaFragment = SocialMediaFragment(contact)
+    private var basicDetailsFragment: BasicDetailsFragment = BasicDetailsFragment(contact)
+    private var socialMediaFragment: SocialMediaFragment = SocialMediaFragment(contact)
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
@@ -33,20 +33,17 @@ class ContactViewAdapter(var contact: Contact, val context: Context, fm: Fragmen
         }
     }
 
-    override fun getPageTitle(position: Int): CharSequence {
-        return context.resources.getString(TAB_TITLES[position])
-    }
+    override fun getPageTitle(position: Int): CharSequence =
+        context.resources.getString(TAB_TITLES[position])
 
-    override fun getCount(): Int {
-        return TAB_TITLES.size
-    }
+    override fun getCount(): Int = TAB_TITLES.size
 
     fun saveDetails(starred: Boolean) {
         basicDetailsFragment.saveDetails(starred)
         socialMediaFragment.saveDetails()
     }
 
-    fun setEdit(editMode: Boolean){
+    fun setEdit(editMode: Boolean) {
         socialMediaFragment.setEdit(editMode)
         basicDetailsFragment.toggleEditMode(editMode)
     }

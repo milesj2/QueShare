@@ -17,7 +17,7 @@ class FavouritesFragment : Fragment()
     private val TAG: String = "FavouritesFragment"
 
     private lateinit var favouritesRV: RecyclerView
-    private lateinit var contactsRepo : ContactsRepository
+    private lateinit var contactsRepo: ContactsRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,

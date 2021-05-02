@@ -3,6 +3,5 @@
     <string name="tab_text_1">Favourites</string>
     <string name="tab_text_2">Contacts</string>
     <string name="tab_text_3">Profile</string>
-    <string name="scan_qr">Scan Bump Code!</string>
-    <string name="share_qr">Or share your own</string>
+    <string name="scan_qr">Scan QueConnect Code!</string>
 </resources>

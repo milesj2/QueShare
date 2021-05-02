@@ -12,36 +12,46 @@
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:orientation="horizontal"
             android:padding="16dp"
-            android:gravity="center_vertical">
+            android:background="@drawable/bg_contact_row"
+            android:gravity="center_vertical"
+            android:layout_margin="10dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_baseline_person_24" />
+                app:srcCompat="@drawable/ic_baseline_person_24"
+                style="@style/Icon"
+                />
             <TextView
                 android:id="@+id/txtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/DefaultText"
                 android:paddingStart="16dp"
                 android:text="TextView" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:orientation="horizontal"
             android:padding="16dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_contact_row"
+            android:layout_margin="10dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_baseline_local_phone_24" />
+                app:srcCompat="@drawable/ic_baseline_local_phone_24"
+                style="@style/Icon"
+                />
             <TextView
                 android:id="@+id/txtNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
+                android:textAppearance="@style/DefaultText"
                 android:text="+447123456789" />
         </LinearLayout>
     </LinearLayout>
@@ -52,36 +62,47 @@
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:orientation="horizontal"
             android:padding="16dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_contact_row"
+            android:layout_margin="10dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_baseline_person_24" />
+                app:srcCompat="@drawable/ic_baseline_person_24"
+                android:background="@drawable/shape_circle_sml"
+                style="@style/Icon"/>
             <EditText
                 android:id="@+id/txtNameEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
+                android:textAppearance="@style/DefaultText"
+                android:textColor="@color/off_white"
                 android:text="TextView" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:orientation="horizontal"
             android:padding="16dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_contact_row"
+            android:layout_margin="10dp">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_baseline_local_phone_24" />
+                app:srcCompat="@drawable/ic_baseline_local_phone_24"
+                style="@style/Icon" />
 
             <EditText
                 android:id="@+id/txtNumberEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/DefaultText"
+                android:textColor="@color/off_white"
                 android:paddingStart="16dp"
                 android:text="+447123456789" />
         </LinearLayout>

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import android.widget.ListView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayout
 import ga.kojin.bump.R
 import ga.kojin.bump.data.ContactsRepository
 import ga.kojin.bump.models.persisted.Contact
+
 
 class ProfileViewFragment : Fragment() {
 
@@ -29,25 +30,27 @@ class ProfileViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreate(savedInstanceState)
-        val root = inflater.inflate(R.layout.activity_contact_details, container, false)
+        val root = inflater.inflate(R.layout.fragment_profile_view, container, false)
 
         contactsRepo = ContactsRepository(root.context)
         contact = contactsRepo.getUserProfile()
 
+
+
         val toolbar: Toolbar = root.findViewById(R.id.toolbar)
         val starred: ImageView = root.findViewById(R.id.imgStarred)
-        val title: TextView = root.findViewById(R.id.txtName)
+        // val title: TextView = root.findViewById(R.id.txtName)
         val navBack: ImageView = root.findViewById(R.id.imgNavBack)
         val avatar: ImageView = root.findViewById(R.id.imageView)
 
-        toolbar.visibility = View.GONE
+        // toolbar.visibility = View.GONE
         starred.visibility = View.GONE
-        title.visibility = View.GONE
+        //title.visibility = View.GONE
         navBack.visibility = View.GONE
 
         avatar.setImageResource(R.mipmap.ic_default_avatar)
 
-        contactAdapter = ContactViewAdapter(contact, requireContext(), requireFragmentManager())
+        contactAdapter = ContactViewAdapter(contact, requireContext(), childFragmentManager)
 
         viewPager = root.findViewById(R.id.detailsViewPager)
         tabLayout = root.findViewById(R.id.detailsTabBar)

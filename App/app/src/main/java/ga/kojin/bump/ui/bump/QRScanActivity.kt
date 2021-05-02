@@ -1,10 +1,13 @@
 package ga.kojin.bump.ui.bump
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.widget.Button
+import android.text.format.Formatter
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,10 +23,13 @@ import ga.kojin.bump.ui.bump.qrshare.QRShareActivity
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.zxing.BarcodeFormat
 import ga.kojin.bump.data.ContactsRepository
+import ga.kojin.bump.helpers.QRCodeHelper
 import ga.kojin.bump.models.persisted.Contact
+import java.util.*
 
-class BumpActivity : AppCompatActivity() {
+class QRScanActivity : AppCompatActivity() {
 
     private lateinit var codeScanner: CodeScanner
     private lateinit var scannerView: CodeScannerView
@@ -31,25 +37,39 @@ class BumpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bump)
+        setContentView(R.layout.activity_qr_scan)
 
-        scannerView = this.findViewById(R.id.scanner_view)
+        scannerView = findViewById(R.id.scanner_view)
 
-        val btnNavBack: ImageView = this.findViewById(R.id.imgNavBack)
+        val btnNavBack: ImageView = findViewById(R.id.imgNavBack)
         btnNavBack.setOnClickListener {
             finish()
         }
 
-        // val btnBump: Button = findViewById(R.id.btnShare)
-        val btnBump: FloatingActionButton = findViewById(R.id.fbtnShare)
+        val btnBump: FloatingActionButton = findViewById(R.id.fabAdd)
 
         btnBump.setOnClickListener {
-            val intent = Intent("ga.kojin.bump.ui.bump.qrshare.QRShareActivity")
-            intent.setClass(applicationContext, QRShareActivity::class.java)
-            this.startActivity(intent)
+            val dialog = Dialog(this, R.style.CustomAlertDialog)
+
+            dialog.setContentView(R.layout.dialog_qr_code)
+
+            val qrCode: ImageView = dialog.findViewById(R.id.imgQRCode)
+
+            val wm = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+            val ip = Formatter.formatIpAddress(wm.connectionInfo.ipAddress)
+            val port = Random().nextInt(9999 - 1000) + 1000
+            val width: Int = Resources.getSystem().displayMetrics.widthPixels
+            qrCode.setImageBitmap(
+                QRCodeHelper().generateQRCode(
+                    width,
+                    width,
+                    "bump://ga.kojin.bump/share?host=$ip&port=$port&key=1234"
+                )
+            )
+            dialog.show()
         }
 
-        this.startQRScanner()
+        startQRScanner()
     }
 
     override fun onRequestPermissionsResult(
@@ -65,21 +85,23 @@ class BumpActivity : AppCompatActivity() {
     }
 
     private fun startQRScanner() {
-        if (this.applicationContext.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED){
+        if (ActivityCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 100)
             return
         }
 
-        codeScanner = CodeScanner(this, scannerView)
-
-        // Parameters (default values)
-        codeScanner.camera = CodeScanner.CAMERA_BACK
-        codeScanner.formats = CodeScanner.ALL_FORMATS
-        // ex. listOf(BarcodeFormat.QR_CODE)
-        codeScanner.autoFocusMode = AutoFocusMode.SAFE
-        codeScanner.scanMode = ScanMode.SINGLE
-        codeScanner.isAutoFocusEnabled = true
-        codeScanner.isFlashEnabled = false
+        codeScanner = CodeScanner(this, scannerView).apply {
+            camera = CodeScanner.CAMERA_BACK
+            formats = listOf(BarcodeFormat.QR_CODE)
+            autoFocusMode = AutoFocusMode.SAFE
+            scanMode = ScanMode.SINGLE
+            isAutoFocusEnabled = true
+            isFlashEnabled = false
+        }
 
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
@@ -87,14 +109,16 @@ class BumpActivity : AppCompatActivity() {
                 bump()
                 val mapper = jacksonObjectMapper()
                 val contact = mapper.readValue<Contact>(it.text)
-                ContactsRepository(applicationContext).addUser(contact)
+                ContactsRepository(applicationContext).addContact(contact)
                 finish()
             }
         }
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
             runOnUiThread {
-                Toast.makeText(this, "Camera initialization error: ${it.message}",
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this, "Camera initialization error: ${it.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -107,13 +131,13 @@ class BumpActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (scannerInitialised){
+        if (scannerInitialised) {
             codeScanner.startPreview()
         }
     }
 
     override fun onPause() {
-        if (scannerInitialised){
+        if (scannerInitialised) {
             codeScanner.releaseResources()
         }
         super.onPause()

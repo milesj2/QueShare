@@ -34,6 +34,7 @@ class ContactsRecyclerViewAdapter(val context: Context) :
         val contact: Contact = contactsList[position]
 
         holder.contactViewName.text = contact.name
+        holder.contactInitial.text = "${contact.name[0]}"
 
         val id = contactsList[position].id
     }
@@ -48,6 +49,7 @@ class ContactsRecyclerViewAdapter(val context: Context) :
         View.OnLongClickListener {
 
         val contactViewName = itemView.findViewById<TextView>(R.id.txtName)
+        val contactInitial = itemView.findViewById<TextView>(R.id.txtInitial)
         val contactsLinearLayout = itemView.findViewById<LinearLayout>(R.id.contactsLinear)
 
         init {
