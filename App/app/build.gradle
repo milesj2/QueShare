@@ -49,14 +49,21 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // Fast Scroller
     implementation 'com.reddit:indicator-fast-scroll:1.4.0'
+    // QR Code Scanner
     implementation 'com.budiyev.android:code-scanner:2.1.0'
-
+    // QR Code Generator
     implementation 'com.google.zxing:core:3.3.3'
-
+    // SERIALISATION
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1'
-
-
+    // Sockets
     implementation "io.ktor:ktor-network:1.5.4"
+    // Image Picker/Cropper
+    implementation "com.github.CanHub:Android-Image-Cropper:3.0.1"
+    // Blur Image View
+    //implementation 'com.github.JarDroid:BlurImageview-coil:0.1.0'
+    implementation "io.coil-kt:coil:0.11.0"
+
 
 }

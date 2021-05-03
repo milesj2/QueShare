@@ -6,6 +6,13 @@
     android:id="@+id/imageConstraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/imgBlurredBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -22,14 +29,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:clipChildren="true">
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:srcCompat="@mipmap/ic_default_avatar_foreground"
+        android:clipChildren="true"
+        android:background="@android:color/transparent"
+        android:gravity="center_horizontal">
+        <androidx.cardview.widget.CardView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:elevation="12dp"
+            android:id="@+id/view2"
+            app:cardCornerRadius="100dp"
             android:background="@drawable/border_profile_image"
-            android:contentDescription="TODO" />
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible">
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="TODO"
+                android:background="@android:color/transparent" />
+        </androidx.cardview.widget.CardView>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <TextView
@@ -42,6 +61,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="100sp"
         android:visibility="gone"
+        android:textAppearance="@style/DefaultTitleText"
         />
     <ImageView
         android:id="@+id/imgStarred"
