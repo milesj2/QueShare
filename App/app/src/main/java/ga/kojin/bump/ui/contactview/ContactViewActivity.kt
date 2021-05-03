@@ -138,4 +138,6 @@ class ContactViewActivity : AppCompatActivity() {
     private fun saveContact() {
         contactViewAdapter.saveDetails(starred)
     }
+
+
 }

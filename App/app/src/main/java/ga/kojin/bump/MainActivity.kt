@@ -3,7 +3,6 @@ package ga.kojin.bump
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -13,15 +12,15 @@ import android.text.format.Formatter
 import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import ga.kojin.bump.databinding.ActivityMainBinding
 import ga.kojin.bump.helpers.QRCodeHelper
-import ga.kojin.bump.ui.bump.QRScanActivity
+import ga.kojin.bump.ui.share.QRScanActivity
 import ga.kojin.bump.ui.main.SectionsPagerAdapter
+import ga.kojin.bump.ui.share.qrshare.QRShareDialog
 import java.util.*
 
 
@@ -61,26 +60,9 @@ class MainActivity : AppCompatActivity() {
         val fabShare: FloatingActionButton = binding.fabShare
 
         fabShare.setOnClickListener {
-            val dialog = Dialog(this, R.style.CustomAlertDialog)
-
-            dialog.setContentView(R.layout.dialog_qr_code)
-
-            val qrCode: ImageView = dialog.findViewById(R.id.imgQRCode)
-
-            val wm = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
-            val ip = Formatter.formatIpAddress(wm.connectionInfo.ipAddress)
-            val port = Random().nextInt(9999 - 1000) + 1000
-
-            qrCode.setImageBitmap(
-                QRCodeHelper().generateQRCode(
-                    width,
-                    width,
-                    "bump://ga.kojin.bump/share?host=$ip&port=$port&key=1234"
-                )
-            )
+            val dialog = QRShareDialog(this)
             dialog.show()
         }
-
 
         requireContacts()
     }

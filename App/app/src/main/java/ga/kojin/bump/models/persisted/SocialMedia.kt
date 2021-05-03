@@ -7,5 +7,4 @@ data class SocialMedia(
     var contactID: Long,
     var type: SocialMediaType,
     var handle: String
-    ) {
-}
+)

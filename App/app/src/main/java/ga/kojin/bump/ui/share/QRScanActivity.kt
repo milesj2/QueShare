@@ -1,10 +1,11 @@
-package ga.kojin.bump.ui.bump
+package ga.kojin.bump.ui.share
 
 import android.Manifest
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.format.Formatter
@@ -12,21 +13,11 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.CodeScannerView
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
-import ga.kojin.bump.R
-import ga.kojin.bump.ui.bump.qrshare.QRShareActivity
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.budiyev.android.codescanner.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.BarcodeFormat
-import ga.kojin.bump.data.ContactsRepository
+import ga.kojin.bump.R
 import ga.kojin.bump.helpers.QRCodeHelper
-import ga.kojin.bump.models.persisted.Contact
 import java.util.*
 
 class QRScanActivity : AppCompatActivity() {
@@ -106,11 +97,10 @@ class QRScanActivity : AppCompatActivity() {
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-                bump()
-                val mapper = jacksonObjectMapper()
-                val contact = mapper.readValue<Contact>(it.text)
-                ContactsRepository(applicationContext).addContact(contact)
-                finish()
+                val intent = Intent("ga.kojin.bump.ui.share.Network")
+                intent.data = Uri.parse(it.text)
+                intent.setClass(this, NetworkBump::class.java)
+                this.startActivity(intent)
             }
         }
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS

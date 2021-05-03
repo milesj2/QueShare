@@ -1,14 +1,22 @@
 package ga.kojin.bump.data
 
+import android.R.attr.bitmap
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat
+import android.graphics.BitmapFactory
+import ga.kojin.bump.helpers.BitmapHelper
 import ga.kojin.bump.models.SocialMediaType
 import ga.kojin.bump.models.SystemContact
 import ga.kojin.bump.models.persisted.Contact
+import ga.kojin.bump.models.persisted.Photo
 import ga.kojin.bump.models.persisted.SocialMedia
+import java.io.ByteArrayOutputStream
+
 
 class DBDriver(var context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -36,7 +44,7 @@ class DBDriver(var context: Context) :
         const val KEY_HANDLE = "handle"
 
         const val KEY_PHOTO_ID = "photo_id"
-        const val KEY_IMAGE = "image"
+        const val KEY_PHOTO_BITMAP = "bitmap"
     }
 
     private val SQL_TALE_CONTACTS_DROP = "  DROP TABLE dbo.Contacts;"
@@ -64,7 +72,7 @@ class DBDriver(var context: Context) :
             "$TABLE_PHOTOS (" +
             " $KEY_PHOTO_ID INTEGER PRIMARY KEY " +
             ",$KEY_CONTACT_ID INTEGER" +
-            ",$KEY_IMAGE" +
+            ",$KEY_PHOTO_BITMAP" +
             ");"
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -113,8 +121,19 @@ class DBDriver(var context: Context) :
         return list
     }
 
-    fun getStarredContacts(): ArrayList<Contact> =
-        getContactResults("Select * from $TABLE_CONTACTS WHERE $KEY_STARRED='1'")
+    fun getContactByID(id: Long): Contact? {
+        var contact: Contact? = null
+        val db = this.readableDatabase
+        val query = "Select * from $TABLE_CONTACTS WHERE $KEY_CONTACT_ID='$id'"
+        val result = db.rawQuery(query, null)
+        if (result.moveToFirst()) {
+            do {
+                contact = getContactFromResult(result)
+            } while (result.moveToNext())
+        }
+        db.close()
+        return contact
+    }
 
     fun getContactBySystemID(id: String): Contact? {
         var contact: Contact? = null
@@ -130,19 +149,8 @@ class DBDriver(var context: Context) :
         return contact
     }
 
-    fun getContactByID(id: Long): Contact? {
-        var contact: Contact? = null
-        val db = this.readableDatabase
-        val query = "Select * from $TABLE_CONTACTS WHERE $KEY_CONTACT_ID='$id'"
-        val result = db.rawQuery(query, null)
-        if (result.moveToFirst()) {
-            do {
-                contact = getContactFromResult(result)
-            } while (result.moveToNext())
-        }
-        db.close()
-        return contact
-    }
+    fun getStarredContacts(): ArrayList<Contact> =
+        getContactResults("Select * from $TABLE_CONTACTS WHERE $KEY_STARRED='1'")
 
     fun updateContact(contact: Contact) {
         val contentValues = ContentValues()
@@ -168,6 +176,40 @@ class DBDriver(var context: Context) :
             arrayOf("$contactID")
         )
 
+    }
+
+    private fun getContactResults(query: String): ArrayList<Contact> {
+        val list: ArrayList<Contact> = ArrayList()
+        val db = this.readableDatabase
+        val result = db.rawQuery(query, null)
+        if (result.moveToFirst()) {
+            do {
+                if (result.getString(result.getColumnIndex(KEY_CONTACT_ID)) == "$USER_PROFILE_ID") {
+                    continue
+                }
+                list.add(getContactFromResult(result))
+            } while (result.moveToNext())
+        }
+        db.close()
+        return list
+    }
+
+    private fun getSystemContactFromResult(result: Cursor): SystemContact {
+        return SystemContact(
+            result.getString(result.getColumnIndex(KEY_SYS_CONTACT_ID)),
+            result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
+            result.getString(result.getColumnIndex(KEY_MOBILE)),
+            result.getInt(result.getColumnIndex(KEY_STARRED)) == 1
+        )
+    }
+
+    private fun getContactFromResult(result: Cursor): Contact {
+        return Contact(
+            result.getLong(result.getColumnIndex(KEY_CONTACT_ID)),
+            result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
+            result.getInt(result.getColumnIndex(KEY_STARRED)) == 1,
+            result.getString(result.getColumnIndex(KEY_MOBILE))
+        )
     }
 
     fun addSocialMedia(socialMedia: SocialMedia): Long {
@@ -228,44 +270,77 @@ class DBDriver(var context: Context) :
         )
     }
 
-    private fun getContactResults(query: String): ArrayList<Contact> {
-        val list: ArrayList<Contact> = ArrayList()
+    fun removeSocialMedia(socialMedia: SocialMedia) {
+        readableDatabase.delete(
+            TABLE_SOCIAL_MEDIA,
+            "$KEY_SOCIAL_MEDIA_ID=?",
+            arrayOf("${socialMedia.id}")
+        )
+    }
+
+    fun addImage(photo: Photo): Long {
+        val contentValues = ContentValues()
+        val stream = ByteArrayOutputStream()
+        photo.bitmap.compress(CompressFormat.PNG, 0, stream)
+        contentValues.put(KEY_PHOTO_BITMAP, stream.toByteArray())
+        contentValues.put(KEY_CONTACT_ID, photo.contactID)
+
+        return readableDatabase.insert(TABLE_PHOTOS, null, contentValues)
+    }
+
+    fun updateImage(photo: Photo): Int {
+        val contentValues = ContentValues()
+
+        contentValues.put(KEY_PHOTO_BITMAP, BitmapHelper.bitmapToBlob(photo.bitmap))
+        contentValues.put(KEY_CONTACT_ID, photo.contactID)
+
+        return readableDatabase.update(
+            TABLE_PHOTOS,
+            contentValues,
+            "$KEY_CONTACT_ID=?",
+            arrayOf("${photo.contactID}")
+        )
+    }
+
+    fun upsertImage(photo: Photo): Long {
+        val contentValues = ContentValues()
+
+        contentValues.put(KEY_PHOTO_BITMAP, BitmapHelper.bitmapToBlob(photo.bitmap))
+        contentValues.put(KEY_CONTACT_ID, photo.contactID)
+
+        readableDatabase.delete(
+            TABLE_PHOTOS,
+            "$KEY_CONTACT_ID=?",
+            arrayOf("${photo.contactID}")
+        )
+
+        return addImage(photo)
+    }
+
+    fun removeImage(photo: Photo) {
+
+    }
+
+    fun getImageByContactID(contactID: Long): Photo? {
+        var photo: Photo? = null
         val db = this.readableDatabase
+        val query = "SELECT * FROM $TABLE_PHOTOS WHERE $KEY_CONTACT_ID='$contactID'"
+
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
-            do {
-                if (result.getString(result.getColumnIndex(KEY_CONTACT_ID)) == "$USER_PROFILE_ID") {
-                    continue
-                }
-                list.add(getContactFromResult(result))
-            } while (result.moveToNext())
+            photo = Photo(
+                result.getLong(result.getColumnIndex(KEY_PHOTO_ID)),
+                result.getLong(result.getColumnIndex(KEY_CONTACT_ID)),
+                BitmapHelper.blobToBitMap(result.getBlob(result.getColumnIndex(KEY_PHOTO_BITMAP)))
+            )
         }
+        result.close()
         db.close()
-        return list
+        return photo
+
+
     }
 
-    private fun getSystemContactFromResult(result: Cursor): SystemContact {
-        return SystemContact(
-            result.getString(result.getColumnIndex(KEY_SYS_CONTACT_ID)),
-            result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
-            result.getString(result.getColumnIndex(KEY_MOBILE)),
-            result.getInt(result.getColumnIndex(KEY_STARRED)) == 1
-        )
-    }
 
-    private fun getContactFromResult(result: Cursor): Contact {
-        return Contact(
-            result.getLong(result.getColumnIndex(KEY_CONTACT_ID)),
-            result.getString(result.getColumnIndex(KEY_FIRSTNAME)),
-            result.getInt(result.getColumnIndex(KEY_STARRED)) == 1,
-            result.getString(result.getColumnIndex(KEY_MOBILE))
-        )
-    }
-
-    fun addImage() {}
-
-    fun removeImage() {}
-
-    fun getImageByContactID(contactID: Long) {}
 }
 

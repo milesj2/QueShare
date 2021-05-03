@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:fillViewport="true">
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -15,21 +15,29 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/socialMedia"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <LinearLayout
                 android:id="@+id/addNewControl"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_height="70dp"
+                android:padding="15dp"
+                android:layout_gravity="start"
                 android:gravity="center_vertical"
-                android:padding="10dp">
+                android:background="@drawable/bg_contact_row"
+                android:layout_margin="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/socialMedia">
 
                 <ImageView
                     android:id="@+id/imgChooseType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_facebook" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/ic_facebook"
+                    android:background="@drawable/shape_circle_sml"/>
 
                 <EditText
                     android:id="@+id/handle"
@@ -55,9 +63,14 @@
                 android:id="@+id/btnAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_rounded_button"
                 android:text="+"
-                android:layout_gravity="center"/>
+                android:layout_margin="10dp"
+                android:layout_gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/socialMedia"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

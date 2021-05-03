@@ -1,5 +1,7 @@
 package ga.kojin.bump.ui.contactview.socialmedia
 
+import android.content.Context
+import android.media.Image
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -9,11 +11,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ga.kojin.bump.R
+import ga.kojin.bump.data.SocialMediaRepository
 import ga.kojin.bump.models.SocialMediaType
 import ga.kojin.bump.models.persisted.SocialMedia
+import kotlin.coroutines.coroutineContext
 
 
-class SocialMediaListAdapter() :
+class SocialMediaListAdapter(val context: Context) :
     RecyclerView.Adapter<SocialMediaListAdapter.ViewHolder>() {
 
     var socialMediaList: ArrayList<SocialMedia> = ArrayList()
@@ -22,6 +26,7 @@ class SocialMediaListAdapter() :
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val socialMediaIco: ImageView = itemView.findViewById(R.id.imgSocialMediaIco)
         val txtHandle: TextView = itemView.findViewById(R.id.handle)
+        val btnDelete: ImageView = itemView.findViewById(R.id.imgDelete)
 
     }
 
@@ -71,6 +76,14 @@ class SocialMediaListAdapter() :
 
             }
         })
+
+        if (editMode) {
+            holder.btnDelete.setOnClickListener {
+                SocialMediaRepository(context).removeSocialMedia(socialMediaList[position])
+                socialMediaList.removeAt(position)
+                notifyDataSetChanged()
+            }
+        }
     }
 
     override fun getItemCount(): Int {

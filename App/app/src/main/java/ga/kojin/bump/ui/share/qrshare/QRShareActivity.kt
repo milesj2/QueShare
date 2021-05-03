@@ -1,4 +1,4 @@
-package ga.kojin.bump.ui.bump.qrshare
+package ga.kojin.bump.ui.share.qrshare
 
 import android.graphics.Bitmap
 import android.graphics.Color

@@ -4,22 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:padding="15dp"
-    android:layout_gravity="left"
+    android:layout_gravity="start"
     android:background="@drawable/bg_contact_row"
     android:layout_margin="10dp">
-
     <ImageView
         android:id="@+id/imgSocialMediaIco"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/shape_circle_sml"
         app:srcCompat="@android:drawable/ic_dialog_info" />
-
     <EditText
         android:id="@+id/handle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="@color/off_white"
         android:text="/miles.jarvis" />
+    <ImageView
+        android:id="@+id/imgDelete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        android:background="@drawable/shape_circle_sml"
+        app:srcCompat="@drawable/ic_baseline_delete_24" />
 </LinearLayout>

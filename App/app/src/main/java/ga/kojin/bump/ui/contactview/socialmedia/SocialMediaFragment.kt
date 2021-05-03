@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,10 +26,9 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
 
     private lateinit var socialMediaRV: RecyclerView
     private lateinit var addNewControl: LinearLayout
-
     private lateinit var chooseTypeImage: ImageView
-
-    private var socialMediaAdapter: SocialMediaListAdapter = SocialMediaListAdapter()
+    private lateinit var socialMediaAdapter: SocialMediaListAdapter
+    private lateinit var addNewButton: Button
 
 
     override fun onCreateView(
@@ -39,7 +39,7 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
         Log.w(TAG, "CREATED")
 
         root = inflater.inflate(R.layout.fragment_social_media, container, false)
-
+        socialMediaAdapter = SocialMediaListAdapter(requireContext())
         socialMediaList =
             SocialMediaRepository(requireContext()).getSocialMediaByContactID(contact.id)
         socialMediaAdapter.socialMediaList = socialMediaList
@@ -54,15 +54,30 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
         addNewControl = root.findViewById(R.id.addNewControl)
         addNewControl.visibility = View.GONE
 
-        val addNewButton: Button = root.findViewById(R.id.btnAdd)
+        addNewButton = root.findViewById(R.id.btnAdd)
         val txtHandle: TextView = root.findViewById(R.id.handle)
         val chooseType: ImageView = root.findViewById(R.id.imgChooseType)
         val clearChanges: ImageView = root.findViewById(R.id.imgClearChanges)
         val acceptChanges: ImageView = root.findViewById(R.id.imgAcceptChanges)
 
         addNewButton.setOnClickListener {
-            addNewControl.visibility = View.VISIBLE
-            addNewButton.visibility = View.INVISIBLE
+            addNewButton.startAnimation(
+                AnimationUtils.loadAnimation(
+                    context,
+                    R.anim.move_down_fade_out
+                )
+            )
+            addNewControl.startAnimation(
+                AnimationUtils.loadAnimation(
+                    context,
+                    R.anim.dialog_fade_in
+                )
+            )
+            addNewButton.postDelayed({
+                addNewButton.animation = null
+                addNewButton.visibility = View.GONE
+                addNewControl.visibility = View.VISIBLE
+            }, 150)
         }
 
         chooseType.setOnClickListener {
@@ -90,7 +105,6 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
         }
 
         acceptChanges.setOnClickListener {
-            addNewControl.visibility = View.GONE
             val socialMedia = SocialMedia(
                 -1, contact.id ?: -1,
                 (chooseType.tag ?: SocialMediaType.Facebook) as SocialMediaType,
@@ -98,16 +112,16 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
             )
             SocialMediaRepository(requireContext()).addSocialMedia(socialMedia)
             socialMediaAdapter.socialMediaList.add(socialMedia)
+            animateEditBoxOut()
             socialMediaAdapter.notifyItemInserted(
                 socialMediaAdapter.socialMediaList.size - 1
             )
-            addNewButton.visibility = View.VISIBLE
+            txtHandle.text = ""
         }
 
         clearChanges.setOnClickListener {
-            addNewControl.visibility = View.GONE
+            animateEditBoxOut()
             txtHandle.text = ""
-            addNewButton.visibility = View.VISIBLE
         }
 
         return root
@@ -133,24 +147,23 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.w(TAG, "RESUMED")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.w(TAG, "onDestroyed")
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.w(TAG, "PAUSED")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.w(TAG, "onDestroyView")
+    private fun animateEditBoxOut() {
+        addNewControl.startAnimation(
+            AnimationUtils.loadAnimation(
+                context,
+                R.anim.move_down_fade_out
+            )
+        )
+        addNewButton.startAnimation(
+            AnimationUtils.loadAnimation(
+                context,
+                R.anim.dialog_fade_in
+            )
+        )
+        addNewButton.postDelayed({
+            addNewControl.animation = null
+            addNewControl.visibility = View.GONE
+            addNewButton.visibility = View.VISIBLE
+        }, 150)
     }
 }

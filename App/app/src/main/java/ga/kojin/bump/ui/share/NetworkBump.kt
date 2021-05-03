@@ -1,4 +1,4 @@
-package ga.kojin.bump.ui.bump
+package ga.kojin.bump.ui.share
 
 import android.os.Bundle
 import android.widget.TextView
@@ -34,10 +34,11 @@ class NetworkBump : AppCompatActivity() {
         if (uri != null) {
             val ip = uri.getQueryParameter("host")
             val port = uri.getQueryParameter("port")?.toInt()
-            if (ip != null && port != null) {
+            val key = uri.getQueryParameter("key")
+            if (ip != null && port != null && key != null) {
                 GlobalScope.launch {
                     suspend {
-                        socketstuff(ip, port)
+                        socketstuff(ip, port, key)
                     }.invoke()
                 }
             }
@@ -45,7 +46,7 @@ class NetworkBump : AppCompatActivity() {
         }
     }
 
-    suspend fun socketstuff(url: String, port: Int) {
+    suspend fun socketstuff(url: String, port: Int, key: String) {
         val exec = Executors.newCachedThreadPool()
         val selector = ActorSelectorManager(exec.asCoroutineDispatcher())
 
@@ -56,15 +57,20 @@ class NetworkBump : AppCompatActivity() {
         val input: ByteReadChannel = socket.openReadChannel()
         val output: ByteWriteChannel = socket.openWriteChannel(autoFlush = true)
 
-        val string: String = "${BumpHelper.buildQRString(applicationContext)}\r\n"
-        makeToast("Sending...")
-        output.writeStringUtf8(string)
+
+        makeToast("Sending key...")
+        output.writeStringUtf8("$key\r\n")
 
         makeToast("Receiving...")
         val response = input.readUTF8Line()
         if (response != null) {
             BumpHelper.addContactFromString(applicationContext, response)
         }
+
+        val string: String = "${BumpHelper.buildQRString(applicationContext)}\r\n"
+        makeToast("Sending Contact info...")
+        output.writeStringUtf8(string)
+
         makeToast("QueShare Successful!")
         finish()
     }

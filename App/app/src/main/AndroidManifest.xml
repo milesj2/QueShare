@@ -13,19 +13,21 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Bump">
+        android:theme="@style/Theme.Bump"
+        android:screenOrientation="portrait">
         <activity
-            android:name=".ui.bump.QRScanActivity"
+            android:name=".ui.share.QRScanActivity"
             android:theme="@style/Theme.Bump.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.bump.qrshare.QRShareActivity"
+            android:name=".ui.share.qrshare.QRShareActivity"
             android:theme="@style/Theme.Bump.NoActionBar">
         </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Bump.NoActionBar">
+            android:theme="@style/Theme.Bump.NoActionBar"
+            android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,7 +38,7 @@
             android:theme="@style/Theme.Bump.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.bump.NetworkBump"
+            android:name=".ui.share.NetworkBump"
             android:label="@string/app_name"
             android:theme="@style/Theme.Bump.NoActionBar">
             <intent-filter>
@@ -46,6 +48,7 @@
                 <data android:scheme="bump" android:host="ga.kojin.bump" android:path="/share" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.share.HostNetworkShare" />
     </application>
 
 </manifest>

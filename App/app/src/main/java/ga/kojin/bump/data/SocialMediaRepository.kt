@@ -8,15 +8,13 @@ class SocialMediaRepository (context: Context) {
 
     private val dbDriver: DBDriver = DBDriver(context)
 
-    fun addSocialMedia(socialMedia: SocialMedia) : Boolean =
-        dbDriver.addSocialMedia(socialMedia) == 1L
+    fun addSocialMedia(socialMedia: SocialMedia): Long = dbDriver.addSocialMedia(socialMedia)
 
-
-    fun removeSocialMedia(socialMedia: SocialMedia){
-        TODO("NotImplemented")
+    fun removeSocialMedia(socialMedia: SocialMedia) {
+        dbDriver.removeSocialMedia(socialMedia)
     }
 
-    fun getSocialMediaByID(id: Int) : SocialMedia? {
+    fun getSocialMediaByID(id: Int): SocialMedia? {
         val rows = dbDriver.getSocialMedia(null, id)
         return if (rows.size == 0) {
             null
@@ -28,8 +26,8 @@ class SocialMediaRepository (context: Context) {
     fun getSocialMediaByContactID(contactID: Long) : ArrayList<SocialMedia> =
         dbDriver.getSocialMedia(contactID, null)
 
-    fun getAllSocialMedia() : List<SocialMedia> =
+    fun getAllSocialMedia(): List<SocialMedia> =
         dbDriver.getSocialMedia(null, null)
 
-    fun updateSocialMedia(social : SocialMedia) = dbDriver.updateSocialMedia(social)
+    fun updateSocialMedia(social: SocialMedia) = dbDriver.updateSocialMedia(social)
 }
