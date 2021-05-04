@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ class FavouritesFragment : Fragment()
 
     private lateinit var favouritesRV: RecyclerView
     private lateinit var contactsRepo: ContactsRepository
+    private lateinit var layoutNoFavourites: ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +27,7 @@ class FavouritesFragment : Fragment()
         savedInstanceState: Bundle?
     ): View? {
 
-        val root = inflater.inflate(R.layout.fragment_contacts, container, false)
+        val root = inflater.inflate(R.layout.fragment_favourites, container, false)
 
         favouritesRV = root.findViewById(R.id.contact_list)
         contactsRepo = ContactsRepository(requireContext())
@@ -37,6 +39,8 @@ class FavouritesFragment : Fragment()
             adapter = contactsAdapter
         }
 
+        layoutNoFavourites = root.findViewById(R.id.layout_no_favourites)
+
         refreshContacts()
 
         return root
@@ -46,7 +50,7 @@ class FavouritesFragment : Fragment()
         if (context == null)
             return
 
-        if (favouritesRV.adapter == null){
+        if (favouritesRV.adapter == null) {
             Log.v(TAG, "No adapter for dataset!")
             return
         }
@@ -57,5 +61,12 @@ class FavouritesFragment : Fragment()
 
         Log.v(TAG, "notifyDataSetChanged")
         favouritesRV.adapter!!.notifyDataSetChanged()
+
+        if (adapter.contactsList.size > 0) {
+            layoutNoFavourites.visibility = View.GONE
+        } else {
+            layoutNoFavourites.visibility = View.VISIBLE
+        }
+
     }
 }

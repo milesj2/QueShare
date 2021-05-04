@@ -39,6 +39,12 @@
     <style name="DefaultText" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textColor">@color/off_white</item>
     </style>
+
+    <style name="DefaultMediumText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/off_white</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
     <style name="DefaultTitleText" parent="TextAppearance.AppCompat.Title">
         <item name="android:textColor">@color/off_white</item>
     </style>

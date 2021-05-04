@@ -133,7 +133,9 @@ class QRScanActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    private fun bump() {}
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
 
+    }
 }

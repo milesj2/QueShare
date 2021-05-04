@@ -79,7 +79,7 @@ class ClientNetworkShare : AppCompatActivity() {
         output.flush()
 
         Log.v(TAG, "Receiving Photo...")
-        val imgResponse: ByteArray? = ClientSocketHelper.receiveFile(input)
+        val imgResponse: ByteArray? = ClientSocketHelper.receiveFile(input, socket)
 
         Log.v(TAG, "Sending Photo...")
         ServerSocketHelper.sendPhoto(

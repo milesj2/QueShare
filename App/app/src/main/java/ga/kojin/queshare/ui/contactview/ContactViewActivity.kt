@@ -39,7 +39,7 @@ class ContactViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_contact_details)
+        setContentView(R.layout.activity_view_contact)
 
         val btnNavBack: ImageView = findViewById(R.id.imgNavBack)
 
@@ -78,7 +78,8 @@ class ContactViewActivity : AppCompatActivity() {
         starred = contact.starred == true
         setStarredIco()
 
-        contactViewAdapter = ContactViewAdapter(contact, this, supportFragmentManager)
+        contactViewAdapter = ContactViewAdapter(this, supportFragmentManager)
+        contactViewAdapter.setContact(contact)
 
         viewPager.adapter = contactViewAdapter
         viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))

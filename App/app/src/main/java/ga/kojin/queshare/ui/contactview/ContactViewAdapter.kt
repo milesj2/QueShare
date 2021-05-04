@@ -15,11 +15,10 @@ private val TAB_TITLES = arrayOf(
     R.string.tab_text_2
 )
 
-class ContactViewAdapter(var contact: Contact, val context: Context, fm: FragmentManager) :
-    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
-{
-    private var basicDetailsFragment: BasicDetailsFragment = BasicDetailsFragment(contact)
-    private var socialMediaFragment: SocialMediaFragment = SocialMediaFragment(contact)
+class ContactViewAdapter(val context: Context, fm: FragmentManager) :
+    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    private var basicDetailsFragment: BasicDetailsFragment = BasicDetailsFragment()
+    private var socialMediaFragment: SocialMediaFragment = SocialMediaFragment()
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
@@ -38,9 +37,15 @@ class ContactViewAdapter(var contact: Contact, val context: Context, fm: Fragmen
 
     override fun getCount(): Int = TAB_TITLES.size
 
-    fun saveDetails(starred: Boolean) {
-        basicDetailsFragment.saveDetails(starred)
-        socialMediaFragment.saveDetails()
+    fun setContact(contact: Contact) {
+        socialMediaFragment.contact = contact
+        basicDetailsFragment.contact = contact
+    }
+
+    fun saveDetails(starred: Boolean): Boolean {
+        if (!basicDetailsFragment.saveDetails(starred))
+            return false
+        return socialMediaFragment.saveDetails()
     }
 
     fun setEdit(editMode: Boolean) {

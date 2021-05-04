@@ -12,6 +12,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import ga.kojin.queshare.databinding.ActivityMainBinding
 import ga.kojin.queshare.helpers.PermissionsHelper
+import ga.kojin.queshare.helpers.QueShareDialogHelper
+import ga.kojin.queshare.helpers.SharedPreferences
 import ga.kojin.queshare.ui.share.QRScanActivity
 import ga.kojin.queshare.ui.main.SectionsPagerAdapter
 import ga.kojin.queshare.ui.share.QRShareDialog
@@ -24,11 +26,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sectionsPagerAdapter: SectionsPagerAdapter
     private var width: Int = Resources.getSystem().displayMetrics.widthPixels
 
+    private lateinit var userPreferences: SharedPreferences
+
     private val TAG: String = "MainActivity"
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        userPreferences = SharedPreferences(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -40,21 +46,28 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
 
         val tabs: TabLayout = binding.tabs
-        tabs.setupWithViewPager(viewPager)
-
         val fabAdd: FloatingActionButton = binding.fabAdd
-
-        fabAdd.setOnClickListener { view ->
-            val intent = Intent("ga.kojin.bump.ui.contact.BumpActivity")
-            intent.setClass(this, QRScanActivity::class.java)
-            this.startActivity(intent)
-        }
-
         val fabShare: FloatingActionButton = binding.fabShare
 
+        tabs.setupWithViewPager(viewPager)
+
+        fabAdd.setOnClickListener { view ->
+            if (userPreferences.getValueBoolean(userPreferences.PROFILE_SET_UP, false)) {
+                val intent = Intent("ga.kojin.queshare.ui.share.QRShareDialog")
+                intent.setClass(this, QRScanActivity::class.java)
+                this.startActivity(intent)
+            } else {
+                QueShareDialogHelper.showProfileNotInitialisedDialog(this)
+            }
+        }
+
         fabShare.setOnClickListener {
-            val dialog = QRShareDialog(this)
-            dialog.show()
+            if (userPreferences.getValueBoolean(userPreferences.PROFILE_SET_UP, false)) {
+                val dialog = QRShareDialog(this)
+                dialog.show()
+            } else {
+                QueShareDialogHelper.showProfileNotInitialisedDialog(this)
+            }
         }
 
         requireContacts()
@@ -63,6 +76,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         sectionsPagerAdapter.refreshData()
+
     }
 
     private fun requireContacts() {

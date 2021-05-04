@@ -13,10 +13,11 @@ import ga.kojin.queshare.R
 import ga.kojin.queshare.data.ContactsRepository
 import ga.kojin.queshare.models.persisted.Contact
 
-class BasicDetailsFragment(var contact: Contact) : Fragment() {
+class BasicDetailsFragment : Fragment() {
 
     private val TAG: String = "BasicDetailsFragment"
 
+    var contact: Contact? = null
     lateinit var root: View
     var viewLayout: LinearLayout? = null
     var editLayout: LinearLayout? = null
@@ -24,6 +25,7 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
     private lateinit var contactNumberView: TextView
     lateinit var contactNameEdit: EditText
     lateinit var contactNumberEdit: EditText
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,16 +51,18 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
     }
 
     private fun populateFields() {
-        contactNameView.text = contact.name
-        contactNumberView.text = contact.number
-        contactNameEdit.setText(contact.name)
-        contactNumberEdit.setText(contact.number)
+        contactNameView.text = (contact ?: return).name
+        contactNumberView.text = (contact ?: return).number
+        contactNameEdit.setText((contact ?: return).name)
+        contactNumberEdit.setText((contact ?: return).number)
 
     }
 
     override fun onResume() {
         super.onResume()
         Log.w(TAG, "RESUMED ${this}")
+
+        populateFields()
 
 
     }
@@ -74,35 +78,31 @@ class BasicDetailsFragment(var contact: Contact) : Fragment() {
     }
 
     fun toggleEditMode(editMode: Boolean) {
-
-        try {
-            if (editMode) {
-
-                viewLayout?.visibility = View.GONE
-                editLayout?.visibility = View.VISIBLE
-            } else {
-
-                viewLayout?.visibility = View.VISIBLE
-                editLayout?.visibility = View.GONE
-                populateFields()
-            }
-        } catch (e: UninitializedPropertyAccessException) {
-            Log.w(TAG, "VIEWLAYOUT UninitializedPropertyAccessException")
-            return
+        if (editMode) {
+            viewLayout?.visibility = View.GONE
+            editLayout?.visibility = View.VISIBLE
+        } else {
+            viewLayout?.visibility = View.VISIBLE
+            editLayout?.visibility = View.GONE
+            populateFields()
         }
-
     }
 
-    fun saveDetails(starred: Boolean) {
+    fun saveDetails(starred: Boolean): Boolean {
         try {
-            contact.starred = starred
-            contact.name = contactNameEdit.text.toString()
-            contact.number = contactNumberEdit.text.toString()
+            if (contact == null) return false
+            contact?.starred = starred
+            contact?.name = contactNameEdit.text.toString()
+            contact?.number = contactNumberEdit.text.toString()
 
-            ContactsRepository(requireContext()).updateContact(contact)
+            if (contact?.name.isNullOrEmpty() || contact?.name.isNullOrBlank())
+                return false
+
+            contact?.let { ContactsRepository(requireContext()).updateContact(it) }
             populateFields()
+            return true
         } catch (e: UninitializedPropertyAccessException) {
-            return
+            return false
         }
     }
 

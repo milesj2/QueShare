@@ -15,6 +15,7 @@ object ServerSocketHelper {
 
     var connection: Socket? = null
     var input: ByteReadChannel? = null
+    var serverSocket: ServerSocket? = null
 
     private val TAG: String = "ServerSocket"
 
@@ -26,15 +27,15 @@ object ServerSocketHelper {
         onConnect: () -> Unit
     ) {
         Log.v(TAG, "Starting Server...")
-        val server = aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
+        serverSocket = aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
             .bind(InetSocketAddress(url, port))
 
         while (connection == null) {
             Log.v(TAG, "Listening...")
-            val socket = server.accept()
+            val socket = serverSocket?.accept()
 
-            Log.v(TAG, "Found new connection '${socket.remoteAddress}'.")
-            input = socket.openReadChannel()
+            Log.v(TAG, "Found new connection '${socket?.remoteAddress}'.")
+            input = socket?.openReadChannel()
 
             try {
                 while (true) {
@@ -50,9 +51,13 @@ object ServerSocketHelper {
                 }
             } catch (e: Throwable) {
                 e.printStackTrace()
-                socket.awaitClosed()
+                socket?.awaitClosed()
             }
         }
+    }
+
+    suspend fun closeServer() {
+        serverSocket?.awaitClosed()
     }
 
     suspend fun sendPhoto(output: ByteWriteChannel, photo: Photo?) {

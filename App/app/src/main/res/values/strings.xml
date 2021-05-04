@@ -4,4 +4,8 @@
     <string name="tab_text_2">Contacts</string>
     <string name="tab_text_3">Profile</string>
     <string name="scan_qr">Scan QueConnect Code!</string>
+    <string name="no_contacts">You currently have no contacts - try adding some!</string>
+    <string name="try_adding">Either share or scan a QR to swap details.</string>
+    <string name="no_favourites">You currently have no favourites contacts.</string>
+    <string name="try_favouriting">Hit that star on that special person!</string>
 </resources>

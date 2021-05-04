@@ -41,6 +41,8 @@ class HostNetworkShare : AppCompatActivity() {
                     }
                 } catch (e: Exception) {
 
+                } finally {
+                    ServerSocketHelper.closeServer()
                 }
             }.invoke()
         }
@@ -72,7 +74,7 @@ class HostNetworkShare : AppCompatActivity() {
         )
 
         Log.v(TAG, "Receiving Photo...")
-        val imgResponse: ByteArray? = ClientSocketHelper.receiveFile(input)
+        val imgResponse: ByteArray? = ClientSocketHelper.receiveFile(input, socket)
 
         socket.close()
 

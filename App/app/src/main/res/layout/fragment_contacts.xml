@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include android:id="@+id/layout_no_contacts"
+        layout="@layout/layout_no_contacts" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contact_list"
         android:layout_width="0dp"

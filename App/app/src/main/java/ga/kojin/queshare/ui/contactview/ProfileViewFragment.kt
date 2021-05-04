@@ -26,8 +26,10 @@ import ga.kojin.queshare.data.PhotoRepository
 import ga.kojin.queshare.helpers.BitmapHelper
 import ga.kojin.queshare.helpers.DimensionsHelper
 import ga.kojin.queshare.helpers.PermissionsHelper
+import ga.kojin.queshare.helpers.QueShareDialogHelper
 import ga.kojin.queshare.models.persisted.Contact
 import ga.kojin.queshare.models.persisted.Photo
+import ga.kojin.queshare.helpers.SharedPreferences
 
 
 class ProfileViewFragment : Fragment() {
@@ -41,6 +43,7 @@ class ProfileViewFragment : Fragment() {
     private lateinit var avatar: ImageView
     private lateinit var blurredBackground: ImageView
     private lateinit var root: View
+    private lateinit var view2: CardView
 
     private val pickImage = 100
 
@@ -62,6 +65,7 @@ class ProfileViewFragment : Fragment() {
         val imageConstraint: ConstraintLayout = root.findViewById(R.id.imageConstraint)
         avatar = root.findViewById(R.id.imageView)
         blurredBackground = root.findViewById(R.id.imgBlurredBackground)
+        view2 = root.findViewById(R.id.view2)
 
         // toolbar.visibility = View.GONE
         starred.visibility = View.GONE
@@ -78,10 +82,10 @@ class ProfileViewFragment : Fragment() {
             txtInitial.visibility = View.VISIBLE
         } else {
             setProfilePhoto(photo)
-            val view2: CardView = root.findViewById(R.id.view2)
+
             view2.visibility = View.VISIBLE
         }
-        
+
         contactAdapter = ContactViewAdapter(contact, requireContext(), childFragmentManager)
 
         viewPager = root.findViewById(R.id.detailsViewPager)
@@ -116,7 +120,16 @@ class ProfileViewFragment : Fragment() {
         }
 
         btnDone.setOnClickListener {
-            saveProfile()
+            if (!saveProfile()) {
+                QueShareDialogHelper.showAlertDialog(
+                    requireContext(),
+                    "Cannot save contact",
+                    "Name Cannot be blank",
+                    "Ok"
+                )
+            }
+            val sharedPreferences = ga.kojin.queshare.helpers.SharedPreferences(requireContext())
+            sharedPreferences.save(sharedPreferences.PROFILE_SET_UP, true)
             editMode = false
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
@@ -142,12 +155,11 @@ class ProfileViewFragment : Fragment() {
         return root
     }
 
-    private fun saveProfile() {
-        contactAdapter.saveDetails(false)
-    }
+    private fun saveProfile(): Boolean = contactAdapter.saveDetails(false)
 
     private fun setProfilePhoto(photo: Bitmap) {
         avatar.setImageBitmap(photo)
+        view2.visibility = View.VISIBLE
         blurredBackground.setImageBitmap(
             BitmapHelper.blurRenderScript(
                 requireContext(),
@@ -179,10 +191,6 @@ class ProfileViewFragment : Fragment() {
     }
 
     private fun pickFromGallery() {
-
-        val width: Int = Resources.getSystem().displayMetrics.widthPixels
-        val ratio = width / 200
-
         CropImage.activity()
             .setGuidelines(CropImageView.Guidelines.ON)
             .setFixAspectRatio(true)
