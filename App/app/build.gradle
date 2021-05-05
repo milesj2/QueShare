@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "ga.kojin.bump"
+        applicationId "ga.kojin.queshare"
         minSdkVersion 22
         targetSdkVersion 30
         versionCode 1
@@ -59,10 +59,10 @@ dependencies {
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1'
     // Sockets
     implementation "io.ktor:ktor-network:1.5.4"
+    implementation "io.ktor:ktor-network-tls:1.5.4"
     // Image Picker/Cropper
     implementation "com.github.CanHub:Android-Image-Cropper:3.0.1"
     // Blur Image View
-    //implementation 'com.github.JarDroid:BlurImageview-coil:0.1.0'
     implementation "io.coil-kt:coil:0.11.0"
 
 

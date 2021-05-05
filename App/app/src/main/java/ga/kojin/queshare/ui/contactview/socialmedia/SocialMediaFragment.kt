@@ -16,6 +16,7 @@ import ga.kojin.queshare.data.SocialMediaRepository
 import ga.kojin.queshare.models.SocialMediaType
 import ga.kojin.queshare.models.persisted.Contact
 import ga.kojin.queshare.models.persisted.SocialMedia
+import ga.kojin.queshare.ui.contactview.basicdetails.BasicDetailsFragment
 
 class SocialMediaFragment() : Fragment() {
 
@@ -31,6 +32,12 @@ class SocialMediaFragment() : Fragment() {
     private lateinit var addNewButton: Button
     var contact: Contact? = null
 
+    fun newInstance(bundle: Bundle): SocialMediaFragment {
+        val fragment = SocialMediaFragment()
+        fragment.arguments = bundle
+        return fragment
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +48,8 @@ class SocialMediaFragment() : Fragment() {
 
         root = inflater.inflate(R.layout.fragment_social_media, container, false)
         socialMediaAdapter = SocialMediaListAdapter(requireContext())
+
+        socialMediaList = ArrayList<SocialMedia>()
 
         socialMediaRV = root.findViewById(R.id.socialMedia)
 

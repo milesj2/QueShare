@@ -11,7 +11,7 @@ import ga.kojin.queshare.models.persisted.Photo
 
 object ShareHelper {
 
-    fun buildQRString(context: Context): String {
+    fun serialiseProfileContact(context: Context): String {
 
         val contact = ContactsRepository(context).getUserProfile()
 
@@ -23,7 +23,7 @@ object ShareHelper {
         return mapper.writeValueAsString(contact)
     }
 
-    fun addContactFromString(context: Context, text: String): Long {
+    fun deserialiseProfileContact(context: Context, text: String): Long {
         val mapper = jacksonObjectMapper()
         val contact = mapper.readValue<Contact>(text)
         val userID = ContactsRepository(context).addContact(contact)

@@ -86,7 +86,8 @@ class ProfileViewFragment : Fragment() {
             view2.visibility = View.VISIBLE
         }
 
-        contactAdapter = ContactViewAdapter(contact, requireContext(), childFragmentManager)
+        contactAdapter = ContactViewAdapter(requireContext(), childFragmentManager)
+        setContact()
 
         viewPager = root.findViewById(R.id.detailsViewPager)
         tabLayout = root.findViewById(R.id.detailsTabBar)
@@ -195,7 +196,9 @@ class ProfileViewFragment : Fragment() {
             .setGuidelines(CropImageView.Guidelines.ON)
             .setFixAspectRatio(true)
             .setCropShape(CropImageView.CropShape.OVAL)
+            .setActivityTitle("Select 'Crop' to Finish")
             .start(requireContext(), this)
+
     }
 
     override fun onRequestPermissionsResult(
@@ -225,6 +228,15 @@ class ProfileViewFragment : Fragment() {
                 PhotoRepository(requireContext()).upsertContactImage(photo)
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setContact()
+    }
+
+    private fun setContact() {
+        contactAdapter.setContact(contact)
     }
 
 }

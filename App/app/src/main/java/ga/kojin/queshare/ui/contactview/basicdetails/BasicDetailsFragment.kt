@@ -18,13 +18,19 @@ class BasicDetailsFragment : Fragment() {
     private val TAG: String = "BasicDetailsFragment"
 
     var contact: Contact? = null
-    lateinit var root: View
-    var viewLayout: LinearLayout? = null
-    var editLayout: LinearLayout? = null
+    private lateinit var root: View
+    private var viewLayout: LinearLayout? = null
+    private var editLayout: LinearLayout? = null
     private lateinit var contactNameView: TextView
     private lateinit var contactNumberView: TextView
-    lateinit var contactNameEdit: EditText
-    lateinit var contactNumberEdit: EditText
+    private lateinit var contactNameEdit: EditText
+    private lateinit var contactNumberEdit: EditText
+
+    fun newInstance(bundle: Bundle): BasicDetailsFragment {
+        val fragment = BasicDetailsFragment()
+        fragment.arguments = bundle
+        return fragment
+    }
 
 
     override fun onCreateView(
@@ -32,7 +38,6 @@ class BasicDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.w(TAG, "CREATED ${this}")
         val view2: View = inflater.inflate(R.layout.fragment_basic_details, container, false)
 
         viewLayout = view2.findViewById(R.id.layoutView)
@@ -55,26 +60,11 @@ class BasicDetailsFragment : Fragment() {
         contactNumberView.text = (contact ?: return).number
         contactNameEdit.setText((contact ?: return).name)
         contactNumberEdit.setText((contact ?: return).number)
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.w(TAG, "RESUMED ${this}")
-
-        populateFields()
-
-
     }
 
     override fun onStart() {
         super.onStart()
-        Log.w(TAG, "ONSTART ${this} ")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.w(TAG, "PAUSED ${this}")
+        populateFields()
     }
 
     fun toggleEditMode(editMode: Boolean) {

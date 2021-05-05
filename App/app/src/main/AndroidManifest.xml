@@ -49,7 +49,8 @@
                 <data android:scheme="bump" android:host="ga.kojin.bump" android:path="/share" />
             </intent-filter>
         </activity>
-        <activity android:name="ga.kojin.queshare.ui.share.HostNetworkShare" />
+        <activity android:name="ga.kojin.queshare.ui.share.HostNetworkShare"
+            android:theme="@style/Theme.QueShare.NoActionBar"/>
         <activity android:name="com.canhub.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
     </application>

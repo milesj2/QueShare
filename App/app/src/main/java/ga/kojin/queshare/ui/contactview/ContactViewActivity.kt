@@ -59,7 +59,6 @@ class ContactViewActivity : AppCompatActivity() {
 
         val photo = PhotoRepository(this).getImageByContactID(contact.id)?.bitmap
         if (photo == null) {
-            // avatar.setImageResource(R.mipmap.ic_default_avatar)
             val txtInitial: TextView = findViewById(R.id.txtInitial)
             txtInitial.text = "${contact.name[0]}"
             txtInitial.visibility = View.VISIBLE
@@ -69,13 +68,14 @@ class ContactViewActivity : AppCompatActivity() {
             view2.visibility = View.VISIBLE
         }
 
-
         imgStarred.setOnClickListener {
             starred = !starred
+            imgStarred.isSelected = starred
             contactsRepo.setContactFavouriteStatus(userID, starred)
             setStarredIco()
         }
-        starred = contact.starred == true
+
+        starred = contact.starred
         setStarredIco()
 
         contactViewAdapter = ContactViewAdapter(this, supportFragmentManager)
@@ -97,6 +97,9 @@ class ContactViewActivity : AppCompatActivity() {
         val btnDone: ImageView = findViewById(R.id.imgDone)
         val btnClear: ImageView = findViewById(R.id.imgClear)
         val btnDelete: ImageView = findViewById(R.id.imgDelete)
+        val btnAddImage: ImageView = findViewById(R.id.imgAddImage)
+
+        btnAddImage.visibility = View.GONE
 
         btnEdit.setOnClickListener {
             editMode = true
@@ -119,7 +122,7 @@ class ContactViewActivity : AppCompatActivity() {
 
         btnClear.setOnClickListener {
             editMode = false
-            btnEdit.visibility = View.VISIBLE
+            btnDelete.visibility = View.VISIBLE
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
@@ -129,27 +132,27 @@ class ContactViewActivity : AppCompatActivity() {
         btnDelete.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(viewPager.context)
 
-            dialogBuilder.setMessage("There are no contacts, would you like to import from system?")
+            dialogBuilder.setMessage("Are you sure you wish to proceed?")
                 .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+                .setPositiveButton("Yes") { _, _ ->
                     contactsRepo.deleteContact(contact.id)
                     finish()
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton("No") { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Are you sure?")
+            alert.setTitle("Deleting contact")
             alert.show()
         }
     }
 
     private fun setStarredIco() {
         if (starred) {
-            imgStarred.setImageResource(android.R.drawable.star_big_on)
+            //imgStarred.setImageResource(android.R.drawable.star_big_on)
         } else {
-            imgStarred.setImageResource(android.R.drawable.star_big_off)
+            //imgStarred.setImageResource(android.R.drawable.star_big_off)
         }
     }
 

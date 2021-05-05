@@ -1,2 +1,2 @@
-rootProject.name = "Bump"
+rootProject.name = "QueShare"
 include ':app'
