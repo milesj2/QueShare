@@ -36,12 +36,16 @@
         </activity>
         <activity
             android:name="ga.kojin.queshare.ui.contactview.ContactViewActivity"
-            android:theme="@style/Theme.QueShare.NoActionBar">
+            android:theme="@style/Theme.QueShare.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
         </activity>
         <activity
             android:name="ga.kojin.queshare.ui.share.ClientNetworkShare"
             android:label="@string/app_name"
-            android:theme="@style/Theme.QueShare.NoActionBar">
+            android:theme="@style/Theme.QueShare.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -49,9 +53,14 @@
                 <data android:scheme="bump" android:host="ga.kojin.bump" android:path="/share" />
             </intent-filter>
         </activity>
-        <activity android:name="ga.kojin.queshare.ui.share.HostNetworkShare" />
+        <activity android:name="ga.kojin.queshare.ui.share.HostNetworkShare"
+            android:theme="@style/Theme.QueShare.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
         <activity android:name="com.canhub.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+            android:theme="@style/Base.Theme.AppCompat"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
     </application>
 
 </manifest>

@@ -7,7 +7,9 @@ import kotlin.collections.ArrayList
 
 
 class SharedPreferences(val context: Context) {
-    private val PREFS_NAME = "BUMP"
+    private val PREFS_NAME = "QUESHARE"
+
+    val PROFILE_SET_UP = "profile_setup"
 
     private val sharedPref: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

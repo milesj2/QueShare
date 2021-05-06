@@ -40,23 +40,7 @@ class QRScanActivity : AppCompatActivity() {
         val btnBump: FloatingActionButton = findViewById(R.id.fabAdd)
 
         btnBump.setOnClickListener {
-            val dialog = Dialog(this, R.style.CustomAlertDialog)
-
-            dialog.setContentView(R.layout.dialog_qr_code)
-
-            val qrCode: ImageView = dialog.findViewById(R.id.imgQRCode)
-
-            val wm = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
-            val ip = Formatter.formatIpAddress(wm.connectionInfo.ipAddress)
-            val port = Random().nextInt(9999 - 1000) + 1000
-            val width: Int = Resources.getSystem().displayMetrics.widthPixels
-            qrCode.setImageBitmap(
-                QRCodeHelper().generateQRCode(
-                    width,
-                    width,
-                    "bump://ga.kojin.bump/share?host=$ip&port=$port&key=1234"
-                )
-            )
+            val dialog = QRShareDialog(this)
             dialog.show()
         }
 
@@ -133,7 +117,9 @@ class QRScanActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    private fun bump() {}
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
 
+    }
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,7 @@ class ContactsFragment : Fragment() {
 
     private lateinit var contactsRV: RecyclerView
     private lateinit var contactsRepo: ContactsRepository
+    private lateinit var layoutNoContacts: ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +36,7 @@ class ContactsFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_contacts, container, false)
         contactsRV = root.findViewById(R.id.contact_list)
+        layoutNoContacts = root.findViewById(R.id.layout_no_contacts)
         contactsRepo = ContactsRepository(requireContext())
 
         val contactsAdapter = ContactsRecyclerViewAdapter(requireContext())
@@ -77,14 +80,19 @@ class ContactsFragment : Fragment() {
         adapter.contactsList = contactsRepo.getUsers()
 
         adapter.contactsList.sortBy { selector(it) }
+        try {
+            if (adapter.contactsList.size == 0) {
+                layoutNoContacts.visibility = View.VISIBLE
+                Log.v(TAG, "No stored users.")
+                // requestImport()
+            } else {
+                layoutNoContacts.visibility = View.GONE
+            }
+        } catch (e: UninitializedPropertyAccessException) {
 
-        if (adapter.contactsList.size == 0) {
-            Log.v(TAG, "No stored users.")
-            // requestImport()
         }
-
         Log.v(TAG, "notifyDataSetChanged")
-        contactsRV.adapter!!.notifyDataSetChanged()
+        (contactsRV.adapter ?: return).notifyDataSetChanged()
     }
 
     fun selector(c: Contact): String = c.name

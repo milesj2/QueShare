@@ -37,25 +37,28 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     app:srcCompat="@drawable/ic_facebook"
-                    android:background="@drawable/shape_circle_sml"/>
+                    android:background="@drawable/shape_circle_sml"
+                    android:contentDescription="@string/social_media_icon" />
 
                 <EditText
                     android:id="@+id/handle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="" />
+                    android:hint="@string/social_media_handle"/>
 
                 <ImageView
                     android:id="@+id/imgClearChanges"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_clear_24" />
+                    app:srcCompat="@drawable/ic_baseline_clear_24"
+                    android:contentDescription="@string/cancel" />
                 <ImageView
                     android:id="@+id/imgAcceptChanges"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_check_24" />
+                    app:srcCompat="@drawable/ic_baseline_check_24"
+                    android:contentDescription="@string/confirm"/>
 
             </LinearLayout>
 
@@ -64,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_rounded_button"
-                android:text="+"
+                android:text="@string/plus"
                 android:layout_margin="10dp"
                 android:layout_gravity="center"
                 app:layout_constraintStart_toStartOf="parent"

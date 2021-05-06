@@ -31,12 +31,12 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Basic Details" />
+                android:text="@string/basic_details" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Social Media" />
+                android:text="@string/social_media" />
         </com.google.android.material.tabs.TabLayout>
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"

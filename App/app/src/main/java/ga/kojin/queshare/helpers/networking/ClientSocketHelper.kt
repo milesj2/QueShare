@@ -1,13 +1,14 @@
 package ga.kojin.queshare.helpers.networking
 
 import android.util.Log
+import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
 
 object ClientSocketHelper {
 
     private val TAG: String = "ClientSocket"
 
-    suspend fun receiveFile(input: ByteReadChannel): ByteArray? {
+    suspend fun receiveFile(input: ByteReadChannel, socket: Socket): ByteArray? {
         var fileResponse: ByteArray? = null
         var fileSize = ""
         while (fileSize == "") {

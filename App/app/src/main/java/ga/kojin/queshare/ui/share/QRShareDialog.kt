@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.text.format.Formatter
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import ga.kojin.queshare.R
@@ -16,6 +17,7 @@ import io.ktor.network.sockets.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.Exception
 
 class QRShareDialog(context: Context) : Dialog(context, R.style.CustomAlertDialog) {
 
@@ -23,20 +25,33 @@ class QRShareDialog(context: Context) : Dialog(context, R.style.CustomAlertDialo
     val socket = ServerSocketHelper
     lateinit var connection: Socket
     private var launchedShare = false
+    private lateinit var qrCode: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_qr_code)
 
-        val qrCode: ImageView = findViewById(R.id.imgQRCode)
+        qrCode = findViewById(R.id.imgQRCode)
 
+    }
+
+    private fun randomID(): String = List(16) {
+        (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
+    }.joinToString("")
+
+    override fun onStart() {
+        super.onStart()
+
+        val width: Int = Resources.getSystem().displayMetrics.widthPixels
         val wm = context.getSystemService(AppCompatActivity.WIFI_SERVICE) as WifiManager
         val ip = Formatter.formatIpAddress(wm.connectionInfo.ipAddress)
         val port = Random().nextInt(9999 - 1000) + 1000
+        val key = randomID()
 
-        val width: Int = Resources.getSystem().displayMetrics.widthPixels
-
-        val key = "ABC123"
+        Log.v(
+            TAG, "Generating QR Code of value " +
+                    "bump://ga.kojin.bump/share?host=$ip&port=$port&key=$key"
+        )
 
         qrCode.setImageBitmap(
             QRCodeHelper().generateQRCode(
@@ -46,17 +61,41 @@ class QRShareDialog(context: Context) : Dialog(context, R.style.CustomAlertDialo
             )
         )
 
-        GlobalScope.launch {
-            suspend {
-                socket.setupSocket(ip, port, key) {
-                    //Log.v(TAG, "New Connection from: ${connection.remoteAddress}")
-                    launchedShare = true
-                    val intent = Intent("ga.kojin.bump.ui.share.HostNetworkShare")
-                    intent.setClass(context, HostNetworkShare::class.java)
-                    context.startActivity(intent)
-                    dismiss()
-                }
-            }.invoke()
+        Log.v(TAG, "Closing socket")
+        try {
+
+            socket.closeServer()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error")
+        }
+
+        socket.setupSocket(ip, port)
+        try {
+            GlobalScope.launch {
+                suspend {
+                    Log.v(TAG, "Opening New")
+                    socket.listen(key) {
+                        connection = ServerSocketHelper.connection!!
+                        Log.v(TAG, "New Connection from: ${connection.remoteAddress}")
+                        launchedShare = true
+                        val intent = Intent("ga.kojin.queshare.ui.share.HostNetworkShare")
+                        intent.setClass(context, HostNetworkShare::class.java)
+                        context.startActivity(intent)
+                        dismiss()
+                    }
+                }.invoke()
+            }
+        } catch (e: Exception) {
+
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        try {
+            socket.closeServer()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error")
         }
 
     }

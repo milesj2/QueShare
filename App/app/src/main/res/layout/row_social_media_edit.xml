@@ -12,19 +12,26 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/shape_circle_sml"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
+        app:srcCompat="@android:drawable/ic_dialog_info"
+        android:contentDescription="@string/social_media_icon" />
     <EditText
         android:id="@+id/handle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textColor="@color/off_white"
-        android:text="/miles.jarvis" />
+        android:text="@string/placeholder"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textSize="20sp"
+        android:textColorHint="@color/off_white"
+        android:hint="@string/social_media_handle"/>
     <ImageView
         android:id="@+id/imgDelete"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:padding="5dp"
         android:background="@drawable/shape_circle_sml"
-        app:srcCompat="@drawable/ic_baseline_delete_24" />
+        app:srcCompat="@drawable/ic_baseline_delete_24"
+        android:contentDescription="@string/delete_button" />
 </LinearLayout>

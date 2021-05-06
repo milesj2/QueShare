@@ -1,8 +1,6 @@
 package ga.kojin.queshare.helpers.networking
 
 import android.util.Log
-import ga.kojin.queshare.data.DBDriver
-import ga.kojin.queshare.data.PhotoRepository
 import ga.kojin.queshare.helpers.BitmapHelper
 import ga.kojin.queshare.models.persisted.Photo
 import io.ktor.network.selector.*
@@ -10,48 +8,60 @@ import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.Dispatchers
 import java.net.InetSocketAddress
+import java.nio.channels.ClosedChannelException
 
 object ServerSocketHelper {
 
     var connection: Socket? = null
     var input: ByteReadChannel? = null
+    private var serverSocket: ServerSocket? = null
 
-    private val TAG: String = "ServerSocket"
+    private const val TAG: String = "ServerSocket"
 
-
-    suspend fun setupSocket(
-        url: String,
-        port: Int,
-        key: String,
-        onConnect: () -> Unit
-    ) {
+    fun setupSocket(url: String, port: Int) {
         Log.v(TAG, "Starting Server...")
-        val server = aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
+        serverSocket = aSocket(ActorSelectorManager(Dispatchers.IO)).tcp()
             .bind(InetSocketAddress(url, port))
+    }
 
+    suspend fun listen(key: String, onConnect: () -> Unit) {
+        Log.v(TAG, connection.toString())
+        connection?.close()
+        connection?.dispose()
+        connection = null
         while (connection == null) {
-            Log.v(TAG, "Listening...")
-            val socket = server.accept()
+            //Log.v(TAG, "Listening on $url:$port")
+            Log.v(TAG, "Listening")
+            val socket = serverSocket?.accept()
 
-            Log.v(TAG, "Found new connection '${socket.remoteAddress}'.")
-            input = socket.openReadChannel()
+            //Log.v(TAG, "Found new connection '${socket?.remoteAddress} on $url:$port'.")
+            Log.v(TAG, "Found new connection '${socket?.remoteAddress}'.")
+            input = socket?.openReadChannel()
+            Log.i(TAG, "Waiting for input...")
+            var line: String = ""
 
-            try {
-                while (true) {
-                    Log.i(TAG, "Waiting for input...")
-                    val line = input!!.readUTF8Line()
-                    Log.i(TAG, "Received input '$line'")
-
-                    if (line == key) {
-                        connection = socket
-                        onConnect.invoke()
-                        break
-                    }
-                }
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                socket.awaitClosed()
+            while (line == "") {
+                line = input!!.readUTF8Line().toString()
             }
+            Log.i(TAG, "Received input '$line'")
+            if (line == key) {
+                connection = socket
+                onConnect.invoke()
+                break
+            }
+        }
+    }
+
+    fun closeServer() {
+        try {
+            if (serverSocket?.isClosed == false) {
+                connection?.close()
+                //serverSocket?.close()
+            }
+        } catch (e: ClosedChannelException) {
+            Log.e(TAG, "Closed Channel Exception")
+        } catch (e: Exception) {
+            Log.e(TAG, "Closed Channel Exception")
         }
     }
 

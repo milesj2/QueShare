@@ -17,6 +17,15 @@
 
         <item name="backgroundGradient">@drawable/bg_grad_main</item>
 
+
+    </style>
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintStart_toStartOf">parent</item>
+        <item name="layout_constraintEnd_toEndOf">parent</item>
+        <item name="android:colorAccent">@color/purple_700</item>
     </style>
 
     <style name="Theme.QueShare.QRDialog" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -34,23 +43,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Bump.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.QueShare.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="DefaultText" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textColor">@color/off_white</item>
-    </style>
-    <style name="DefaultTitleText" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textColor">@color/off_white</item>
-    </style>
 
-    <style name="Theme.Bump.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Icon" >
+    <style name="Theme.QueShare.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.QueShare.Icon" >
         <item name="android:background">@drawable/shape_circle_sml</item>
         <item name="android:padding">5dp</item>
     </style>
 
-    <style name="CustomEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="Theme.QueShare.CustomEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:textColor">@color/off_white</item>
     </style>
 

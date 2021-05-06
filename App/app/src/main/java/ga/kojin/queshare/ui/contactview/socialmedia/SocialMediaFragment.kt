@@ -16,8 +16,9 @@ import ga.kojin.queshare.data.SocialMediaRepository
 import ga.kojin.queshare.models.SocialMediaType
 import ga.kojin.queshare.models.persisted.Contact
 import ga.kojin.queshare.models.persisted.SocialMedia
+import ga.kojin.queshare.ui.contactview.basicdetails.BasicDetailsFragment
 
-class SocialMediaFragment(val contact: Contact) : Fragment() {
+class SocialMediaFragment() : Fragment() {
 
     private val TAG: String = "SocialMediaFragment"
 
@@ -29,6 +30,13 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
     private lateinit var chooseTypeImage: ImageView
     private lateinit var socialMediaAdapter: SocialMediaListAdapter
     private lateinit var addNewButton: Button
+    var contact: Contact? = null
+
+    fun newInstance(bundle: Bundle): SocialMediaFragment {
+        val fragment = SocialMediaFragment()
+        fragment.arguments = bundle
+        return fragment
+    }
 
 
     override fun onCreateView(
@@ -40,9 +48,8 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
 
         root = inflater.inflate(R.layout.fragment_social_media, container, false)
         socialMediaAdapter = SocialMediaListAdapter(requireContext())
-        socialMediaList =
-            SocialMediaRepository(requireContext()).getSocialMediaByContactID(contact.id)
-        socialMediaAdapter.socialMediaList = socialMediaList
+
+        socialMediaList = ArrayList<SocialMedia>()
 
         socialMediaRV = root.findViewById(R.id.socialMedia)
 
@@ -108,7 +115,7 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
 
             val socialMedia = SocialMedia(
                 -1,
-                contact.id,
+                contact!!.id,
                 (chooseType.tag ?: SocialMediaType.Facebook) as SocialMediaType,
                 txtHandle.text.toString()
             )
@@ -136,8 +143,8 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
         socialMediaAdapter.notifyDataSetChanged()
     }
 
-    fun saveDetails() {
-        try {
+    fun saveDetails(): Boolean {
+        return try {
             for (i in 0 until socialMediaList.size) {
                 val socialVH =
                     socialMediaRV.findViewHolderForAdapterPosition(0) as SocialMediaListAdapter.ViewHolder
@@ -146,8 +153,9 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
                 SocialMediaRepository(requireContext()).updateSocialMedia(socialMedia)
             }
             socialMediaAdapter.notifyDataSetChanged()
+            true
         } catch (e: UninitializedPropertyAccessException) {
-            return
+            false
         }
     }
 
@@ -169,5 +177,20 @@ class SocialMediaFragment(val contact: Contact) : Fragment() {
             addNewControl.visibility = View.GONE
             addNewButton.visibility = View.VISIBLE
         }, 150)
+    }
+
+    fun refreshSocialMediaList() {
+        if (contact != null) {
+            socialMediaList =
+                SocialMediaRepository(requireContext()).getSocialMediaByContactID(contact!!.id)
+        }
+        socialMediaAdapter.socialMediaList = socialMediaList
+        socialMediaAdapter.notifyDataSetChanged()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshSocialMediaList()
     }
 }

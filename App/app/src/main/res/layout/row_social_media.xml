@@ -14,15 +14,17 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/shape_circle_sml"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
+        app:srcCompat="@android:drawable/ic_dialog_info"
+        android:contentDescription="@string/social_media_icon" />
 
     <TextView
         android:id="@+id/handle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="/miles.jarvis"
-        android:textAppearance="@style/DefaultText" />
+        android:text="@string/placeholder"
+        android:textSize="22sp"
+        android:textAppearance="@style/Theme.QueShare.DefaultText" />
     <LinearLayout
         android:id="@+id/layoutActions"
         android:layout_width="wrap_content"
@@ -47,5 +49,6 @@
         android:id="@+id/imgDelete"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/delete_button" />
 </LinearLayout>

@@ -16,8 +16,10 @@ import com.google.android.material.textfield.TextInputEditText
 import ga.kojin.queshare.R
 import ga.kojin.queshare.data.ContactsRepository
 import ga.kojin.queshare.data.PhotoRepository
+import ga.kojin.queshare.helpers.AnimationHelper
 import ga.kojin.queshare.helpers.BitmapHelper
 import ga.kojin.queshare.helpers.DimensionsHelper
+import ga.kojin.queshare.helpers.QueShareDialogHelper
 import ga.kojin.queshare.models.persisted.Contact
 
 class ContactViewActivity : AppCompatActivity() {
@@ -26,7 +28,6 @@ class ContactViewActivity : AppCompatActivity() {
     private val contactsRepo: ContactsRepository = ContactsRepository(this)
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
-    private var starred: Boolean = false
     private var editMode: Boolean = false
     private lateinit var contactViewAdapter: ContactViewAdapter
     private lateinit var avatar: ImageView
@@ -39,7 +40,7 @@ class ContactViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_contact_details)
+        setContentView(R.layout.activity_view_contact)
 
         val btnNavBack: ImageView = findViewById(R.id.imgNavBack)
 
@@ -59,7 +60,6 @@ class ContactViewActivity : AppCompatActivity() {
 
         val photo = PhotoRepository(this).getImageByContactID(contact.id)?.bitmap
         if (photo == null) {
-            // avatar.setImageResource(R.mipmap.ic_default_avatar)
             val txtInitial: TextView = findViewById(R.id.txtInitial)
             txtInitial.text = "${contact.name[0]}"
             txtInitial.visibility = View.VISIBLE
@@ -69,16 +69,14 @@ class ContactViewActivity : AppCompatActivity() {
             view2.visibility = View.VISIBLE
         }
 
-
         imgStarred.setOnClickListener {
-            starred = !starred
-            contactsRepo.setContactFavouriteStatus(userID, starred)
-            setStarredIco()
+            imgStarred.isSelected = !imgStarred.isSelected
+            contactsRepo.setContactFavouriteStatus(userID, imgStarred.isSelected)
         }
-        starred = contact.starred == true
-        setStarredIco()
+        imgStarred.isSelected = contact.starred
 
-        contactViewAdapter = ContactViewAdapter(contact, this, supportFragmentManager)
+        contactViewAdapter = ContactViewAdapter(this, supportFragmentManager)
+        contactViewAdapter.setContact(contact)
 
         viewPager.adapter = contactViewAdapter
         viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
@@ -96,6 +94,9 @@ class ContactViewActivity : AppCompatActivity() {
         val btnDone: ImageView = findViewById(R.id.imgDone)
         val btnClear: ImageView = findViewById(R.id.imgClear)
         val btnDelete: ImageView = findViewById(R.id.imgDelete)
+        val btnAddImage: ImageView = findViewById(R.id.imgAddImage)
+
+        btnAddImage.visibility = View.GONE
 
         btnEdit.setOnClickListener {
             editMode = true
@@ -104,6 +105,7 @@ class ContactViewActivity : AppCompatActivity() {
             btnDone.visibility = View.VISIBLE
             btnClear.visibility = View.VISIBLE
             contactViewAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(this, btnEdit, btnDelete, btnClear, btnDone)
         }
 
         btnDone.setOnClickListener {
@@ -114,52 +116,44 @@ class ContactViewActivity : AppCompatActivity() {
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
             contactViewAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(this, btnDone, btnClear, btnDelete, btnEdit)
         }
 
         btnClear.setOnClickListener {
             editMode = false
-            btnEdit.visibility = View.VISIBLE
+            btnDelete.visibility = View.VISIBLE
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
             contactViewAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(this, btnDone, btnClear, btnDelete, btnEdit)
         }
 
         btnDelete.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(viewPager.context)
-
-            dialogBuilder.setMessage("There are no contacts, would you like to import from system?")
-                .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+            QueShareDialogHelper.showChoiceDialog(
+                this,
+                "Are you sure?",
+                "Are you sure you want to delete this contact?",
+                "Yes",
+                "No",
+                false,
+                {
                     contactsRepo.deleteContact(contact.id)
                     finish()
-                }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.cancel()
-                }
-
-            val alert = dialogBuilder.create()
-            alert.setTitle("Are you sure?")
-            alert.show()
-        }
-    }
-
-    private fun setStarredIco() {
-        if (starred) {
-            imgStarred.setImageResource(android.R.drawable.star_big_on)
-        } else {
-            imgStarred.setImageResource(android.R.drawable.star_big_off)
+                },
+                {}
+            )
         }
     }
 
     private fun saveContact() {
-        contactViewAdapter.saveDetails(starred)
+        contactViewAdapter.saveDetails(imgStarred.isSelected)
     }
 
     private fun setProfilePhoto(photo: Bitmap) {
         avatar.setImageBitmap(photo)
         blurredBackground.setImageBitmap(
-            BitmapHelper.blurRenderScript(
+            BitmapHelper.blurBitmap(
                 this,
                 BitmapHelper.resizeBitmap(
                     photo,

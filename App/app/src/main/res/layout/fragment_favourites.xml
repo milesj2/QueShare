@@ -5,26 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include android:id="@+id/layout_no_favourites"
+        layout="@layout/layout_no_favourites" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contact_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <com.reddit.indicatorfastscroll.FastScrollerView
-        android:id="@+id/fastscroller"
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.reddit.indicatorfastscroll.FastScrollerThumbView
-        android:id="@+id/fastscroller_thumb"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@+id/fastscroller"
-        android:layout_alignBottom="@+id/fastscroller"
-        android:layout_toStartOf="@+id/fastscroller"
-        app:layout_constraintEnd_toStartOf="@+id/fastscroller" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

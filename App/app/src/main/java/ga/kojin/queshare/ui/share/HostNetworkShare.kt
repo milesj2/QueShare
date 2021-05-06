@@ -41,6 +41,8 @@ class HostNetworkShare : AppCompatActivity() {
                     }
                 } catch (e: Exception) {
 
+                } finally {
+                    ServerSocketHelper.closeServer()
                 }
             }.invoke()
         }
@@ -56,28 +58,27 @@ class HostNetworkShare : AppCompatActivity() {
         val input = ServerSocketHelper.input
         val output: ByteWriteChannel = socket.openWriteChannel(autoFlush = true)
 
-        val string: String = "${ShareHelper.buildQRString(applicationContext)}\r\n"
+        updateText("Sending contact...")
+        output.writeStringUtf8("${ShareHelper.serialiseProfileContact(applicationContext)}\r\n")
 
-        Log.v(TAG, "Sending Contact info...")
-        output.writeStringUtf8("$string\r\n")
-
-        Log.v(TAG, "Receiving Contact...")
+        updateText("Receiving Contact...")
         val contactResponse = (input ?: return false).readUTF8Line()
 
-
-        Log.v(TAG, "Sending Photo...")
+        updateText("Sending Photo...")
         ServerSocketHelper.sendPhoto(
             output,
             PhotoRepository(this).getImageByContactID(DBDriver.USER_PROFILE_ID)
         )
 
-        Log.v(TAG, "Receiving Photo...")
-        val imgResponse: ByteArray? = ClientSocketHelper.receiveFile(input)
+        updateText("Receiving Photo...")
+        val imgResponse: ByteArray? = ClientSocketHelper.receiveFile(input, socket)
 
+        updateText("Saving data...")
         socket.close()
+        ServerSocketHelper.closeServer()
 
         val contactID =
-            ShareHelper.addContactFromString(applicationContext, contactResponse ?: return false)
+            ShareHelper.deserialiseProfileContact(applicationContext, contactResponse ?: return false)
 
         if (imgResponse != null) {
             ShareHelper.addPhotoFromBytes(this, imgResponse, contactID)
@@ -89,6 +90,13 @@ class HostNetworkShare : AppCompatActivity() {
     fun makeToast(string: String) {
         runOnUiThread {
             Toast.makeText(applicationContext, "$string", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun updateText(string: String) {
+        runOnUiThread {
+            txtView.text = string
+            Log.v(TAG, string)
         }
     }
 }

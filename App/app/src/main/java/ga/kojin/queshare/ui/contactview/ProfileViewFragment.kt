@@ -3,13 +3,13 @@ package ga.kojin.queshare.ui.contactview
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -23,9 +23,7 @@ import com.google.android.material.tabs.TabLayout
 import ga.kojin.queshare.R
 import ga.kojin.queshare.data.ContactsRepository
 import ga.kojin.queshare.data.PhotoRepository
-import ga.kojin.queshare.helpers.BitmapHelper
-import ga.kojin.queshare.helpers.DimensionsHelper
-import ga.kojin.queshare.helpers.PermissionsHelper
+import ga.kojin.queshare.helpers.*
 import ga.kojin.queshare.models.persisted.Contact
 import ga.kojin.queshare.models.persisted.Photo
 
@@ -41,6 +39,11 @@ class ProfileViewFragment : Fragment() {
     private lateinit var avatar: ImageView
     private lateinit var blurredBackground: ImageView
     private lateinit var root: View
+    private lateinit var view2: CardView
+    private lateinit var btnEdit: ImageView
+    private lateinit var btnDelete: ImageView
+    private lateinit var btnDone: ImageView
+    private lateinit var btnClear: ImageView
 
     private val pickImage = 100
 
@@ -62,6 +65,7 @@ class ProfileViewFragment : Fragment() {
         val imageConstraint: ConstraintLayout = root.findViewById(R.id.imageConstraint)
         avatar = root.findViewById(R.id.imageView)
         blurredBackground = root.findViewById(R.id.imgBlurredBackground)
+        view2 = root.findViewById(R.id.view2)
 
         // toolbar.visibility = View.GONE
         starred.visibility = View.GONE
@@ -78,11 +82,12 @@ class ProfileViewFragment : Fragment() {
             txtInitial.visibility = View.VISIBLE
         } else {
             setProfilePhoto(photo)
-            val view2: CardView = root.findViewById(R.id.view2)
+
             view2.visibility = View.VISIBLE
         }
-        
-        contactAdapter = ContactViewAdapter(contact, requireContext(), childFragmentManager)
+
+        contactAdapter = ContactViewAdapter(requireContext(), childFragmentManager)
+        setContact()
 
         viewPager = root.findViewById(R.id.detailsViewPager)
         tabLayout = root.findViewById(R.id.detailsTabBar)
@@ -99,10 +104,10 @@ class ProfileViewFragment : Fragment() {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        val btnEdit: ImageView = root.findViewById(R.id.imgEdit)
-        val btnDone: ImageView = root.findViewById(R.id.imgDone)
-        val btnClear: ImageView = root.findViewById(R.id.imgClear)
-        val btnDelete: ImageView = root.findViewById(R.id.imgDelete)
+        btnEdit = root.findViewById(R.id.imgEdit)
+        btnDelete = root.findViewById(R.id.imgDelete)
+        btnDone = root.findViewById(R.id.imgDone)
+        btnClear = root.findViewById(R.id.imgClear)
         val btnAddImage: ImageView = root.findViewById(R.id.imgAddImage)
 
         btnDelete.visibility = View.GONE
@@ -113,15 +118,27 @@ class ProfileViewFragment : Fragment() {
             btnDone.visibility = View.VISIBLE
             btnClear.visibility = View.VISIBLE
             contactAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(requireContext(), btnEdit, btnDelete, btnClear, btnDone)
         }
 
         btnDone.setOnClickListener {
-            saveProfile()
+            if (!saveProfile()) {
+                QueShareDialogHelper.showAlertDialog(
+                    requireContext(),
+                    "Cannot save contact",
+                    "Name cannot be blank.",
+                    "Ok"
+                )
+            } else {
+                val sharedPreferences = SharedPreferences(requireContext())
+                sharedPreferences.save(sharedPreferences.PROFILE_SET_UP, true)
+            }
             editMode = false
             btnEdit.visibility = View.VISIBLE
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
             contactAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(requireContext(), btnDone, btnClear, btnDelete, btnEdit)
         }
 
         btnClear.setOnClickListener {
@@ -130,6 +147,7 @@ class ProfileViewFragment : Fragment() {
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
             contactAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(requireContext(), btnDone, btnClear, btnDelete, btnEdit)
         }
 
         btnAddImage.setOnClickListener {
@@ -142,14 +160,13 @@ class ProfileViewFragment : Fragment() {
         return root
     }
 
-    private fun saveProfile() {
-        contactAdapter.saveDetails(false)
-    }
+    private fun saveProfile(): Boolean = contactAdapter.saveDetails(false)
 
     private fun setProfilePhoto(photo: Bitmap) {
         avatar.setImageBitmap(photo)
+        view2.visibility = View.VISIBLE
         blurredBackground.setImageBitmap(
-            BitmapHelper.blurRenderScript(
+            BitmapHelper.blurBitmap(
                 requireContext(),
                 BitmapHelper.resizeBitmap(
                     photo,
@@ -179,14 +196,11 @@ class ProfileViewFragment : Fragment() {
     }
 
     private fun pickFromGallery() {
-
-        val width: Int = Resources.getSystem().displayMetrics.widthPixels
-        val ratio = width / 200
-
         CropImage.activity()
             .setGuidelines(CropImageView.Guidelines.ON)
             .setFixAspectRatio(true)
             .setCropShape(CropImageView.CropShape.OVAL)
+            .setActivityTitle("Select Crop")
             .start(requireContext(), this)
     }
 
@@ -200,7 +214,6 @@ class ProfileViewFragment : Fragment() {
         if (requestCode == pickImage) {
             pickFromGallery()
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -219,4 +232,12 @@ class ProfileViewFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        setContact()
+    }
+
+    private fun setContact() {
+        contactAdapter.setContact(contact)
+    }
 }
