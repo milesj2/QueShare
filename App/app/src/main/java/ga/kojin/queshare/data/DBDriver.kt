@@ -23,28 +23,26 @@ class DBDriver(var context: Context) :
     companion object {
         const val DATABASE_NAME = "data"
         const val DATABASE_VERSION = 1
-
         const val USER_PROFILE_ID: Long = -1
 
-        const val TABLE_CONTACTS = "contacts"
-        const val TABLE_SOCIAL_MEDIA = "social_media"
-        const val TABLE_PHOTOS = "photos"
-
-        const val KEY_CONTACT_ID = "contact_id"
-        const val KEY_SYS_CONTACT_ID = "sys_contact_id"
-        const val KEY_SOCIAL_MEDIA_ID = "social_media_id"
-        const val KEY_FIRSTNAME = "firstname"
-        const val KEY_LASTNAME = "lastname"
-        const val KEY_INITIALS = "initials"
-        const val KEY_MOBILE = "mobile"
-        const val KEY_STARRED = "starred"
-
-        const val KEY_SOCIAL_TYPE = "type"
-        const val KEY_HANDLE = "handle"
-
-        const val KEY_PHOTO_ID = "photo_id"
-        const val KEY_PHOTO_BITMAP = "bitmap"
     }
+
+    private val TABLE_CONTACTS = "contacts"
+    private val TABLE_SOCIAL_MEDIA = "social_media"
+    private val TABLE_PHOTOS = "photos"
+
+    private val KEY_CONTACT_ID = "contact_id"
+    private val KEY_SYS_CONTACT_ID = "sys_contact_id"
+    private val KEY_SOCIAL_MEDIA_ID = "social_media_id"
+    private val KEY_FIRSTNAME = "firstname"
+    private val KEY_LASTNAME = "lastname"
+    private val KEY_INITIALS = "initials"
+    private val KEY_MOBILE = "mobile"
+    private val KEY_STARRED = "starred"
+    private val KEY_SOCIAL_TYPE = "type"
+    private val KEY_HANDLE = "handle"
+    private val KEY_PHOTO_ID = "photo_id"
+    private val KEY_PHOTO_BITMAP = "bitmap"
 
     private val SQL_TALE_CONTACTS_DROP = "  DROP TABLE dbo.Contacts;"
 
@@ -344,10 +342,6 @@ class DBDriver(var context: Context) :
         result.close()
         db.close()
         return photo
-
-
     }
-
-
 }
 

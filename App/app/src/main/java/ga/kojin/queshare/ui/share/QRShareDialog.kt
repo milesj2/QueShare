@@ -16,8 +16,8 @@ import ga.kojin.queshare.helpers.networking.ServerSocketHelper
 import io.ktor.network.sockets.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import java.util.*
+import kotlin.Exception
 
 class QRShareDialog(context: Context) : Dialog(context, R.style.CustomAlertDialog) {
 
@@ -63,26 +63,30 @@ class QRShareDialog(context: Context) : Dialog(context, R.style.CustomAlertDialo
 
         Log.v(TAG, "Closing socket")
         try {
+
             socket.closeServer()
         } catch (e: Exception) {
             Log.e(TAG, "Error")
         }
 
         socket.setupSocket(ip, port)
+        try {
+            GlobalScope.launch {
+                suspend {
+                    Log.v(TAG, "Opening New")
+                    socket.listen(key) {
+                        connection = ServerSocketHelper.connection!!
+                        Log.v(TAG, "New Connection from: ${connection.remoteAddress}")
+                        launchedShare = true
+                        val intent = Intent("ga.kojin.queshare.ui.share.HostNetworkShare")
+                        intent.setClass(context, HostNetworkShare::class.java)
+                        context.startActivity(intent)
+                        dismiss()
+                    }
+                }.invoke()
+            }
+        } catch (e: Exception) {
 
-        GlobalScope.launch {
-            suspend {
-                Log.v(TAG, "Opening New")
-                socket.listen(key) {
-                    connection = ServerSocketHelper.connection!!
-                    Log.v(TAG, "New Connection from: ${connection.remoteAddress}")
-                    launchedShare = true
-                    val intent = Intent("ga.kojin.bump.ui.share.HostNetworkShare")
-                    intent.setClass(context, HostNetworkShare::class.java)
-                    context.startActivity(intent)
-                    dismiss()
-                }
-            }.invoke()
         }
     }
 

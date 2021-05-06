@@ -24,17 +24,12 @@ object BitmapHelper {
         BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
 
-    fun cropBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
-
-        var x: Int
-        var y: Int
-
-        return Bitmap.createBitmap(bitmap, 0, 0, width, height)
-    }
+    fun cropBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap =
+        Bitmap.createBitmap(bitmap, 0, 0, width, height)
 
 
     @SuppressLint("NewApi")
-    fun blurRenderScript(context: Context?, smallBitmap: Bitmap, radius: Int): Bitmap? {
+    fun blurBitmap(context: Context?, smallBitmap: Bitmap, radius: Int): Bitmap? {
         var smallBitmap = smallBitmap
         try {
             smallBitmap = RGB565toARGB888(smallBitmap)
@@ -89,10 +84,4 @@ object BitmapHelper {
         img.compress(Bitmap.CompressFormat.PNG, quality, stream)
         return stream
     }
-
-    fun blurBitmap(){
-
-    }
-
-
 }

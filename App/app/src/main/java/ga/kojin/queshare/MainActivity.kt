@@ -15,7 +15,7 @@ import ga.kojin.queshare.helpers.PermissionsHelper
 import ga.kojin.queshare.helpers.QueShareDialogHelper
 import ga.kojin.queshare.helpers.SharedPreferences
 import ga.kojin.queshare.ui.share.QRScanActivity
-import ga.kojin.queshare.ui.main.SectionsPagerAdapter
+import ga.kojin.queshare.ui.main.MainTabAdapter
 import ga.kojin.queshare.ui.share.QRShareDialog
 
 
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewPager: ViewPager
-    private lateinit var sectionsPagerAdapter: SectionsPagerAdapter
+    private lateinit var mainTabAdapter: MainTabAdapter
     private var width: Int = Resources.getSystem().displayMetrics.widthPixels
 
     private lateinit var userPreferences: SharedPreferences
@@ -42,8 +42,9 @@ class MainActivity : AppCompatActivity() {
         viewPager = binding.viewPager
         viewPager.offscreenPageLimit = 3
 
-        sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        viewPager.adapter = sectionsPagerAdapter
+        mainTabAdapter = MainTabAdapter(this, supportFragmentManager)
+        viewPager.adapter = mainTabAdapter
+        viewPager.currentItem = 1
 
         val tabs: TabLayout = binding.tabs
         val fabAdd: FloatingActionButton = binding.fabAdd
@@ -57,7 +58,11 @@ class MainActivity : AppCompatActivity() {
                 intent.setClass(this, QRScanActivity::class.java)
                 this.startActivity(intent)
             } else {
-                QueShareDialogHelper.showProfileNotInitialisedDialog(this)
+                QueShareDialogHelper.showAlertDialog(
+                    this, "Sorry!",
+                    "Please setup your profile to use this feature.",
+                    "Ok"
+                )
             }
         }
 
@@ -75,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        sectionsPagerAdapter.refreshData()
+        mainTabAdapter.refreshData()
 
     }
 
@@ -94,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         Log.v(TAG, "Permission result for ${permissions[0]} is ${grantResults[0]}")
 
         if (grantResults[0] == 0) {
-            sectionsPagerAdapter.refreshData()
+            mainTabAdapter.refreshData()
         }
     }
 

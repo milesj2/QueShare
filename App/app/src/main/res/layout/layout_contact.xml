@@ -70,7 +70,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/btn_star"
-        android:layout_margin="10dp"/>
+        android:padding="10dp"
+        android:background="@drawable/bg_background_black_fade_rounded_right"/>
     <ImageView
         android:id="@+id/imgEdit"
         android:layout_width="wrap_content"
@@ -118,13 +119,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="10dp"
         app:srcCompat="@drawable/btn_ic_back_arrow" />
+
     <ImageView
+        android:background="@drawable/bg_background_black_fade_rounded"
         android:id="@+id/imgAddImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="10dp"
-        app:srcCompat="@drawable/btn_camera" />
+        android:padding="5dp"
+        app:srcCompat="@drawable/btn_photo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

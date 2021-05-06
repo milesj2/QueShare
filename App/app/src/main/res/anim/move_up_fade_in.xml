@@ -4,7 +4,7 @@
         android:duration="150"
         android:fillAfter="true"
         android:fromYDelta="0%p"
-        android:toYDelta="-5%p" />
+        android:toYDelta="5%p" />
     <alpha
         android:interpolator="@android:anim/accelerate_interpolator"
         android:fromAlpha="0"

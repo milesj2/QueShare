@@ -16,8 +16,10 @@ import com.google.android.material.textfield.TextInputEditText
 import ga.kojin.queshare.R
 import ga.kojin.queshare.data.ContactsRepository
 import ga.kojin.queshare.data.PhotoRepository
+import ga.kojin.queshare.helpers.AnimationHelper
 import ga.kojin.queshare.helpers.BitmapHelper
 import ga.kojin.queshare.helpers.DimensionsHelper
+import ga.kojin.queshare.helpers.QueShareDialogHelper
 import ga.kojin.queshare.models.persisted.Contact
 
 class ContactViewActivity : AppCompatActivity() {
@@ -108,6 +110,7 @@ class ContactViewActivity : AppCompatActivity() {
             btnDone.visibility = View.VISIBLE
             btnClear.visibility = View.VISIBLE
             contactViewAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(this, btnEdit, btnDelete, btnClear, btnDone)
         }
 
         btnDone.setOnClickListener {
@@ -118,6 +121,7 @@ class ContactViewActivity : AppCompatActivity() {
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
             contactViewAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(this, btnDone, btnClear, btnDelete, btnEdit)
         }
 
         btnClear.setOnClickListener {
@@ -127,24 +131,39 @@ class ContactViewActivity : AppCompatActivity() {
             btnDone.visibility = View.GONE
             btnClear.visibility = View.GONE
             contactViewAdapter.setEdit(editMode)
+            AnimationHelper.animateButtons(this, btnDone, btnClear, btnDelete, btnEdit)
         }
 
         btnDelete.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(viewPager.context)
-
-            dialogBuilder.setMessage("Are you sure you wish to proceed?")
-                .setCancelable(false)
-                .setPositiveButton("Yes") { _, _ ->
+            QueShareDialogHelper.showChoiceDialog(
+                this,
+                "Are you sure?",
+                "Are you sure you want to delete this contact?",
+                "Yes",
+                "No",
+                false,
+                {
                     contactsRepo.deleteContact(contact.id)
                     finish()
-                }
-                .setNegativeButton("No") { dialog, _ ->
-                    dialog.cancel()
-                }
+                },
+                {}
+            )
 
-            val alert = dialogBuilder.create()
-            alert.setTitle("Deleting contact")
-            alert.show()
+//            val dialogBuilder = AlertDialog.Builder(viewPager.context)
+//
+//            dialogBuilder.setMessage("Are you sure you wish to proceed?")
+//                .setCancelable(false)
+//                .setPositiveButton("Yes") { _, _ ->
+//                    contactsRepo.deleteContact(contact.id)
+//                    finish()
+//                }
+//                .setNegativeButton("No") { dialog, _ ->
+//                    dialog.cancel()
+//                }
+//
+//            val alert = dialogBuilder.create()
+//            alert.setTitle("Deleting contact")
+//            alert.show()
         }
     }
 
@@ -163,7 +182,7 @@ class ContactViewActivity : AppCompatActivity() {
     private fun setProfilePhoto(photo: Bitmap) {
         avatar.setImageBitmap(photo)
         blurredBackground.setImageBitmap(
-            BitmapHelper.blurRenderScript(
+            BitmapHelper.blurBitmap(
                 this,
                 BitmapHelper.resizeBitmap(
                     photo,

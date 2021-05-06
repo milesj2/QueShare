@@ -58,8 +58,7 @@ dependencies {
     // SERIALISATION
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1'
     // Sockets
-    implementation "io.ktor:ktor-network:1.5.4"
-    implementation "io.ktor:ktor-network-tls:1.5.4"
+    implementation "io.ktor:ktor-network:1.5.0"
     // Image Picker/Cropper
     implementation "com.github.CanHub:Android-Image-Cropper:3.0.1"
     // Blur Image View

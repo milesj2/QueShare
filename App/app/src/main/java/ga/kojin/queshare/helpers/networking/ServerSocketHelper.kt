@@ -37,22 +37,17 @@ object ServerSocketHelper {
             //Log.v(TAG, "Found new connection '${socket?.remoteAddress} on $url:$port'.")
             Log.v(TAG, "Found new connection '${socket?.remoteAddress}'.")
             input = socket?.openReadChannel()
+            Log.i(TAG, "Waiting for input...")
+            var line: String = ""
 
-            try {
-                while (true) {
-                    Log.i(TAG, "Waiting for input...")
-                    val line = input!!.readUTF8Line()
-                    Log.i(TAG, "Received input '$line'")
-
-                    if (line == key) {
-                        connection = socket
-                        onConnect.invoke()
-                        break
-                    }
-                }
-            } catch (e: Throwable) {
-                e.printStackTrace()
-                socket?.awaitClosed()
+            while (line == "") {
+                line = input!!.readUTF8Line().toString()
+            }
+            Log.i(TAG, "Received input '$line'")
+            if (line == key) {
+                connection = socket
+                onConnect.invoke()
+                break
             }
         }
     }
@@ -61,7 +56,7 @@ object ServerSocketHelper {
         try {
             if (serverSocket?.isClosed == false) {
                 connection?.close()
-                serverSocket?.close()
+                //serverSocket?.close()
             }
         } catch (e: ClosedChannelException) {
             Log.e(TAG, "Closed Channel Exception")
