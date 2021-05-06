@@ -24,6 +24,7 @@
         android:layout_marginStart="10dp"
         android:text="@string/placeholder"
         android:textSize="22sp"
+        android:textColor="@color/off_white"
         android:textAppearance="@style/Theme.QueShare.DefaultText" />
     <LinearLayout
         android:id="@+id/layoutActions"

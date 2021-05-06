@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager
     private lateinit var mainTabAdapter: MainTabAdapter
     private var width: Int = Resources.getSystem().displayMetrics.widthPixels
+    private var QRDialog: QRShareDialog? = null
 
     private lateinit var userPreferences: SharedPreferences
 
@@ -67,9 +68,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         fabShare.setOnClickListener {
+            if (QRDialog?.isShowing == true) {
+                return@setOnClickListener
+            }
+
             if (userPreferences.getValueBoolean(userPreferences.PROFILE_SET_UP, false)) {
-                val dialog = QRShareDialog(this)
-                dialog.show()
+                QRDialog = QRShareDialog(this)
+                QRDialog?.show()
             } else {
                 QueShareDialogHelper.showAlertDialog(
                     this, "Sorry!",
@@ -90,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun requireContacts() {
         Log.v(TAG, "Requiring Contacts")
-        PermissionsHelper.requestPermission(this, Manifest.permission.READ_CONTACTS, 100)
+        // PermissionsHelper.requestPermission(this, Manifest.permission.READ_CONTACTS, 100)
     }
 
     override fun onRequestPermissionsResult(

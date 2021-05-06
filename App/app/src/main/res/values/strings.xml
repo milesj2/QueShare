@@ -14,7 +14,7 @@
     <string name="confirm">Confirm</string>
     <string name="contactavatar">ContactAvatar</string>
     <string name="phone_icon">phone icon</string>
-    <string name="phone_number">phone number</string>
+    <string name="phone_number">Phone Number</string>
     <string name="social_media_icon">Social Media Icon</string>
     <string name="social_media_handle">Social media handle</string>
     <string name="cancel">Cancel</string>
@@ -29,4 +29,5 @@
     <string name="load_photo_button">load photo button</string>
     <string name="directional_arrow">directional arrow</string>
     <string name="placeholder">Placeholder</string>
+    <string name="name">Name</string>
 </resources>

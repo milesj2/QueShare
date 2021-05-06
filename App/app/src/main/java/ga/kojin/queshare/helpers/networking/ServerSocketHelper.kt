@@ -1,5 +1,6 @@
 package ga.kojin.queshare.helpers.networking
 
+import android.content.Context
 import android.util.Log
 import ga.kojin.queshare.helpers.BitmapHelper
 import ga.kojin.queshare.models.persisted.Photo
@@ -26,18 +27,15 @@ object ServerSocketHelper {
 
     suspend fun listen(key: String, onConnect: () -> Unit) {
         Log.v(TAG, connection.toString())
-        connection?.close()
         connection?.dispose()
         connection = null
         while (connection == null) {
-            //Log.v(TAG, "Listening on $url:$port")
             Log.v(TAG, "Listening")
             val socket = serverSocket?.accept()
 
-            //Log.v(TAG, "Found new connection '${socket?.remoteAddress} on $url:$port'.")
             Log.v(TAG, "Found new connection '${socket?.remoteAddress}'.")
             input = socket?.openReadChannel()
-            Log.i(TAG, "Waiting for input...")
+            Log.i(TAG, "Waiting for key...")
             var line: String = ""
 
             while (line == "") {

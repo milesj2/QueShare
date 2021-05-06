@@ -91,6 +91,7 @@
                 android:textColor="@color/off_white"
                 android:textColorHint="@color/off_white"
                 android:textSize="20sp"
+                android:hint="@string/name"
                 android:autofillHints="Name"
                 android:inputType="text" />
         </LinearLayout>
