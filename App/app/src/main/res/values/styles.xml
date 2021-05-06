@@ -28,5 +28,19 @@
         <item name="android:textColor">@color/off_white</item>
     </style>
 
+    <style name="Theme.QueShare.DefaultText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/off_white</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="Theme.QueShare.DefaultMediumText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">@color/off_white</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="Theme.QueShare.DefaultTitleText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/off_white</item>
+    </style>
+
 
 </resources>

@@ -16,27 +16,39 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp">
 
-            <ImageView
-                android:id="@+id/imgProfilePhoto"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:srcCompat="@drawable/shape_circle" />
-
-            <TextView
-                android:id="@+id/txtInitial"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/off_white"
-                android:translationX="-33sp" />
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imgProfilePhoto"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/shape_circle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
+                <TextView
+                    android:id="@+id/txtInitial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/Theme.QueShare.DefaultText"
+                    android:textColor="@color/off_white"
+                    android:textSize="22sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:id="@+id/txtName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:text="@string/placeholder"
+                android:textSize="22sp"
+                android:textAppearance="@style/Theme.QueShare.DefaultText"
                 android:textColor="@color/off_white" />
         </LinearLayout>
 

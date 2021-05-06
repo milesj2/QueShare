@@ -200,9 +200,8 @@ class ProfileViewFragment : Fragment() {
             .setGuidelines(CropImageView.Guidelines.ON)
             .setFixAspectRatio(true)
             .setCropShape(CropImageView.CropShape.OVAL)
-            .setActivityTitle("Select 'Crop'")
+            .setActivityTitle("Select Crop")
             .start(requireContext(), this)
-
     }
 
     override fun onRequestPermissionsResult(
@@ -215,7 +214,6 @@ class ProfileViewFragment : Fragment() {
         if (requestCode == pickImage) {
             pickFromGallery()
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

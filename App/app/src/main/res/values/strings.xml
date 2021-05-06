@@ -8,4 +8,25 @@
     <string name="try_adding">Either share or scan a QR to swap details.</string>
     <string name="no_favourites">You currently have no favourites contacts.</string>
     <string name="try_favouriting">Hit that star on that special person!</string>
+    <string name="basic_details">Basic Details</string>
+    <string name="social_media">Social Media</string>
+    <string name="qr_code">QR CODE</string>
+    <string name="confirm">Confirm</string>
+    <string name="contactavatar">ContactAvatar</string>
+    <string name="phone_icon">phone icon</string>
+    <string name="phone_number">phone number</string>
+    <string name="social_media_icon">Social Media Icon</string>
+    <string name="social_media_handle">Social media handle</string>
+    <string name="cancel">Cancel</string>
+    <string name="plus">+</string>
+    <string name="blurred_image_behind_profile_photo">blurred image behind profile photo</string>
+    <string name="profile_photo">profile photo</string>
+    <string name="favourite_button">favourite button</string>
+    <string name="edit_button">edit button</string>
+    <string name="delete_button">delete button</string>
+    <string name="done_button">done button</string>
+    <string name="navigation_back">navigation back</string>
+    <string name="load_photo_button">load photo button</string>
+    <string name="directional_arrow">directional arrow</string>
+    <string name="placeholder">Placeholder</string>
 </resources>

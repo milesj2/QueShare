@@ -95,14 +95,4 @@ class BasicDetailsFragment : Fragment() {
             return false
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.w(TAG, "DESTROYED ${this}")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.w(TAG, "DESTROYEDVIEW ${this}")
-    }
 }

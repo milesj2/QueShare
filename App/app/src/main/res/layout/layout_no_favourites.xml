@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/no_favourites"
-        android:textAppearance="@style/DefaultTitleText"
+        android:textAppearance="@style/Theme.QueShare.DefaultTitleText"
         android:textAlignment="center"
         />
     <TextView
@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/try_favouriting"
-        android:textAppearance="@style/DefaultTitleText"
+        android:textAppearance="@style/Theme.QueShare.DefaultTitleText"
         android:layout_margin="20dp"
         />
 

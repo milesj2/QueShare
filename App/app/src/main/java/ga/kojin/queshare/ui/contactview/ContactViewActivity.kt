@@ -28,7 +28,6 @@ class ContactViewActivity : AppCompatActivity() {
     private val contactsRepo: ContactsRepository = ContactsRepository(this)
     private lateinit var viewPager: ViewPager
     private lateinit var tabLayout: TabLayout
-    private var starred: Boolean = false
     private var editMode: Boolean = false
     private lateinit var contactViewAdapter: ContactViewAdapter
     private lateinit var avatar: ImageView
@@ -71,14 +70,10 @@ class ContactViewActivity : AppCompatActivity() {
         }
 
         imgStarred.setOnClickListener {
-            starred = !starred
-            imgStarred.isSelected = starred
-            contactsRepo.setContactFavouriteStatus(userID, starred)
-            setStarredIco()
+            imgStarred.isSelected = !imgStarred.isSelected
+            contactsRepo.setContactFavouriteStatus(userID, imgStarred.isSelected)
         }
-
-        starred = contact.starred
-        setStarredIco()
+        imgStarred.isSelected = contact.starred
 
         contactViewAdapter = ContactViewAdapter(this, supportFragmentManager)
         contactViewAdapter.setContact(contact)
@@ -148,35 +143,11 @@ class ContactViewActivity : AppCompatActivity() {
                 },
                 {}
             )
-
-//            val dialogBuilder = AlertDialog.Builder(viewPager.context)
-//
-//            dialogBuilder.setMessage("Are you sure you wish to proceed?")
-//                .setCancelable(false)
-//                .setPositiveButton("Yes") { _, _ ->
-//                    contactsRepo.deleteContact(contact.id)
-//                    finish()
-//                }
-//                .setNegativeButton("No") { dialog, _ ->
-//                    dialog.cancel()
-//                }
-//
-//            val alert = dialogBuilder.create()
-//            alert.setTitle("Deleting contact")
-//            alert.show()
-        }
-    }
-
-    private fun setStarredIco() {
-        if (starred) {
-            //imgStarred.setImageResource(android.R.drawable.star_big_on)
-        } else {
-            //imgStarred.setImageResource(android.R.drawable.star_big_off)
         }
     }
 
     private fun saveContact() {
-        contactViewAdapter.saveDetails(starred)
+        contactViewAdapter.saveDetails(imgStarred.isSelected)
     }
 
     private fun setProfilePhoto(photo: Bitmap) {

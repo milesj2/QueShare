@@ -71,7 +71,11 @@ class MainActivity : AppCompatActivity() {
                 val dialog = QRShareDialog(this)
                 dialog.show()
             } else {
-                QueShareDialogHelper.showProfileNotInitialisedDialog(this)
+                QueShareDialogHelper.showAlertDialog(
+                    this, "Sorry!",
+                    "Please setup your profile to use this feature.",
+                    "Ok"
+                )
             }
         }
 

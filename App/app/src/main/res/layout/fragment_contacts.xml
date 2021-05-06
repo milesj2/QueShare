@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:textColor="@color/off_white"
-        android:textAppearance="@style/DefaultText"/>
+        android:textAppearance="@style/Theme.QueShare.DefaultText"/>
 
     <com.reddit.indicatorfastscroll.FastScrollerThumbView
         android:id="@+id/fastscroller_thumb"
@@ -32,7 +32,7 @@
         android:layout_alignBottom="@+id/fastscroller"
         android:layout_toStartOf="@+id/fastscroller"
         app:layout_constraintEnd_toStartOf="@+id/fastscroller"
-        android:textAppearance="@style/DefaultText"/>
+        android:textAppearance="@style/Theme.QueShare.DefaultText"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

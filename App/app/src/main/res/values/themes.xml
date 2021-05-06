@@ -43,29 +43,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Bump.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.QueShare.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="DefaultText" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textColor">@color/off_white</item>
-    </style>
 
-    <style name="DefaultMediumText" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textColor">@color/off_white</item>
-        <item name="android:textSize">40sp</item>
-    </style>
 
-    <style name="DefaultTitleText" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textColor">@color/off_white</item>
-    </style>
+    <style name="Theme.QueShare.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="Theme.Bump.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="Icon" >
+    <style name="Theme.QueShare.Icon" >
         <item name="android:background">@drawable/shape_circle_sml</item>
         <item name="android:padding">5dp</item>
     </style>
 
-    <style name="CustomEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="Theme.QueShare.CustomEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:textColor">@color/off_white</item>
     </style>
 

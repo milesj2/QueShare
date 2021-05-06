@@ -12,7 +12,8 @@
         android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/blurred_image_behind_profile_photo" />
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -45,7 +46,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/profile_photo"
                 android:background="@android:color/transparent" />
         </androidx.cardview.widget.CardView>
 
@@ -61,7 +62,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="100sp"
         android:visibility="gone"
-        android:textAppearance="@style/DefaultTitleText"
+        android:textAppearance="@style/Theme.QueShare.DefaultTitleText"
         />
     <ImageView
         android:id="@+id/imgStarred"
@@ -71,7 +72,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/btn_star"
         android:padding="10dp"
-        android:background="@drawable/bg_background_black_fade_rounded_right"/>
+        android:background="@drawable/bg_background_black_fade_rounded_right"
+        android:contentDescription="@string/favourite_button" />
     <ImageView
         android:id="@+id/imgEdit"
         android:layout_width="wrap_content"
@@ -80,7 +82,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="10dp"
-        app:srcCompat="@drawable/btn_edit" />
+        app:srcCompat="@drawable/btn_edit"
+        android:contentDescription="@string/edit_button" />
     <ImageView
         android:id="@+id/imgDelete"
         android:layout_width="wrap_content"
@@ -89,7 +92,8 @@
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toStartOf="@id/imgEdit"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/btn_delete" />
+        app:srcCompat="@drawable/btn_delete"
+        android:contentDescription="@string/delete_button" />
     <ImageView
         android:id="@+id/imgDone"
         android:layout_width="wrap_content"
@@ -99,7 +103,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="10dp"
         android:visibility="gone"
-        app:srcCompat="@drawable/btn_done" />
+        app:srcCompat="@drawable/btn_done"
+        android:contentDescription="@string/done_button" />
     <ImageView
         android:id="@+id/imgClear"
         android:layout_width="wrap_content"
@@ -118,7 +123,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="10dp"
-        app:srcCompat="@drawable/btn_ic_back_arrow" />
+        app:srcCompat="@drawable/btn_ic_back_arrow"
+        android:contentDescription="@string/navigation_back" />
 
     <ImageView
         android:background="@drawable/bg_background_black_fade_rounded"
@@ -129,5 +135,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:padding="5dp"
-        app:srcCompat="@drawable/btn_photo" />
+        app:srcCompat="@drawable/btn_photo"
+        android:contentDescription="@string/load_photo_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
