@@ -172,6 +172,16 @@ class DBDriver(var context: Context) :
             "$KEY_CONTACT_ID=?",
             arrayOf("$contactID")
         )
+        readableDatabase.delete(
+            TABLE_SOCIAL_MEDIA,
+            "$KEY_CONTACT_ID=?",
+            arrayOf("$contactID")
+        )
+        readableDatabase.delete(
+            TABLE_PHOTOS,
+            "$KEY_CONTACT_ID=?",
+            arrayOf("$contactID")
+        )
 
     }
 
